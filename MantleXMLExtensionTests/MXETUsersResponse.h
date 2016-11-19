@@ -1,0 +1,67 @@
+//
+//  MXETUsersResponse.h
+//  MantleXMLExtension
+//
+//  Created by Hinagiku Soranoba on 2016/11/19.
+//  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <Mantle/MTLModel.h>
+#import "MXEXmlAdapter.h"
+
+@class MXETError;
+@class MXETUser;
+
+/**
+ * <?xml version="1.0" encoding="UTF-8"?>
+ * <response status="ok">
+ *   <user>
+ *   </user>
+ *   <user>
+ *   </user>
+ * </response>
+ */
+@interface MXETUsersResponse : MTLModel <MXEXmlSerializing>
+
+@property (nonatomic, nonnull, strong) NSString* status;
+@property (nonatomic, nonnull, strong) NSArray<MXETUser*>* users;
+
+@end
+
+typedef enum : NSUInteger {
+    MXETMan = 1,
+    MXETWoman = 2,
+} MXETSex;
+
+@interface MXETUser : MTLModel <MXEXmlSerializing>
+
+@property (nonatomic, nonnull, strong) NSString* firstName;
+@property (nonatomic, nonnull, strong) NSString* lastName;
+@property (nonatomic, assign) NSInteger age;
+@property (nonatomic, assign) MXETSex sex;
+
+@end
+
+/**
+ * <?xml version="1.0" encoding="UTF-8"?>
+ * <response status="fail">
+ *   <error>
+ *     <code>404</code>
+ *     <description>NOT FOUND</description>
+ *   </error>
+ * </response>
+ */
+@interface MXETErrorResponse : MTLModel <MXEXmlSerializing>
+
+@property (nonatomic, nonnull, strong) NSString* status;
+@property (nonatomic, nonnull, strong) MXETError* error;
+
+@end
+
+@interface MXETError : MTLModel <MXEXmlSerializing>
+
+@property (nonatomic, assign) NSInteger code;
+@property (nonatomic, nonnull, strong) NSString* errorDescription;
+
+@end

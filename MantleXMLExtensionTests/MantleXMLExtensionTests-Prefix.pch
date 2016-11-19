@@ -1,0 +1,17 @@
+//
+//  MantleXMLExtensionTests-Prefix.pch
+//  MantleXMLExtension
+//
+//  Created by Hinagiku Soranoba on 2016/11/19.
+//  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
+//
+
+#ifndef MantleXMLExtensionTests_Prefix_pch
+#define MantleXMLExtensionTests_Prefix_pch
+
+#import <Quick/Quick.h>
+#import <Nimble/Nimble-Swift.h>
+#import <Nimble/Nimble.h>
+#import <OCMock/OCMock.h>
+
+#endif /* MantleXMLExtensionTests_Prefix_pch */

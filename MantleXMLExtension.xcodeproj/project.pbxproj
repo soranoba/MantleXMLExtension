@@ -7,13 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A4BCF36E1DDFEC6600EF672C /* MantleXMLExtensionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF36D1DDFEC6600EF672C /* MantleXMLExtensionTests.m */; };
+		826A9804BB27E5742444AC9E /* Pods_MantleXMLExtensionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */; };
+		A4BCF37E1DE0162F00EF672C /* MXETUsersResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */; };
+		A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */; };
+		A4BCF3931DE04F9B00EF672C /* MXETSampleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */; };
+		A4BCF3981DE0AD8200EF672C /* MXEXmlNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantleXMLExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4BCF36D1DDFEC6600EF672C /* MantleXMLExtensionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MantleXMLExtensionTests.m; sourceTree = "<group>"; };
 		A4BCF36F1DDFEC6600EF672C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETUsersResponse.m; sourceTree = "<group>"; };
+		A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MXETUsersResponse.h; sourceTree = "<group>"; };
+		A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlAdapterTests.m; sourceTree = "<group>"; };
+		A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MantleXMLExtensionTests-Prefix.pch"; sourceTree = "<group>"; };
+		A4BCF3911DE04F7B00EF672C /* MXETSampleModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MXETSampleModel.h; sourceTree = "<group>"; };
+		A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETSampleModel.m; sourceTree = "<group>"; };
+		A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlNodeTests.m; sourceTree = "<group>"; };
 		F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantleXMLExtensionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA06D942273418DD7BA511A8 /* Pods-MantleXMLExtensionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantleXMLExtensionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests.release.xcconfig"; sourceTree = "<group>"; };
 		FBBF0BAB1849359EBCC4F772 /* Pods-MantleXMLExtensionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantleXMLExtensionTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -24,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				826A9804BB27E5742444AC9E /* Pods_MantleXMLExtensionTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,10 +62,24 @@
 		A4BCF36C1DDFEC6600EF672C /* MantleXMLExtensionTests */ = {
 			isa = PBXGroup;
 			children = (
-				A4BCF36D1DDFEC6600EF672C /* MantleXMLExtensionTests.m */,
+				A4BCF3801DE0168F00EF672C /* Models */,
+				A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */,
+				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
 				A4BCF36F1DDFEC6600EF672C /* Info.plist */,
+				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
 			);
 			path = MantleXMLExtensionTests;
+			sourceTree = "<group>";
+		};
+		A4BCF3801DE0168F00EF672C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
+				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
+				A4BCF3911DE04F7B00EF672C /* MXETSampleModel.h */,
+				A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		AA1B2A2DFC10CA1729817594 /* Pods */ = {
@@ -81,9 +106,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A4BCF3701DDFEC6600EF672C /* Build configuration list for PBXNativeTarget "MantleXMLExtensionTests" */;
 			buildPhases = (
+				597513063BB4F004186570F4 /* [CP] Check Pods Manifest.lock */,
 				A4BCF3671DDFEC6600EF672C /* Sources */,
 				A4BCF3681DDFEC6600EF672C /* Frameworks */,
 				A4BCF3691DDFEC6600EF672C /* Resources */,
+				43DBD1F172CE65A131D8AE1F /* [CP] Embed Pods Frameworks */,
+				6003DD3CE1369EF642C72108 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -137,12 +165,63 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		43DBD1F172CE65A131D8AE1F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		597513063BB4F004186570F4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6003DD3CE1369EF642C72108 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A4BCF3671DDFEC6600EF672C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4BCF36E1DDFEC6600EF672C /* MantleXMLExtensionTests.m in Sources */,
+				A4BCF3981DE0AD8200EF672C /* MXEXmlNodeTests.m in Sources */,
+				A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */,
+				A4BCF3931DE04F9B00EF672C /* MXETSampleModel.m in Sources */,
+				A4BCF37E1DE0162F00EF672C /* MXETUsersResponse.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +258,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "MantleXMLExtensionTests/MantleXMLExtensionTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -189,6 +269,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = MantleXMLExtension/Classes/Private;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -224,12 +305,14 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "MantleXMLExtensionTests/MantleXMLExtensionTests-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = MantleXMLExtension/Classes/Private;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
@@ -239,6 +322,7 @@
 		};
 		A4BCF3711DDFEC6600EF672C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FBBF0BAB1849359EBCC4F772 /* Pods-MantleXMLExtensionTests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = Q67BJ4H5A7;
 				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
@@ -250,6 +334,7 @@
 		};
 		A4BCF3721DDFEC6600EF672C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA06D942273418DD7BA511A8 /* Pods-MantleXMLExtensionTests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = Q67BJ4H5A7;
 				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
@@ -278,6 +363,7 @@
 				A4BCF3721DDFEC6600EF672C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
