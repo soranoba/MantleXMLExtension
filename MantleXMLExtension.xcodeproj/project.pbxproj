@@ -1,0 +1,285 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A4BCF36E1DDFEC6600EF672C /* MantleXMLExtensionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF36D1DDFEC6600EF672C /* MantleXMLExtensionTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantleXMLExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4BCF36D1DDFEC6600EF672C /* MantleXMLExtensionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MantleXMLExtensionTests.m; sourceTree = "<group>"; };
+		A4BCF36F1DDFEC6600EF672C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantleXMLExtensionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA06D942273418DD7BA511A8 /* Pods-MantleXMLExtensionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantleXMLExtensionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests.release.xcconfig"; sourceTree = "<group>"; };
+		FBBF0BAB1849359EBCC4F772 /* Pods-MantleXMLExtensionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantleXMLExtensionTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A4BCF3681DDFEC6600EF672C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A4BCF32F1DDFDE2C00EF672C = {
+			isa = PBXGroup;
+			children = (
+				A4BCF36C1DDFEC6600EF672C /* MantleXMLExtensionTests */,
+				EA9637E886BB15C86946631C /* Frameworks */,
+				AA1B2A2DFC10CA1729817594 /* Pods */,
+				A4BCF3391DDFDE2C00EF672C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A4BCF3391DDFDE2C00EF672C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A4BCF36C1DDFEC6600EF672C /* MantleXMLExtensionTests */ = {
+			isa = PBXGroup;
+			children = (
+				A4BCF36D1DDFEC6600EF672C /* MantleXMLExtensionTests.m */,
+				A4BCF36F1DDFEC6600EF672C /* Info.plist */,
+			);
+			path = MantleXMLExtensionTests;
+			sourceTree = "<group>";
+		};
+		AA1B2A2DFC10CA1729817594 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FBBF0BAB1849359EBCC4F772 /* Pods-MantleXMLExtensionTests.debug.xcconfig */,
+				FA06D942273418DD7BA511A8 /* Pods-MantleXMLExtensionTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		EA9637E886BB15C86946631C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A4BCF36A1DDFEC6600EF672C /* MantleXMLExtensionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A4BCF3701DDFEC6600EF672C /* Build configuration list for PBXNativeTarget "MantleXMLExtensionTests" */;
+			buildPhases = (
+				A4BCF3671DDFEC6600EF672C /* Sources */,
+				A4BCF3681DDFEC6600EF672C /* Frameworks */,
+				A4BCF3691DDFEC6600EF672C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MantleXMLExtensionTests;
+			productName = MantleXMLExtensionTests;
+			productReference = A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A4BCF3301DDFDE2C00EF672C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = "Hinagiku Soranoba";
+				TargetAttributes = {
+					A4BCF36A1DDFEC6600EF672C = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = Q67BJ4H5A7;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A4BCF3331DDFDE2C00EF672C /* Build configuration list for PBXProject "MantleXMLExtension" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A4BCF32F1DDFDE2C00EF672C;
+			productRefGroup = A4BCF3391DDFDE2C00EF672C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A4BCF36A1DDFEC6600EF672C /* MantleXMLExtensionTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A4BCF3691DDFEC6600EF672C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A4BCF3671DDFEC6600EF672C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4BCF36E1DDFEC6600EF672C /* MantleXMLExtensionTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A4BCF33F1DDFDE2C00EF672C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A4BCF3401DDFDE2C00EF672C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A4BCF3711DDFEC6600EF672C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = Q67BJ4H5A7;
+				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A4BCF3721DDFEC6600EF672C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = Q67BJ4H5A7;
+				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A4BCF3331DDFDE2C00EF672C /* Build configuration list for PBXProject "MantleXMLExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A4BCF33F1DDFDE2C00EF672C /* Debug */,
+				A4BCF3401DDFDE2C00EF672C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A4BCF3701DDFEC6600EF672C /* Build configuration list for PBXNativeTarget "MantleXMLExtensionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A4BCF3711DDFEC6600EF672C /* Debug */,
+				A4BCF3721DDFEC6600EF672C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A4BCF3301DDFDE2C00EF672C /* Project object */;
+}
