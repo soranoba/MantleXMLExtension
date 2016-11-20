@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define MXEXmlAttribute(nodePath, attribute) \
+    [MXEXmlAttributePath pathWithNode:(nodePath) attributeKey:(attribute)]
+
 /**
  * A class for expressing attribute, out of elements of xml.
  *
@@ -16,19 +19,18 @@
 @interface MXEXmlAttributePath : NSObject
 
 /**
- * Create a representation of the path whose last path is the attribute.
+ * Create a attribute path.
  *
- * @param paths A list of xml nodes
+ * @param nodePath     A path of node that has the attribute.
+ *                     When specifying a grandchild node, the path is `parent.child.grandchild`.
+ *                     When specifying a root node, the path is nil or empty string or `.`.
+ * @param attributeKey Attribute name.
  * @return instance
  */
-- (instancetype _Nullable) initWithPaths: (NSArray<NSString*>* _Nonnull)paths;
+- (instancetype _Nullable) initWithNodePath: (NSString* _Nullable)nodePath
+                               attributeKey: (NSString* _Nonnull)attributeKey;
 
-/**
- * Create a representation of the path is a root attribute.
- *
- * @param attribute Attribute name
- * @return instance
- */
-- (instancetype _Nullable) initWithRootAttribute: (NSString* _Nonnull)attribute;
++ (instancetype _Nullable) pathWithNode: (NSString* _Nullable)nodePath
+                           attributeKey: (NSString* _Nonnull)attributeKey;
 
 @end

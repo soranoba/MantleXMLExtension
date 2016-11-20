@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Mantle/MTLModel.h>
 #import "MXEXmlAttributePath.h"
+#import "MXEXmlDuplicateNodesPath.h"
 
 static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
@@ -28,16 +29,32 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
  *   <user><id>2</id></user>
  * </response>
  *
- * This case is...
+ * --- 1st case is...
  *
  * + (NSString*) xmlRootElementName { return @"response"; }
  * + (NSDictionary*) xmlKeyPathsByPropertyKey
  * {
- *     return @{ @"statusCode" : [[MXEXmlAttributePath alloc] initWithPaths:@[@"status", @"code"]],
- *               @"statusValue": [[MXEXmlAttributePath alloc] initWithPaths:@[@"status", @"value"]],
- *               @"totalCount" : @[@"summary", @"total"],
- *               @"userIds"    : [[MXEXmlMultiNodesPath alloc] initWithParentPaths:@[]
- *                                                              pathsToBeCollected:@[@"user", @"id"]]}
+ *     return @{ @"statusCode" : MXEXmlAttribute(@"status", @"code"),
+ *               @"statusValue": MXEXmlAttribute(@"status", @"value"),
+ *               @"totalCount" : @"summary.total",
+ *               @"userIds"    : MXEDuplicateNodes(@".", @"user.id")}
+ * }
+ *
+ * --- 2nd case: Replace user to MXEXmlSerializing model class in 1st case.
+ *
+ * + (NSDictionary*) xmlKeyPathsByPropertyKey
+ * {
+ *     return @{ @"statusCode" : MXEXmlAttribute(@"status", @"code"),
+ *               @"statusValue": MXEXmlAttribute(@"status", @"value"),
+ *               @"totalCount" : @"summary.total",
+ *               @"userIds"    : MXEDuplicateNodes(@".", @"user")}
+ * }
+ *
+ * User model
+ * + (NSString*) xmlRootElementName { return @"user"; }
+ * + (NSDictionary*) xmlKeyPathsByPropertyKey
+ * {
+ *     return @{ @"userId" : @"id" }
  * }
  */
 + (NSDictionary<NSString*, id>* _Nonnull) xmlKeyPathsByPropertyKey;

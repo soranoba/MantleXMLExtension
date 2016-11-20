@@ -12,6 +12,7 @@ typedef enum : NSUInteger {
     MXEErrorUnknown = 0,
     MXEErrorNil,
     MXEErrorRootNodeInvalid,
+    MXEErrorInputDataInvalid,
 } MXEErrorCode;
 
 @interface NSError (MantleXMLExtension)

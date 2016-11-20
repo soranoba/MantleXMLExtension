@@ -10,20 +10,23 @@
 
 @implementation MXEXmlAttributePath
 
-- (instancetype _Nullable) initWithPaths: (NSArray<NSString*>* _Nonnull)paths
+- (instancetype _Nullable) initWithNodePath: (NSString* _Nullable)nodePath
+                               attributeKey: (NSString* _Nonnull)attributeKey
 {
+    NSParameterAssert(attributeKey != nil && attributeKey.length > 0);
+
     if (self = [super init]) {
-        self.paths = paths;
+        self.nodePath = nodePath;
+        self.attributeKey = attributeKey;
     }
     return self;
 }
 
-- (instancetype _Nullable) initWithRootAttribute: (NSString* _Nonnull)attribute
++ (instancetype _Nullable) pathWithNode: (NSString* _Nullable)nodePath
+                           attributeKey: (NSString* _Nonnull)attributeKey
 {
-    if (self = [super init]) {
-        self.paths = @[attribute];
-    }
-    return self;
+    return [[self alloc] initWithNodePath:nodePath attributeKey:attributeKey];
 }
+
 
 @end

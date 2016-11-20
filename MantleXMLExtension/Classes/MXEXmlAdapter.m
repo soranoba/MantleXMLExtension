@@ -5,16 +5,41 @@
 //  Created by Hinagiku Soranoba on 2016/11/19.
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
+// This module uses portions of code from the https://github.com/Mantle/Mantle
+// (Please refer to `#pragma mark - License Github`)
+//
+// ---
+// Copyright (c) GitHub, Inc.
+// All rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+// and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions
+// of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+// THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
 
 #import <objc/runtime.h>
 #import <Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.h>
 #import <Mantle/EXTRuntimeExtensions.h>
 #import <Mantle/MTLValueTransformer.h>
 #import <Mantle/MTLReflection.h>
+#import <Mantle/EXTRuntimeExtensions.h>
+#import <Mantle/EXTScope.h>
+#import <Mantle/MTLTransformerErrorHandling.h>
 
 #import "MXEXmlAdapter.h"
 #import "NSError+MantleXMLExtension.h"
 #import "MXEXmlAttributePath+Private.h"
+#import "MXEXmlDuplicateNodesPath+Private.h"
 #import "MXEXmlNode.h"
 
 static void setError(NSError* _Nullable * _Nullable error, MXEErrorCode code)
@@ -75,18 +100,12 @@ static void setError(NSError* _Nullable * _Nullable error, MXEErrorCode code)
             NSAssert([self.propertyKeys containsObject:key], @"%@ is NOT a property of %@.", key, modelClass);
 
             id value = self.xmlKeyPathsByPropertyKey[key];
-            if ([value isKindOfClass:NSArray.class]) {
-                NSArray* pathFragments = (NSArray*)value;
-                NSAssert(pathFragments.count, @"%@ MUST NOT empty key fragments.", key);
-                for (id pathFragment in pathFragments) {
-                    NSAssert([pathFragment isKindOfClass:NSString.class],
-                             @"%@ MUST either map to a XML key path or a XML array of key paths. got: %@.", key, value);
-                }
-            } else {
-                NSAssert([value isKindOfClass:NSString.class] || [value isKindOfClass:MXEXmlAttributePath.class],
-                         @"%@ MUST either map to a XML key path or a XML array of key paths. got: %@.", key, value);
-            }
+            NSAssert([value isKindOfClass:NSString.class]
+                     || [value isKindOfClass:MXEXmlAttributePath.class]
+                     || [value isKindOfClass:MXEXmlDuplicateNodesPath.class],
+                    @"%@ MUST NSString or MXEXmlAttributePath or MXEXmlDuplicateNodesPath. But got %@", key, value);
         }
+        self.valueTransformersByPropertyKey = [self.class valueTransformersForModelClass:modelClass];
     }
     return self;
 }
@@ -175,18 +194,6 @@ static void setError(NSError* _Nullable * _Nullable error, MXEErrorCode code)
     return [responseStr dataUsingEncoding:[self.class xmlDeclarationToEncoding:xmlDeclaration]];
 }
 
-- (id<MXEXmlSerializing> _Nullable) modelFromMXEXmlNode:(MXEXmlNode* _Nonnull)xmlNode
-                                                  error:(NSError* _Nullable * _Nullable)error
-{
-    return nil;
-}
-
-- (MXEXmlNode* _Nullable) MXEXmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
-                                        error:(NSError* _Nullable * _Nullable)error
-{
-    return nil;
-}
-
 #pragma mark - NSXMLParserDelegate
 
 - (void) parser:(NSXMLParser*)parser
@@ -205,8 +212,10 @@ didStartElement:(NSString*)elementName
         }
     }
     MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:elementName];
-    node.attributes  = attributeDict;
-    [self.xmlParseStack addObject:node];
+    if (node) {
+        node.attributes  = attributeDict;
+        [self.xmlParseStack addObject:node];
+    }
 }
 
 - (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
@@ -264,6 +273,235 @@ didStartElement:(NSString*)elementName
     } else {
         return NSUTF8StringEncoding; // default.
     }
+}
+
+#pragma mark - License Github
+
+- (id<MXEXmlSerializing> _Nullable) modelFromMXEXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+                                                  error:(NSError* _Nullable * _Nullable)error
+{
+    NSMutableDictionary* dictionaryValue = [NSMutableDictionary dictionary];
+
+    for (NSString *propertyKey in [self.modelClass propertyKeys]) {
+        id xmlKeyPaths = self.xmlKeyPathsByPropertyKey[propertyKey];
+
+        if (!xmlKeyPaths) {
+            continue;
+        }
+
+        id value = [xmlNode getChildForKeyPath:xmlKeyPaths];
+        if (!value) {
+            continue;
+        }
+
+        @try {
+            NSValueTransformer *transformer = self.valueTransformersByPropertyKey[propertyKey];
+            if (transformer != nil) {
+                if ([transformer respondsToSelector:@selector(transformedValue:success:error:)]) {
+                    id<MTLTransformerErrorHandling> errorHandlingTransformer = (id)transformer;
+
+                    BOOL success;
+                    value = [errorHandlingTransformer transformedValue:value success:&success error:error];
+                    if (!success) {
+                        return nil;
+                    }
+                } else {
+                    value = [transformer transformedValue:value];
+                }
+            }
+            dictionaryValue[propertyKey] = value;
+        } @catch (NSException *ex) {
+
+        }
+    }
+    id model = [self.modelClass modelWithDictionary:dictionaryValue error:error];
+    return [model validate:error] ? model : nil;
+}
+
+- (MXEXmlNode* _Nullable) MXEXmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
+                                        error:(NSError* _Nullable * _Nullable)error
+{
+    NSParameterAssert(model != nil);
+    NSParameterAssert([model isKindOfClass:self.modelClass]);
+
+    NSSet *propertyKeysToSerialize = [NSSet setWithArray:self.xmlKeyPathsByPropertyKey.allKeys];
+
+    NSDictionary *dictionaryValue
+        = [model.dictionaryValue dictionaryWithValuesForKeys:propertyKeysToSerialize.allObjects];
+    MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:[model.class xmlRootElementName]];
+
+    __block BOOL success = YES;
+    __block NSError *tmpError = nil;
+
+    [dictionaryValue enumerateKeysAndObjectsUsingBlock:^(NSString *propertyKey, id value, BOOL *stop) {
+        id xmlKeyPaths = self.xmlKeyPathsByPropertyKey[propertyKey];
+        if (!xmlKeyPaths) {
+            return;
+        }
+
+        NSValueTransformer *transformer = self.valueTransformersByPropertyKey[propertyKey];
+        if ([transformer.class allowsReverseTransformation]) {
+            if ([transformer respondsToSelector:@selector(reverseTransformedValue:success:error:)]) {
+                id<MTLTransformerErrorHandling> errorHandlingTransformer = (id)transformer;
+
+                value = [errorHandlingTransformer reverseTransformedValue:value success:&success error:&tmpError];
+
+                if (!success) {
+                    *stop = YES;
+                    return;
+                }
+            } else {
+                value = [transformer reverseTransformedValue:value];
+            }
+        }
+        [node setChild:value forKeyPath:xmlKeyPaths];
+    }];
+
+    if (success) {
+        return node;
+    } else {
+        if (error) {
+            *error = tmpError;
+        }
+        return nil;
+    }
+
+}
+
++ (NSValueTransformer<MTLTransformerErrorHandling> *)dictionaryTransformerWithModelClass:(Class)modelClass {
+    NSParameterAssert([modelClass conformsToProtocol:@protocol(MTLModel)]);
+    NSParameterAssert([modelClass conformsToProtocol:@protocol(MXEXmlSerializing)]);
+    __block MXEXmlAdapter *adapter;
+
+    return [MTLValueTransformer
+            transformerUsingForwardBlock:^ id (id xmlData, BOOL *success, NSError **error) {
+                if (xmlData == nil) return nil;
+
+                if (![xmlData isKindOfClass:NSData.class]) {
+                    if (error != NULL) {
+                        *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
+                                                         reason:@""];
+                    }
+                    *success = NO;
+                    return nil;
+                }
+
+                if (!adapter) {
+                    adapter = [[self alloc] initWithModelClass:modelClass];
+                }
+                id model = [adapter modelFromXmlData:xmlData error:error];
+                if (model == nil) {
+                    *success = NO;
+                }
+                return model;
+            }
+            reverseBlock:^ NSData * (id model, BOOL *success, NSError **error) {
+                if (model == nil) return nil;
+
+                if (![model conformsToProtocol:@protocol(MTLModel)]
+                    || ![model conformsToProtocol:@protocol(MXEXmlSerializing)]) {
+                    if (error != NULL) {
+                        *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
+                                                         reason:@""];
+                    }
+                    *success = NO;
+                    return nil;
+                }
+
+                if (!adapter) {
+                    adapter = [[self alloc] initWithModelClass:modelClass];
+                }
+                NSData *result = [adapter xmlDataFromModel:model error:error];
+                if (result == nil) {
+                    *success = NO;
+                }
+                return result;
+            }];
+}
+
++ (NSDictionary *)valueTransformersForModelClass:(Class)modelClass {
+    NSParameterAssert(modelClass != nil);
+    NSParameterAssert([modelClass conformsToProtocol:@protocol(MXEXmlSerializing)]);
+
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+
+    for (NSString *key in [modelClass propertyKeys]) {
+        SEL selector = MTLSelectorWithKeyPattern(key, "XmlTransformer");
+        if ([modelClass respondsToSelector:selector]) {
+            IMP imp = [modelClass methodForSelector:selector];
+            NSValueTransformer * (*function)(id, SEL) = (__typeof__(function))imp;
+            NSValueTransformer *transformer = function(modelClass, selector);
+
+            if (transformer != nil) result[key] = transformer;
+
+            continue;
+        }
+
+        if ([modelClass respondsToSelector:@selector(xmlTransformerForKey:)]) {
+            NSValueTransformer *transformer = [modelClass xmlTransformerForKey:key];
+
+            if (transformer != nil) {
+                result[key] = transformer;
+                continue;
+            }
+        }
+
+        objc_property_t property = class_getProperty(modelClass, key.UTF8String);
+
+        if (property == NULL) continue;
+
+        mtl_propertyAttributes *attributes = mtl_copyPropertyAttributes(property);
+        @onExit {
+            free(attributes);
+        };
+
+        NSValueTransformer *transformer = nil;
+
+        if (*(attributes->type) == *(@encode(id))) {
+            Class propertyClass = attributes->objectClass;
+
+            if (propertyClass != nil) {
+                transformer = [self transformerForModelPropertiesOfClass:propertyClass];
+            }
+
+
+            // For user-defined MTLModel, try parse it with dictionaryTransformer.
+            if (nil == transformer && [propertyClass conformsToProtocol:@protocol(MXEXmlSerializing)]) {
+                transformer = [self dictionaryTransformerWithModelClass:propertyClass];
+            }
+
+            if (transformer == nil) transformer = [NSValueTransformer mtl_validatingTransformerForClass:propertyClass ?: NSObject.class];
+        } else {
+            transformer = [self transformerForModelPropertiesOfObjCType:attributes->type] ?: [NSValueTransformer mtl_validatingTransformerForClass:NSValue.class];
+        }
+
+        if (transformer != nil) result[key] = transformer;
+    }
+
+    return result;
+}
+
++ (NSValueTransformer *)transformerForModelPropertiesOfClass:(Class)modelClass {
+    NSParameterAssert(modelClass != nil);
+
+    SEL selector = MTLSelectorWithKeyPattern(NSStringFromClass(modelClass), "XmlTransformer");
+    if (![self respondsToSelector:selector]) return nil;
+
+    IMP imp = [self methodForSelector:selector];
+    NSValueTransformer * (*function)(id, SEL) = (__typeof__(function))imp;
+    NSValueTransformer *result = function(self, selector);
+
+    return result;
+}
+
++ (NSValueTransformer *)transformerForModelPropertiesOfObjCType:(const char *)objCType {
+    NSParameterAssert(objCType != NULL);
+
+    if (strcmp(objCType, @encode(BOOL)) == 0) {
+        return [NSValueTransformer valueTransformerForName:MTLBooleanValueTransformerName];
+    }
+
+    return nil;
 }
 
 @end

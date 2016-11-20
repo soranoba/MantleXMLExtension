@@ -11,22 +11,30 @@
 /// The domain for errors originating from MantleXMLExtension
 static NSString* const MXEErrorDomain = @"MXEErrorDomain";
 
+@interface NSError (MantleXMLExtension_Private)
+/**
+ * Return a LocalizedDescription.
+ */
++ (NSString* _Nonnull) description:(MXEErrorCode)code;
+@end
+
 @implementation NSError (MantleXMLExtension)
 
 + (instancetype _Nonnull) errorWithMXEErrorCode:(MXEErrorCode)code
 {
-    return [self errorWithMXEErrorCode:code reason:[self defaultReason:code]];
-}
+    NSDictionary* userInfo = @{NSLocalizedDescriptionKey: [self description:code]};
+    return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];}
 
 + (instancetype _Nonnull) errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason
 {
-    NSDictionary* userInfo = @{NSLocalizedDescriptionKey: reason};
+    NSDictionary* userInfo = @{NSLocalizedDescriptionKey: [self description:code],
+                               NSLocalizedFailureReasonErrorKey: reason};
     return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
 }
 
 #pragma mark - Private Method
 
-+ (NSString* _Nonnull) defaultReason:(MXEErrorCode)code
++ (NSString* _Nonnull) description:(MXEErrorCode)code
 {
     switch (code) {
         default:

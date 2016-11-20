@@ -9,5 +9,6 @@
 #import "MXEXmlAttributePath.h"
 
 @interface MXEXmlAttributePath ()
-@property(nonatomic, nonnull, copy) NSArray<NSString*>* paths;
+@property(nonatomic, nullable, copy) NSString* nodePath;
+@property(nonatomic, nonnull, copy) NSString* attributeKey;
 @end

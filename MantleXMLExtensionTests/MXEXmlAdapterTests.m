@@ -7,6 +7,7 @@
 //
 
 #import "MXETSampleModel.h"
+#import "MXETUsersResponse.h"
 #import "MXEXmlNode.h"
 
 @interface MXEXmlAdapter () <NSXMLParserDelegate>
@@ -32,33 +33,56 @@ describe(@"Initializer validation", ^{
         OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"notFound":@"a"});
         expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
     });
-    it(@"xmlKeyPathsByPropertyKey included empty key fragments", ^{
+    it(@"xmlKeyPathsByPropertyKey is array", ^{
         OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":@[]});
         expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
     });
-    it(@"xmlKeyPathsByPropertyKey included invalid key fragments", ^{
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":[NSObject new]});
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
-
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":@[@"hoge", [NSObject new]]}));
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
-
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":[NSObject new]});
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
-    });
     it(@"xmlKeyPathsByPropertyKey is valid", ^{
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":@[@"hoge", @"fuga"]}));
+        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":@"hoge.fuga"});
         expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
 
         OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":@"a"});
         expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
 
-        MXEXmlAttributePath* attribute;
-        attribute = [[MXEXmlAttributePath alloc] initWithPaths:@[@"hoge", @"fuga"]];
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":attribute});
+        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":MXEXmlAttribute(@"hoge", @"fuga")}));
+        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
 
-        attribute = [[MXEXmlAttributePath alloc] initWithRootAttribute:@"hoge"];
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":attribute});
+        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":MXEXmlDuplicateNodes(@"hoge", @"fuga")}));
+        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+    });
+});
+
+describe(@"serialize / deserialize", ^{
+
+    NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                       @"<response status=\"ok\">"
+                       @"<user first_name=\"Ai\" last_name=\"Asada\">"
+                       @"<age>25</age>"
+                       @"<sex>Woman</sex>"
+                       @"</user>"
+                       @"<user first_name=\"Ikuo\" last_name=\"Ikeda\">"
+                       @"<age>32</age>"
+                       @"<sex>Man</sex>"
+                       @"</user>"
+                       @"</response>";
+    NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+    it(@"", ^{
+        MXETUsersResponse* response = [MXEXmlAdapter modelOfClass:MXETUsersResponse.class
+                                                      fromXmlData:xmlData
+                                                            error:nil];
+        expect(response.status).to(equal(@"ok"));
+        expect(response.users.count).to(equal(2));
+
+        expect(response.users[0].firstName).to(equal(@"Ai"));
+        expect(response.users[0].lastName).to(equal(@"Asada"));
+        expect(response.users[0].age).to(equal(25));
+        expect(response.users[0].sex == MXETWoman).to(equal(YES));
+
+        expect(response.users[1].firstName).to(equal(@"Ikuo"));
+        expect(response.users[1].lastName).to(equal(@"Ikeda"));
+        expect(response.users[1].age).to(equal(32));
+        expect(response.users[1].sex == MXETMan).to(equal(YES));
     });
 });
 
