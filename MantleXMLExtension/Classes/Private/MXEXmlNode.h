@@ -12,8 +12,10 @@
 
 @property (nonatomic, nonnull, copy) NSString* elementName;
 @property (nonatomic, nullable, copy) NSDictionary<NSString*, NSString*>* attributes;
-/// Array of MXEXmlNode or NSString
-@property (nonatomic, nullable, strong) NSMutableArray<id>* children;
+/// NSString* or NSArray<MXEXmlNode*>*
+/// It MUST set strong. Because, parser insert a NSMutableArray and edit later.
+/// Therefore, it SHOULD NOT be used as a public instance.
+@property (nonatomic, nullable, strong) id children;
 
 /**
  * Initialize with element name.

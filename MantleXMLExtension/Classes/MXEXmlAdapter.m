@@ -45,6 +45,11 @@ static void setError(NSError* _Nullable * _Nullable error, MXEErrorCode code)
 
 - (MXEXmlNode* _Nullable) MXEXmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
                                         error:(NSError* _Nullable * _Nullable)error;
+
+/**
+ * Get NSStringEncoding from xmlDeclaration.
+ */
++ (NSStringEncoding) xmlDeclarationToEncoding:(NSString*)xmlDeclaration;
 @end
 
 @implementation MXEXmlAdapter
@@ -160,14 +165,14 @@ static void setError(NSError* _Nullable * _Nullable error, MXEErrorCode code)
         return nil;
     }
 
-    NSMutableString* responseStr = nil;
+    NSString* xmlDeclaration = nil;
     if ([model.class respondsToSelector:@selector(xmlDeclaration)]) {
-        responseStr = [[model.class xmlDeclaration] mutableCopy];
+        xmlDeclaration = [model.class xmlDeclaration];
     } else {
-        responseStr = [MXEXmlDeclarationDefault mutableCopy];
+        xmlDeclaration = MXEXmlDeclarationDefault;
     }
-    [responseStr appendString:[root toString]];
-    return [responseStr dataUsingEncoding:kCFStringEncodingUTF8];
+    NSString* responseStr = [NSString stringWithFormat:@"%@%@", xmlDeclaration, [root toString]];
+    return [responseStr dataUsingEncoding:[self.class xmlDeclarationToEncoding:xmlDeclaration]];
 }
 
 - (id<MXEXmlSerializing> _Nullable) modelFromMXEXmlNode:(MXEXmlNode* _Nonnull)xmlNode
@@ -201,15 +206,17 @@ didStartElement:(NSString*)elementName
     }
     MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:elementName];
     node.attributes  = attributeDict;
-    node.children    = [NSMutableArray array];
-
     [self.xmlParseStack addObject:node];
 }
 
 - (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
     MXEXmlNode* node = [self.xmlParseStack lastObject];
-    [node.children addObject:string];
+
+    // NOTE: Ignore character string when child node and character string are mixed.
+    if (!node.children) {
+        node.children = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    }
 }
 
 - (void) parser:(NSXMLParser*)parser
@@ -220,8 +227,42 @@ didStartElement:(NSString*)elementName
     if (self.xmlParseStack.count > 1) {
         MXEXmlNode* node = [self.xmlParseStack lastObject];
         [self.xmlParseStack removeLastObject];
+
         MXEXmlNode* parentNode = [self.xmlParseStack lastObject];
-        [parentNode.children addObject:node];
+        if ([parentNode.children isKindOfClass:NSArray.class]) {
+            [parentNode.children addObject:node];
+        } else if (!parentNode.children || [parentNode.children isKindOfClass:NSString.class]) {
+            // NOTE: Ignore character string when child node and character string are mixed.
+            parentNode.children = [NSMutableArray array];
+            [parentNode.children addObject:node];
+        } else {
+            NSAssert(NO, @"Children MUST be array of %@ or NSArray. But got %@", node.class, parentNode.children);
+        }
+    }
+}
+
+#pragma mark - Utility
+
++ (NSStringEncoding) xmlDeclarationToEncoding:(NSString*)xmlDeclaration
+{
+    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"encoding=[\"'](.*)[\"']"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:nil];
+    NSTextCheckingResult* match = [regex firstMatchInString:xmlDeclaration
+                                                    options:0
+                                                      range:NSMakeRange(0, xmlDeclaration.length)];
+
+    NSRange range = [match rangeAtIndex:1];
+    NSString* encoding = [[xmlDeclaration substringWithRange:range] lowercaseString];
+
+    if ([encoding isEqualToString:@"shift_jis"]) {
+        return NSShiftJISStringEncoding;
+    } else if ([encoding isEqualToString:@"euc-jp"]) {
+        return NSJapaneseEUCStringEncoding;
+    } else if ([encoding isEqualToString:@"utf-16"]) {
+        return NSUTF16StringEncoding;
+    } else {
+        return NSUTF8StringEncoding; // default.
     }
 }
 
