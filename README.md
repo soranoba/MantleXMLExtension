@@ -2,6 +2,8 @@ MantleXMLExtension
 =======
 MantleXMLExtension support mutual conversion between Model object and XML with Mantle.
 
+**This repository is WIP!!**
+
 [![CI Status](http://img.shields.io/travis/soranoba/MantleXMLExtension.svg?style=flat)](https://travis-ci.org/soranoba/MantleXMLExtension)
 [![Version](https://img.shields.io/cocoapods/v/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
 [![License](https://img.shields.io/cocoapods/l/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
@@ -9,23 +11,21 @@ MantleXMLExtension support mutual conversion between Model object and XML with M
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
+TODO.
 
 ## Installation
-
 MantleXMLExtension is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "MantleXMLExtension"
+pod 'MantleXMLExtension', :git => 'https://github.com/soranoba/MantleXMLExtension.git'
 ```
 
-## Author
+## Contribute
 
-soranoba, soranoba@gmail.com
+Pull request is welcome =D
 
 ## License
 
-MantleXMLExtension is available under the MIT license. See the LICENSE file for more info.
+[MIT License](LICENSE)
+
