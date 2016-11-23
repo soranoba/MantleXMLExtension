@@ -7,8 +7,8 @@
 //
 
 #import "MXEXmlAttributePath.h"
+#import "MXEXmlPath+Private.h"
 
 @interface MXEXmlAttributePath ()
-@property(nonatomic, nullable, copy) NSString* nodePath;
 @property(nonatomic, nonnull, copy) NSString* attributeKey;
 @end

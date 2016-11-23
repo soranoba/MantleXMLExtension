@@ -12,11 +12,16 @@
 
 + (NSDictionary<NSString*, id>* _Nonnull) xmlKeyPathsByPropertyKey {
     return @{@"status":MXEXmlAttribute(@"", @"status"),
-             @"users" :MXEXmlDuplicateNodes(@"", @"user")};
+             @"users" :MXEXmlArray(@"", MXEXmlChildNode(@"user"))};
 }
 
 + (NSString* _Nonnull) xmlRootElementName {
     return @"response";
+}
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull) usersXmlTransformer
+{
+    return [MXEXmlAdapter xmlNodeArrayTransformerWithModelClass:MXETUser.class];
 }
 
 @end

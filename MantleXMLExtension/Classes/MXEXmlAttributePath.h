@@ -7,30 +7,40 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MXEXmlPath.h"
 
-#define MXEXmlAttribute(nodePath, attribute) \
-    [MXEXmlAttributePath pathWithNode:(nodePath) attributeKey:(attribute)]
+#define MXEXmlAttribute(_nodePath, _attribute) \
+    [MXEXmlAttributePath pathWithNodePath:(_nodePath) attributeKey:(_attribute)]
 
 /**
- * A class for expressing attribute, out of elements of xml.
+ * A class for expressing the attribute, out of elements of xml.
  *
- * @see MXEXmlSerializing +xmlKeyPathsByPropertyKey
+ * @see MXEXmlSerializing # xmlKeyPathsByPropertyKey
  */
-@interface MXEXmlAttributePath : NSObject
+@interface MXEXmlAttributePath : MXEXmlPath
 
 /**
  * Create a attribute path.
  *
- * @param nodePath     A path of node that has the attribute.
- *                     When specifying a grandchild node, the path is `parent.child.grandchild`.
- *                     When specifying a root node, the path is nil or empty string or `.`.
+ * e.g.
+ *    <object><user name="Alice" /></object>
+ *
+ *    If you specify user's name.
+ *    use [MXEXmlAttributePath pathWithNodePath:@"object.user" attributeKey:@"name"].
+ *
+ * @param nodePath     NSArray<NSString*>* or NSString*
+ *                     Path from root to the specified node that has attribute.
  * @param attributeKey Attribute name.
  * @return instance
  */
-- (instancetype _Nullable) initWithNodePath: (NSString* _Nullable)nodePath
-                               attributeKey: (NSString* _Nonnull)attributeKey;
+- (instancetype _Nonnull) initWithNodePath: (id _Nonnull)nodePath
+                              attributeKey: (NSString* _Nonnull)attributeKey;
 
-+ (instancetype _Nullable) pathWithNode: (NSString* _Nullable)nodePath
-                           attributeKey: (NSString* _Nonnull)attributeKey;
+/**
+ * Create a attribute path.
+ * @see initWithNodePath:attributeKey:
+ */
++ (instancetype _Nonnull) pathWithNodePath: (id _Nonnull)nodePath
+                              attributeKey: (NSString* _Nonnull)attributeKey;
 
 @end

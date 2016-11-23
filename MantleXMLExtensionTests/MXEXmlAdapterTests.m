@@ -47,7 +47,7 @@ describe(@"Initializer validation", ^{
         OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":MXEXmlAttribute(@"hoge", @"fuga")}));
         expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
 
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":MXEXmlDuplicateNodes(@"hoge", @"fuga")}));
+        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":MXEXmlArray(@"hoge", @"fuga")}));
         expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
     });
 });

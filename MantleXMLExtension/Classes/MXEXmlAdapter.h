@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <Mantle/MTLModel.h>
+#import <Mantle/MTLTransformerErrorHandling.h>
+
 #import "MXEXmlAttributePath.h"
-#import "MXEXmlDuplicateNodesPath.h"
+#import "MXEXmlArrayPath.h"
+#import "MXEXmlChildNodePath.h"
 
 static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
@@ -37,7 +40,7 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
  *     return @{ @"statusCode" : MXEXmlAttribute(@"status", @"code"),
  *               @"statusValue": MXEXmlAttribute(@"status", @"value"),
  *               @"totalCount" : @"summary.total",
- *               @"userIds"    : MXEDuplicateNodes(@".", @"user.id")}
+ *               @"userIds"    : MXEArray(@".", @"user.id")}
  * }
  *
  * --- 2nd case: Replace user to MXEXmlSerializing model class in 1st case.
@@ -47,7 +50,7 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
  *     return @{ @"statusCode" : MXEXmlAttribute(@"status", @"code"),
  *               @"statusValue": MXEXmlAttribute(@"status", @"value"),
  *               @"totalCount" : @"summary.total",
- *               @"userIds"    : MXEDuplicateNodes(@".", @"user")}
+ *               @"userIds"    : MXEArray(@".", @"user")}
  * }
  *
  * User model
@@ -89,11 +92,11 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 
 #pragma mark - Life cycle
 
-- (instancetype _Nullable) initWithModelClass:(Class<MXEXmlSerializing> _Nonnull)modelClass;
+- (instancetype _Nullable) initWithModelClass:(Class _Nonnull)modelClass;
 
 #pragma mark - Conversion between XML and Model
 
-+ (id<MXEXmlSerializing> _Nullable) modelOfClass:(Class<MXEXmlSerializing> _Nonnull)modelClass
++ (id<MXEXmlSerializing> _Nullable) modelOfClass:(Class _Nonnull)modelClass
                                      fromXmlData:(NSData* _Nullable)XmlData
                                            error:(NSError* _Nullable * _Nullable)error;
 
@@ -105,5 +108,13 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 
 - (NSData* _Nullable) xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                  error:(NSError* _Nullable * _Nullable)error;
+
+#pragma mark - Transformer
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
+    xmlNodeArrayTransformerWithModelClass:(Class _Nonnull)modelClass;
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
+    xmlNodeTransformerWithModelClass:(Class _Nonnull)modelClass;
 
 @end

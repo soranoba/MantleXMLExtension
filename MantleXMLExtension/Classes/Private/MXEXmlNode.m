@@ -8,78 +8,49 @@
 
 #import "MXEXmlNode.h"
 
-@interface MXEXmlNode()
+@interface MXEXmlNode ()
 
 /**
- * Escape.
+ * XML escape
  *
- * @param input Input string.
+ * @param str Input string
  * @return escaped string
  */
-+ (NSString* _Nonnull)escapeString:(NSString* _Nullable)input;
-
-- (MXEXmlNode* _Nullable)lookupChild:(NSString*)elementName;
-+ (NSArray<NSString*>* _Nonnull)stringPathToArrayPath:(NSString*)path;
++ (NSString* _Nonnull)escapeString:(NSString* _Nullable)str;
 
 @end
-@implementation MXEXmlNode : NSObject
 
-- (instancetype _Nullable)initWithElementName:(NSString* _Nonnull)elementName
+@implementation MXEXmlNode
+
+- (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
 {
     if (self = [super init]) {
         self.elementName = elementName;
+        self.attributes = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
-- (instancetype _Nullable) initWithKeyPath:(id _Nonnull)keyPath
+- (instancetype _Nullable) initWithXmlPath:(MXEXmlPath* _Nonnull)xmlPath value:(id _Nullable)value
 {
-    return [self initWithKeyPath:keyPath blocks:nil];
-}
+    NSString* elementName = [xmlPath.separatedPath firstObject];
+    NSArray<NSString*>* separatedPath;
+    if (xmlPath.separatedPath.count > 1) {
+        separatedPath = [xmlPath.separatedPath subarrayWithRange:NSMakeRange(1, xmlPath.separatedPath.count - 1)];
+    } else {
+        separatedPath = [NSArray array];
+    }
 
-- (instancetype _Nullable) initWithKeyPath:(id _Nonnull)keyPath value:(NSString* _Nullable)value
-{
-    return [self initWithKeyPath:keyPath
-                          blocks:^(MXEXmlNode* _Nonnull node) {
-                              node.children = value;
-                          }];
-}
-
-- (instancetype _Nullable) initWithKeyPath:(id _Nonnull)keyPath
-                                    blocks:(MXEXmlNodeInsertBlock _Nullable)blocks
-{
-    NSParameterAssert(keyPath != nil);
-
-    if (self = [super init]) {
-        if ([keyPath isKindOfClass:NSString.class]) {
-            keyPath = [self.class stringPathToArrayPath:keyPath];
-        } else if (![keyPath isKindOfClass:NSArray.class]) {
-            NSAssert(NO, @"KeyPath MUST be NSArray or NSString. But got %@", [keyPath class]);
-            return nil;
-        }
-
-        if (((NSArray*)keyPath).count == 0) {
-            return nil;
-        }
-
+    if (self = [self initWithElementName:elementName]) {
         MXEXmlNode* iterator = self;
-        for (id path in (NSArray<id>*)keyPath) {
-            NSAssert([path isKindOfClass:NSString.class],
-                     @"KeyPath MUST be array of NSString or NSString. But array included %@", [path class]);
-            if (!iterator.elementName) {
-                iterator.elementName = path;
-            } else {
-                MXEXmlNode* child = [[MXEXmlNode alloc] initWithElementName:path];
-                if (!child) {
-                    return nil;
-                }
-                iterator.children = [NSMutableArray array];
-                [iterator.children addObject:child];
-                iterator = child;
-            }
+        for (NSString* path in separatedPath) {
+            MXEXmlNode* child = [[MXEXmlNode alloc] initWithElementName:path];
+            iterator.children = [NSMutableArray array];
+            [iterator.children addObject:child];
+            iterator = child;
         }
-        if (blocks) {
-            blocks(iterator);
+        if (value && ![xmlPath setValueBlocks](iterator, value)) {
+            return nil;
         }
     }
     return self;
@@ -134,53 +105,23 @@
     }
 }
 
-- (id _Nullable)getChildForKeyPath:(id _Nonnull)keyPath
+- (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)nodeName
 {
-    if ([keyPath isKindOfClass:MXEXmlAttributePath.class]) {
-
-        MXEXmlAttributePath* attribute = keyPath;
-        NSMutableArray<NSString*>* pathArray = [[self.class stringPathToArrayPath:attribute.nodePath] mutableCopy];
-
-        if (!pathArray.count || (pathArray.count == 1 && !(pathArray[0].length))) {
-            return self.attributes[attribute.attributeKey];
-        } else {
-            NSString* elementName = [pathArray lastObject];
-            [pathArray removeLastObject];
-
-            MXEXmlNode* tmp = [[MXEXmlNode alloc] initWithElementName:@""];
-            tmp.children = [self getChildForKeyPath:pathArray];
-            return [tmp lookupChild:elementName].attributes[attribute.attributeKey];
-        }
-
-    } else if ([keyPath isKindOfClass:MXEXmlDuplicateNodesPath.class]) {
-
-        MXEXmlDuplicateNodesPath* nodePath = keyPath;
-        id searchNodes = [self getChildForKeyPath:nodePath.parentNodePath];
-        if ([searchNodes isKindOfClass:NSArray.class]) {
-            NSMutableArray* result = [NSMutableArray array];
-            for (id child in searchNodes) {
-                if ([child isKindOfClass:self.class]) {
-                    MXEXmlNode* tmp = [[MXEXmlNode alloc] initWithElementName:@""];
-                    tmp.children = @[child];
-                    id foundNode = [tmp getChildForKeyPath:nodePath.collectRelativePath];
-                    if (foundNode) {
-                        [result addObject:foundNode];
-                    }
-                }
+    if ([self.children isKindOfClass:NSArray.class]) {
+        for (id child in self.children) {
+            NSAssert([child isKindOfClass:self.class], @"children is string or array of %@", self.class);
+            if ([((MXEXmlNode*)child).elementName isEqualToString:nodeName]) {
+                return child;
             }
-            return result;
         }
-        return nil;
-
-    } else if ([keyPath isKindOfClass:NSString.class]) {
-        keyPath = [self.class stringPathToArrayPath:keyPath];
-    } else {
-        NSAssert([keyPath isKindOfClass:NSArray.class],
-                 @"keyPath MUST be NSString or NSArray or MXEXmlAttributePath or MXEXmlDuplicateNodesPath");
     }
+    return nil;
+}
 
+- (id _Nullable)getForXmlPath:(MXEXmlPath* _Nonnull)xmlPath
+{
     MXEXmlNode* iterator = self;
-    for (NSString* path in keyPath) {
+    for (NSString* path in xmlPath.separatedPath) {
         MXEXmlNode* lookupNode = [iterator lookupChild:path];
         if (lookupNode) {
             iterator = lookupNode;
@@ -188,45 +129,19 @@
             return nil;
         }
     }
-    return iterator.children;
+    return [xmlPath getValueBlocks](iterator);
 }
 
-- (void)setChildWithBlocks:(MXEXmlNodeInsertBlock _Nonnull)blocks forKeyPath:(id _Nonnull)keyPath
+- (BOOL) setValue:(id _Nonnull)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath
 {
-    if ([keyPath isKindOfClass:MXEXmlAttributePath.class]) {
-
-        MXEXmlAttributePath* attribute = keyPath;
-        [self setChildWithBlocks:blocks forKeyPath:attribute.nodePath];
-        return;
-
-    } else if ([keyPath isKindOfClass:MXEXmlDuplicateNodesPath.class]) {
-
-        MXEXmlDuplicateNodesPath* nodePath = keyPath;
-        MXEXmlNode* insertNode = [[self.class alloc] initWithKeyPath:nodePath.collectRelativePath
-                                                              blocks:blocks];
-        if (insertNode) {
-            [self setChildWithBlocks:^(MXEXmlNode* _Nonnull node) {
-                if (!node.children) {
-                    node.children = [NSMutableArray array];
-                }
-                [node.children addObject:insertNode];
-            } forKeyPath:nodePath.parentNodePath];
-        }
-        return;
-
-    } else if ([keyPath isKindOfClass:NSString.class]) {
-        keyPath = [self.class stringPathToArrayPath:keyPath];
-    } else {
-        NSAssert([keyPath isKindOfClass:NSArray.class],
-                 @"keyPath MUST be NSString or NSArray or MXEXmlAttributePath or MXEXmlDuplicateNodesPath");
-    }
+    NSArray<NSString*>* separatedPath = xmlPath.separatedPath;
 
     MXEXmlNode* iterator = self;
     BOOL doFound = YES;
     int i;
 
-    for (i = 0; i < ((NSArray<NSString*>*)keyPath).count; i++) {
-        NSString* path = keyPath[i];
+    for (i = 0; i < separatedPath.count; i++) {
+        NSString* path = separatedPath[i];
         MXEXmlNode* lookupNode = [iterator lookupChild:path];
         if (lookupNode) {
             iterator = lookupNode;
@@ -237,44 +152,66 @@
     }
 
     if (doFound) {
-        blocks(iterator);
+        return [xmlPath setValueBlocks](iterator, value);
     } else {
-        NSArray* notEnoughKeyPath = [(NSArray*)keyPath subarrayWithRange:NSMakeRange(i, [keyPath count] - i)];
+        NSArray* notEnoughxmlPath = [separatedPath subarrayWithRange:NSMakeRange(i, separatedPath.count - i)];
 
-        MXEXmlNode* insertNode = [[self.class alloc] initWithKeyPath:notEnoughKeyPath
-                                                              blocks:blocks];
+        xmlPath.separatedPath = notEnoughxmlPath;
+        MXEXmlNode* insertNode = [[self.class alloc] initWithXmlPath:xmlPath
+                                                               value:value];
+        xmlPath.separatedPath = separatedPath;
+
         if (!insertNode) {
-            return;
+            return NO;
         }
-        if (!iterator.children) {
-            iterator.children = [NSMutableArray array];
+
+        if (![iterator.children isKindOfClass:NSMutableArray.class]) {
+            if ([iterator.children isKindOfClass:NSArray.class]) {
+                iterator.children = [iterator.children mutableCopy];
+            } else {
+                iterator.children = [NSMutableArray array];
+            }
         }
         [iterator.children addObject:insertNode];
+        return YES;
     }
 }
 
-- (void)setChild:(NSString* _Nonnull)value forKeyPath:(id _Nonnull)keyPath
-{
-    if ([keyPath isKindOfClass:MXEXmlAttributePath.class]) {
-        MXEXmlAttributePath* attribute = keyPath;
-        [self setChildWithBlocks:^(MXEXmlNode* _Nonnull node) {
-            if (!node.attributes) {
-                node.attributes = [NSMutableDictionary dictionary];
-            }
-            ((NSMutableDictionary*)node.attributes)[attribute.attributeKey] = value;
-        } forKeyPath: attribute.nodePath];
-    } else {
-        [self setChildWithBlocks:^(MXEXmlNode* _Nonnull node) {
-            node.children = value;
-        } forKeyPath:keyPath];
-    }
-}
+#pragma mark - NSObject (override)
 
 - (BOOL)isEqual:(id)object {
-    if ([object isKindOfClass:self.class]) {
-        return [[self toString] isEqualToString:[object toString]];
+    if (![object isKindOfClass:self.class]) {
+        return NO;
     }
-    return NO;
+
+    MXEXmlNode* node = object;
+    if (![node.elementName isEqual:self.elementName]) {
+        return NO;
+    }
+
+    if (node.attributes.count != self.attributes.count) {
+        return NO;
+    }
+    for (NSString* key in node.attributes) {
+        if (![node.attributes[key] isEqual:self.attributes[key]]) {
+            return NO;
+        }
+    }
+
+    if ([node.children isKindOfClass:NSString.class] && [self.children isKindOfClass:NSString.class]) {
+        return [node.children isEqual:self.children];
+    } else if ([node.children isKindOfClass:NSArray.class] && [self.children isKindOfClass:NSArray.class]) {
+        if ([node.children count] != [self.children count]) {
+            return NO;
+        }
+        for (int i = 0; i < [node.children count]; i++) {
+            if (![node.children[i] isEqual:self.children[i]]) {
+                return NO;
+            }
+        }
+        return YES;
+    }
+    return node.children == nil && self.children == nil;
 }
 
 #pragma mark - Private methods
@@ -287,31 +224,6 @@
     str = [str stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
     str = [str stringByReplacingOccurrencesOfString:@"'" withString:@"&apos;"];
     return str;
-}
-
-- (MXEXmlNode* _Nullable)lookupChild:(NSString*)elementName
-{
-    if ([self.children isKindOfClass:NSArray.class]) {
-        for (id child in self.children) {
-            NSAssert([child isKindOfClass:self.class], @"children is string or array of %@", self.class);
-            if ([((MXEXmlNode*)child).elementName isEqualToString:elementName]) {
-                return child;
-            }
-        }
-    }
-    return nil;
-}
-
-+ (NSArray<NSString*>* _Nonnull)stringPathToArrayPath:(NSString*)path
-{
-    NSArray<NSString*>* array = [path componentsSeparatedByString:@"."];
-    NSMutableArray<NSString*>* result = [NSMutableArray array];
-    for (NSString* p in array) {
-        if (p.length) {
-            [result addObject:p];
-        }
-    }
-    return result;
 }
 
 @end
