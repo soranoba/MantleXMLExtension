@@ -6,68 +6,73 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "MXEXmlNode.h"
+#import <Foundation/Foundation.h>
 
 QuickSpecBegin(MXEXmlNodeTests)
 
-describe(@"toString", ^{
+    describe(@"toString", ^{
 
-    it(@"attributes is exist, children isn't exist", ^{
-        MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        root.attributes = @{@"key1":@"value1", @"key2":@"value2"};
-        expect([root toString]).to(equal(@"<object key1=\"value1\" key2=\"value2\" />"));
-    });
+        it(@"attributes is exist, children isn't exist", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
+            root.attributes = @{ @"key1" : @"value1",
+                                 @"key2" : @"value2" };
+            expect([root toString]).to(equal(@"<object key1=\"value1\" key2=\"value2\" />"));
+        });
 
-    it(@"The attribute values escaped", ^{
-        MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        root.attributes = @{@"key":@"escape string is \"'<>&"};
-        expect([root toString]).to(equal(@"<object key=\"escape string is &quot;&apos;&lt;&gt;&amp;\" />"));
-    });
+        it(@"The attribute values escaped", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
+            root.attributes = @{ @"key" : @"escape string is \"'<>&" };
+            expect([root toString]).to(equal(@"<object key=\"escape string is &quot;&apos;&lt;&gt;&amp;\" />"));
+        });
 
-    it(@"The children escaped", ^{
-        MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        root.children = @"escape string is \"'<>&";
-        expect([root toString]).to(equal(@"<object>escape string is &quot;&apos;&lt;&gt;&amp;</object>"));
-    });
+        it(@"The children escaped", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
+            root.children = @"escape string is \"'<>&";
+            expect([root toString]).to(equal(@"<object>escape string is &quot;&apos;&lt;&gt;&amp;</object>"));
+        });
 
-    it(@"attributes isn't exist, children isn't exist", ^{
-        MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        expect([root toString]).to(equal(@"<object />"));
-    });
+        it(@"attributes isn't exist, children isn't exist", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
+            expect([root toString]).to(equal(@"<object />"));
+        });
 
-    it(@"attributes isn't exist, children is exist", ^{
-        MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        root.children = @[ [[MXEXmlNode alloc] initWithElementName:@"1st"],
-                           [[MXEXmlNode alloc] initWithElementName:@"2nd"] ];
-        expect([root toString]).to(equal(@"<object><1st /><2nd /></object>"));
-    });
+        it(@"attributes isn't exist, children is exist", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
+            root.children = @[ [[MXEXmlNode alloc] initWithElementName:@"1st"],
+                               [[MXEXmlNode alloc] initWithElementName:@"2nd"] ];
+            expect([root toString]).to(equal(@"<object><1st /><2nd /></object>"));
+        });
 
-    it(@"attribute is exist, children is exist", ^{
-        MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        root.attributes = @{@"key1":@"value1", @"key2":@"value2"};
-        MXEXmlNode* child = [[MXEXmlNode alloc] initWithElementName:@"2nd"];
-        child.attributes = @{@"key1":@"value1", @"key2":@"value2"};
-        root.children = @[ [[MXEXmlNode alloc] initWithElementName:@"1st"],
-                           child,
-                           [[MXEXmlNode alloc] initWithElementName:@"3rd"]];
-        expect([root toString]).to(equal(@"<object key1=\"value1\" key2=\"value2\">"
-                                         @"<1st />"
-                                         @"<2nd key1=\"value1\" key2=\"value2\" />"
-                                         @"<3rd />"
-                                         @"</object>"));
+        it(@"attribute is exist, children is exist", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"];
+            root.attributes = @{ @"key1" : @"value1",
+                                 @"key2" : @"value2" };
+            MXEXmlNode* child = [[MXEXmlNode alloc] initWithElementName:@"2nd"];
+            child.attributes = @{ @"key1" : @"value1",
+                                  @"key2" : @"value2" };
+            root.children = @[ [[MXEXmlNode alloc] initWithElementName:@"1st"],
+                               child,
+                               [[MXEXmlNode alloc] initWithElementName:@"3rd"] ];
+            expect([root toString]).to(equal(@"<object key1=\"value1\" key2=\"value2\">"
+                                             @"<1st />"
+                                             @"<2nd key1=\"value1\" key2=\"value2\" />"
+                                             @"<3rd />"
+                                             @"</object>"));
+        });
     });
-});
 
 describe(@"isEqual:", ^{
 
     it(@"If the contents are the same, return YES", ^{
         MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        a.attributes = @{@"key1":@"value1", @"key2":@"value2"};
+        a.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"value2" };
         a.children = @"child";
 
         MXEXmlNode* b = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        b.attributes = @{@"key1":@"value1", @"key2":@"value2"};
+        b.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"value2" };
         b.children = @"child";
 
         expect([a isEqual:b]).to(equal(YES));
@@ -75,11 +80,13 @@ describe(@"isEqual:", ^{
 
     it(@"If element name is different, return NO", ^{
         MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        a.attributes = @{@"key1":@"value1", @"key2":@"value2"};
+        a.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"value2" };
         a.children = @"child";
 
         MXEXmlNode* b = [[MXEXmlNode alloc] initWithElementName:@"another object"];
-        b.attributes = @{@"key1":@"value1", @"key2":@"value2"};
+        b.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"value2" };
         b.children = @"child";
 
         expect([a isEqual:b]).to(equal(NO));
@@ -87,11 +94,13 @@ describe(@"isEqual:", ^{
 
     it(@"If attributes is different, return NO", ^{
         MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        a.attributes = @{@"key1":@"value1", @"key2":@"value2"};
+        a.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"value2" };
         a.children = @"child";
 
         MXEXmlNode* b = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        b.attributes = @{@"key1":@"value1", @"key2":@"another value"};
+        b.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"another value" };
         b.children = @"child";
 
         expect([a isEqual:b]).to(equal(NO));
@@ -99,11 +108,13 @@ describe(@"isEqual:", ^{
 
     it(@"If children is different, return NO", ^{
         MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        a.attributes = @{@"key1":@"value1", @"key2":@"value2"};
+        a.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"value2" };
         a.children = @"child";
 
         MXEXmlNode* b = [[MXEXmlNode alloc] initWithElementName:@"object"];
-        b.attributes = @{@"key1":@"value1", @"key2":@"value2"};
+        b.attributes = @{ @"key1" : @"value1",
+                          @"key2" : @"value2" };
         b.children = @"another child";
 
         expect([a isEqual:b]).to(equal(NO));
@@ -134,8 +145,8 @@ describe(@"isEqual:", ^{
         MXEXmlNode* a3 = [[MXEXmlNode alloc] initWithElementName:@"a"];
         a3.children = @"a3";
 
-        root1.children = @[a1, a2, a3];
-        root2.children = @[a3, a2, a1];
+        root1.children = @[ a1, a2, a3 ];
+        root2.children = @[ a3, a2, a1 ];
 
         expect([root1 isEqual:root2]).to(equal(NO));
     });
@@ -148,8 +159,8 @@ describe(@"isEqual:", ^{
         MXEXmlNode* a2 = [[MXEXmlNode alloc] initWithElementName:@"a"];
         MXEXmlNode* a3 = [[MXEXmlNode alloc] initWithElementName:@"a"];
 
-        root1.children = @[a1, a2, a3];
-        root2.children = @[a3, a2, a1];
+        root1.children = @[ a1, a2, a3 ];
+        root2.children = @[ a3, a2, a1 ];
 
         expect([root1 isEqual:root2]).to(equal(YES));
     });
@@ -174,7 +185,7 @@ describe(@"initWithXmlPath:value:", ^{
     });
 
     it(@"MXEXmlArrayPath : array of value", ^{
-        MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlArray(@"a.b", @"c") value:@[@"value1", @"value2"]];
+        MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlArray(@"a.b", @"c") value:@[ @"value1", @"value2" ]];
         expect([a toString]).to(equal(@"<a><b><c>value1</c><c>value2</c></b></a>"));
     });
 
@@ -202,17 +213,17 @@ describe(@"initWithXmlPath:value:", ^{
 describe(@"lookupChild:", ^{
 
     it(@"found / not found", ^{
-        MXEXmlNode* a  = [[MXEXmlNode alloc] initWithElementName:@"a"];
-        a.children = @[[[MXEXmlNode alloc] initWithElementName:@"c"]];
+        MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"a"];
+        a.children = @[ [[MXEXmlNode alloc] initWithElementName:@"c"] ];
         MXEXmlNode* b1 = [[MXEXmlNode alloc] initWithElementName:@"b"];
-        b1.attributes = @{@"key":@"b1"};
+        b1.attributes = @{ @"key" : @"b1" };
         MXEXmlNode* b2 = [[MXEXmlNode alloc] initWithElementName:@"b"];
-        b2.attributes = @{@"key":@"b2"};
-        MXEXmlNode* c  = [[MXEXmlNode alloc] initWithElementName:@"c"];
+        b2.attributes = @{ @"key" : @"b2" };
+        MXEXmlNode* c = [[MXEXmlNode alloc] initWithElementName:@"c"];
         c.children = @"c";
 
         MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"a"];
-        root.children = @[a, b1, b2, c];
+        root.children = @[ a, b1, b2, c ];
 
         expect([root lookupChild:@"a"].elementName).to(equal(@"a"));
         expect([root lookupChild:@"b"].attributes[@"key"]).to(equal(@"b1"));

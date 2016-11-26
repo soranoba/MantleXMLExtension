@@ -10,8 +10,8 @@
 #import <Mantle/MTLModel.h>
 #import <Mantle/MTLTransformerErrorHandling.h>
 
-#import "MXEXmlAttributePath.h"
 #import "MXEXmlArrayPath.h"
+#import "MXEXmlAttributePath.h"
 #import "MXEXmlChildNodePath.h"
 
 static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -60,14 +60,14 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
  *     return @{ @"userId" : @"id" }
  * }
  */
-+ (NSDictionary<NSString*, id>* _Nonnull) xmlKeyPathsByPropertyKey;
++ (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey;
 
 /**
  * Return a element name of XML root node.
  *
  * @see +xmlKeyPathsByPropertyKey
  */
-+ (NSString* _Nonnull) xmlRootElementName;
++ (NSString* _Nonnull)xmlRootElementName;
 
 @optional
 
@@ -99,22 +99,22 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 
 #pragma mark - Life cycle
 
-- (instancetype _Nullable) initWithModelClass:(Class _Nonnull)modelClass;
+- (instancetype _Nullable)initWithModelClass:(Class _Nonnull)modelClass;
 
 #pragma mark - Conversion between XML and Model
 
-+ (id<MXEXmlSerializing> _Nullable) modelOfClass:(Class _Nonnull)modelClass
-                                     fromXmlData:(NSData* _Nullable)XmlData
-                                           error:(NSError* _Nullable * _Nullable)error;
++ (id<MXEXmlSerializing> _Nullable)modelOfClass:(Class _Nonnull)modelClass
+                                    fromXmlData:(NSData* _Nullable)XmlData
+                                          error:(NSError* _Nullable* _Nullable)error;
 
-+ (NSData* _Nullable) xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
-                                 error:(NSError* _Nullable * _Nullable)error;
++ (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
+                                error:(NSError* _Nullable* _Nullable)error;
 
-- (id<MXEXmlSerializing> _Nullable) modelFromXmlData:(NSData* _Nullable)xmlData
-                                               error:(NSError* _Nullable * _Nullable)error;
+- (id<MXEXmlSerializing> _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
+                                              error:(NSError* _Nullable* _Nullable)error;
 
-- (NSData* _Nullable) xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
-                                 error:(NSError* _Nullable * _Nullable)error;
+- (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
+                                error:(NSError* _Nullable* _Nullable)error;
 
 #pragma mark - Transformer
 

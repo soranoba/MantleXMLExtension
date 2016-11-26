@@ -15,26 +15,27 @@ static NSString* const MXEErrorDomain = @"MXEErrorDomain";
 /**
  * Return a LocalizedDescription.
  */
-+ (NSString* _Nonnull) description:(MXEErrorCode)code;
++ (NSString* _Nonnull)description:(MXEErrorCode)code;
 @end
 
 @implementation NSError (MantleXMLExtension)
 
-+ (instancetype _Nonnull) errorWithMXEErrorCode:(MXEErrorCode)code
++ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code
 {
-    NSDictionary* userInfo = @{NSLocalizedDescriptionKey: [self description:code]};
-    return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];}
+    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self description:code] };
+    return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
+}
 
-+ (instancetype _Nonnull) errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason
++ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason
 {
-    NSDictionary* userInfo = @{NSLocalizedDescriptionKey: [self description:code],
-                               NSLocalizedFailureReasonErrorKey: reason};
+    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self description:code],
+                                NSLocalizedFailureReasonErrorKey : reason };
     return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
 }
 
 #pragma mark - Private Method
 
-+ (NSString* _Nonnull) description:(MXEErrorCode)code
++ (NSString* _Nonnull)description:(MXEErrorCode)code
 {
     switch (code) {
         default:

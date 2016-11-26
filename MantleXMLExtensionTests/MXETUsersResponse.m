@@ -15,9 +15,9 @@
 
 + (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey
 {
-    return @{@"status"      :MXEXmlAttribute(@"", @"status"),
-             @"userCount"   :@"summary.count",
-             @"users"       :MXEXmlArray(@"", MXEXmlChildNode(@"user"))};
+    return @{ @"status" : MXEXmlAttribute(@"", @"status"),
+              @"userCount" : @"summary.count",
+              @"users" : MXEXmlArray(@"", MXEXmlChildNode(@"user")) };
 }
 
 + (NSString* _Nonnull)xmlRootElementName
@@ -27,7 +27,7 @@
 
 + (NSArray* _Nonnull)xmlChildNodeOrder
 {
-    return @[@"userCount", @"users"];
+    return @[ @"userCount", @"users" ];
 }
 
 #pragma mark xml transformer
@@ -39,7 +39,7 @@
 
 #pragma mark - MTLModel (Override)
 
-- (BOOL)validate:(NSError * _Nullable * _Nullable)error
+- (BOOL)validate:(NSError* _Nullable* _Nullable)error
 {
     // NOTE: All elements are nullable.
     return [super validate:error];
@@ -53,12 +53,12 @@
 
 + (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey
 {
-    return @{@"firstName":MXEXmlAttribute(@"", @"first_name"),
-             @"lastName" :MXEXmlAttribute(@"", @"last_name"),
-             @"age"      :@"age",
-             @"sex"      :@"sex",
-             @"parent"   :MXEXmlChildNode(@"parent"),
-             @"child"    :MXEXmlChildNode(@"child")};
+    return @{ @"firstName" : MXEXmlAttribute(@"", @"first_name"),
+              @"lastName" : MXEXmlAttribute(@"", @"last_name"),
+              @"age" : @"age",
+              @"sex" : @"sex",
+              @"parent" : MXEXmlChildNode(@"parent"),
+              @"child" : MXEXmlChildNode(@"child") };
 }
 
 + (NSString* _Nonnull)xmlRootElementName
@@ -68,21 +68,21 @@
 
 + (NSArray* _Nonnull)xmlChildNodeOrder
 {
-    return @[@"age", @"sex", @"parent", @"child"];
+    return @[ @"age", @"sex", @"parent", @"child" ];
 }
 
 #pragma mark xml transformer
 
 + (NSValueTransformer* _Nonnull)sexXmlTransformer
 {
-    NSDictionary* map = @{@"Man"    :@(MXETMan),
-                          @"Woman"  :@(MXETWoman)};
+    NSDictionary* map = @{ @"Man" : @(MXETMan),
+                           @"Woman" : @(MXETWoman) };
     return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:map];
 }
 
 #pragma mark - MTLModel (Override)
 
-- (BOOL)validate:(NSError * _Nullable * _Nullable)error
+- (BOOL)validate:(NSError* _Nullable* _Nullable)error
 {
     // NOTE: parent and child are nullable.
     return self.firstName != nil && self.lastName != nil && self.age > 0 && self.sex != 0;

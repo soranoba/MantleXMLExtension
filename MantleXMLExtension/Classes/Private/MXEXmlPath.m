@@ -6,17 +6,16 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlPath+Private.h"
 #import "MXEXmlNode.h"
+#import "MXEXmlPath+Private.h"
 
 @interface MXEXmlPath ()
-
 
 @end
 
 @implementation MXEXmlPath
 
-- (instancetype _Nonnull) initWithNodePath:(id _Nonnull)nodePath
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
 {
     NSParameterAssert([nodePath isKindOfClass:NSString.class] || [nodePath isKindOfClass:NSArray.class]);
 
@@ -38,12 +37,12 @@
     return self;
 }
 
-+ (instancetype _Nonnull) pathWithNodePath:(id _Nonnull)nodePath
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
 {
     return [[self alloc] initWithNodePath:nodePath];
 }
 
-+ (NSArray<NSString*>* _Nonnull)separateNodePath: (NSString* _Nonnull)nodePath
++ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nonnull)nodePath
 {
     NSArray<NSString*>* separatedPath = [nodePath componentsSeparatedByString:@"."];
     NSMutableArray<NSString*>* filteredPath = [NSMutableArray array];
@@ -56,7 +55,7 @@
     return filteredPath;
 }
 
-- (id _Nullable(^ _Nonnull)(MXEXmlNode* _Nonnull)) getValueBlocks
+- (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
     return ^(MXEXmlNode* node) {
         if ([node.children isKindOfClass:NSString.class]) {
@@ -66,7 +65,7 @@
     };
 }
 
-- (BOOL (^ _Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value)) setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
 {
     return ^(MXEXmlNode* node, id value) {
         if ([value isKindOfClass:NSString.class]) {

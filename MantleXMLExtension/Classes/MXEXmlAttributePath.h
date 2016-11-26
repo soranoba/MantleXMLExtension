@@ -6,8 +6,8 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "MXEXmlPath.h"
+#import <Foundation/Foundation.h>
 
 #define MXEXmlAttribute(_nodePath, _attribute) \
     [MXEXmlAttributePath pathWithNodePath:(_nodePath) attributeKey:(_attribute)]
@@ -33,14 +33,14 @@
  * @param attributeKey Attribute name.
  * @return instance
  */
-- (instancetype _Nonnull) initWithNodePath: (id _Nonnull)nodePath
-                              attributeKey: (NSString* _Nonnull)attributeKey;
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
+                             attributeKey:(NSString* _Nonnull)attributeKey;
 
 /**
  * Create a attribute path.
  * @see initWithNodePath:attributeKey:
  */
-+ (instancetype _Nonnull) pathWithNodePath: (id _Nonnull)nodePath
-                              attributeKey: (NSString* _Nonnull)attributeKey;
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
+                             attributeKey:(NSString* _Nonnull)attributeKey;
 
 @end

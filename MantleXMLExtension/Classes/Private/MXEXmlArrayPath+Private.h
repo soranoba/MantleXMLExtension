@@ -10,5 +10,5 @@
 #import "MXEXmlPath+Private.h"
 
 @interface MXEXmlArrayPath ()
-@property(nonatomic, nonnull, strong) MXEXmlPath* collectRelativePath;
+@property (nonatomic, nonnull, strong) MXEXmlPath* collectRelativePath;
 @end

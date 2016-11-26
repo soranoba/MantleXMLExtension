@@ -31,7 +31,7 @@
     return self;
 }
 
-- (instancetype _Nullable) initWithXmlPath:(MXEXmlPath* _Nonnull)xmlPath value:(id _Nullable)value
+- (instancetype _Nullable)initWithXmlPath:(MXEXmlPath* _Nonnull)xmlPath value:(id _Nullable)value
 {
     NSString* elementName = [xmlPath.separatedPath firstObject];
     NSArray<NSString*>* separatedPath;
@@ -76,15 +76,15 @@
     if (self.attributes) {
         for (NSString* key in self.attributes) {
             [attributesStr appendString:[NSString stringWithFormat:@" %@=\"%@\"",
-                                        key, [self.class escapeString:self.attributes[key]]]];
+                                                                   key, [self.class escapeString:self.attributes[key]]]];
         }
     }
 
     if (self.children) {
         if ([self.children isKindOfClass:NSString.class]) {
             return [NSString stringWithFormat:@"<%@%@>%@</%@>",
-                    self.elementName, attributesStr, [self.class escapeString:self.children], self.elementName];
-        } else if ([self.children isKindOfClass:NSArray.class]){
+                                              self.elementName, attributesStr, [self.class escapeString:self.children], self.elementName];
+        } else if ([self.children isKindOfClass:NSArray.class]) {
             NSMutableString* childrenStr = [NSMutableString string];
             for (id child in self.children) {
                 if ([child isKindOfClass:self.class]) {
@@ -95,7 +95,7 @@
                 }
             }
             return [NSString stringWithFormat:@"<%@%@>%@</%@>",
-                    self.elementName, attributesStr, childrenStr, self.elementName];
+                                              self.elementName, attributesStr, childrenStr, self.elementName];
         } else {
             NSAssert(NO, @"Children MUST be array of %@ or NSString. But, got %@", self.class, self.children);
             return @"";
@@ -132,7 +132,7 @@
     return [xmlPath getValueBlocks](iterator);
 }
 
-- (BOOL) setValue:(id _Nonnull)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath
+- (BOOL)setValue:(id _Nonnull)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath
 {
     NSArray<NSString*>* separatedPath = xmlPath.separatedPath;
 
@@ -179,7 +179,8 @@
 
 #pragma mark - NSObject (override)
 
-- (BOOL)isEqual:(id)object {
+- (BOOL)isEqual:(id)object
+{
     if (![object isKindOfClass:self.class]) {
         return NO;
     }

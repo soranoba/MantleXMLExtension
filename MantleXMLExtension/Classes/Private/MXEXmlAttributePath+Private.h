@@ -10,5 +10,5 @@
 #import "MXEXmlPath+Private.h"
 
 @interface MXEXmlAttributePath ()
-@property(nonatomic, nonnull, copy) NSString* attributeKey;
+@property (nonatomic, nonnull, copy) NSString* attributeKey;
 @end

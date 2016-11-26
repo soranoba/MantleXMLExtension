@@ -6,13 +6,13 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "MXEXmlAttributePath+Private.h"
 #import "MXEXmlArrayPath+Private.h"
+#import "MXEXmlAttributePath+Private.h"
 #import "MXEXmlChildNodePath+Private.h"
+#import <Foundation/Foundation.h>
 
 @class MXEXmlNode;
-typedef void(^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
+typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
 
 @interface MXEXmlNode : NSObject
 
@@ -32,7 +32,7 @@ typedef void(^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
  * @param elementName XML element name
  * @return instance
  */
-- (instancetype _Nonnull) initWithElementName:(NSString* _Nonnull)elementName;
+- (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName;
 
 /**
  * Initialize with key path and value.
@@ -41,14 +41,14 @@ typedef void(^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
  * @param value     Set value the most child level node.
  * @return instance
  */
-- (instancetype _Nullable) initWithXmlPath:(MXEXmlPath* _Nonnull)xmlPath value:(id _Nullable)value;
+- (instancetype _Nullable)initWithXmlPath:(MXEXmlPath* _Nonnull)xmlPath value:(id _Nullable)value;
 
 /**
  * Convert to NSString.
  *
  * @return XmlString. This string does NOT include XML declaration.
  */
-- (NSString* _Nonnull) toString;
+- (NSString* _Nonnull)toString;
 
 /**
  * Lookup for child that name is nodeName and return the found node.

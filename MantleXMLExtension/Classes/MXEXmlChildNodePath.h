@@ -6,8 +6,8 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "MXEXmlPath.h"
+#import <Foundation/Foundation.h>
 
 #define MXEXmlChildNode(_path) [MXEXmlChildNodePath pathWithNodePath:(_path)]
 
@@ -30,12 +30,12 @@
  *                 Path from root to the specified node.
  * @return instance
  */
-- (instancetype _Nonnull) initWithNodePath: (id _Nonnull)nodePath;
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath;
 
 /**
  * Create a node path.
  * @see initWithNodePath:
  */
-+ (instancetype _Nonnull) pathWithNodePath: (id _Nonnull)nodePath;
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath;
 
 @end

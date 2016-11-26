@@ -21,20 +21,20 @@
  * @param nodePath Path from root to the specified point.
  * @return Separated node path
  */
-+ (NSArray<NSString*>* _Nonnull)separateNodePath: (NSString* _Nonnull)nodePath;
++ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nonnull)nodePath;
 
 /**
  * Return blocks getting value from node of path.
  *
  * @return blocks getting value from node.
  */
-- (id _Nullable(^ _Nonnull)(MXEXmlNode* _Nonnull)) getValueBlocks;
+- (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks;
 
 /**
  * Return blocks setting value to node of path.
  *
  * @return blocks setting value to node.
  */
-- (BOOL (^ _Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value)) setValueBlocks;
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks;
 
 @end

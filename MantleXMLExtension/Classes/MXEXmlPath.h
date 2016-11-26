@@ -10,8 +10,8 @@
 
 @interface MXEXmlPath : NSObject
 
-- (instancetype _Nonnull) initWithNodePath:(id _Nonnull)nodePath;
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath;
 
-+ (instancetype _Nonnull) pathWithNodePath:(id _Nonnull)nodePath;
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath;
 
 @end

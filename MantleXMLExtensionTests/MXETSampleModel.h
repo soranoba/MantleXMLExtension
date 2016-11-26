@@ -6,9 +6,9 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
+#import "MXEXmlAdapter.h"
 #import <Foundation/Foundation.h>
 #import <Mantle/MTLModel.h>
-#import "MXEXmlAdapter.h"
 
 @interface MXETSampleModel : MTLModel <MXEXmlSerializing>
 

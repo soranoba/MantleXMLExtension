@@ -6,9 +6,9 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
+#import "MXEXmlAdapter.h"
 #import <Foundation/Foundation.h>
 #import <Mantle/MTLModel.h>
-#import "MXEXmlAdapter.h"
 
 @class MXETError;
 @class MXETUser;
@@ -50,12 +50,12 @@ typedef NS_ENUM(NSUInteger, MXETSex) {
  */
 @interface MXETUser : MTLModel <MXEXmlSerializing>
 
-@property(nonatomic, nonnull, strong) NSString* firstName;
-@property(nonatomic, nonnull, strong) NSString* lastName;
-@property(nonatomic, assign) NSInteger age;
-@property(nonatomic, assign) MXETSex sex;
-@property(nonatomic, nullable, strong) MXETUser* parent;
-@property(nonatomic, nullable, strong) MXETUser* child;
+@property (nonatomic, nonnull, strong) NSString* firstName;
+@property (nonatomic, nonnull, strong) NSString* lastName;
+@property (nonatomic, assign) NSInteger age;
+@property (nonatomic, assign) MXETSex sex;
+@property (nonatomic, nullable, strong) MXETUser* parent;
+@property (nonatomic, nullable, strong) MXETUser* child;
 
 @end
 
@@ -70,14 +70,14 @@ typedef NS_ENUM(NSUInteger, MXETSex) {
  */
 @interface MXETErrorResponse : MTLModel <MXEXmlSerializing>
 
-@property(nonatomic, nonnull, strong) NSString* status;
-@property(nonatomic, nonnull, strong) MXETError* error;
+@property (nonatomic, nonnull, strong) NSString* status;
+@property (nonatomic, nonnull, strong) MXETError* error;
 
 @end
 
 @interface MXETError : MTLModel <MXEXmlSerializing>
 
-@property(nonatomic, assign) NSInteger code;
-@property(nonatomic, nonnull, strong) NSString* errorDescription;
+@property (nonatomic, assign) NSInteger code;
+@property (nonatomic, nonnull, strong) NSString* errorDescription;
 
 @end

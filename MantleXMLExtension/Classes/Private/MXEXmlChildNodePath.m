@@ -11,7 +11,7 @@
 
 @implementation MXEXmlChildNodePath
 
-- (instancetype _Nonnull) initWithNodePath:(id _Nonnull)nodePath
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
 {
     NSParameterAssert([nodePath isKindOfClass:NSString.class] || [nodePath isKindOfClass:NSArray.class]);
 
@@ -32,21 +32,21 @@
     return self;
 }
 
-+ (instancetype _Nonnull) pathWithNodePath:(id _Nonnull)nodePath
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
 {
     return [[self alloc] initWithNodePath:nodePath];
 }
 
 #pragma mark - MXEXmlpath (override)
 
-- (id _Nullable(^ _Nonnull)(MXEXmlNode* _Nonnull)) getValueBlocks
+- (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
     return ^(MXEXmlNode* node) {
         return [node lookupChild:self.nodeName];
     };
 }
 
-- (BOOL (^ _Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value)) setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
 {
     return ^(MXEXmlNode* node, id value) {
         if (!([value isKindOfClass:MXEXmlNode.class]
@@ -55,7 +55,7 @@
         }
         MXEXmlNode* insertNode = value;
         insertNode.elementName = self.nodeName;
-        
+
         MXEXmlNode* foundNode = [node lookupChild:self.nodeName];
         if ([node.children isKindOfClass:NSArray.class]) {
             if (![node.children isKindOfClass:NSMutableArray.class]) {

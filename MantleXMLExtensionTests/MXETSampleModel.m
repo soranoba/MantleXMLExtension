@@ -12,11 +12,13 @@
 
 #pragma mark - MXEXmlSerialing
 
-+ (NSDictionary<NSString*, id>* _Nonnull) xmlKeyPathsByPropertyKey {
++ (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey
+{
     return @{};
 }
 
-+ (NSString* _Nonnull) xmlRootElementName {
++ (NSString* _Nonnull)xmlRootElementName
+{
     return @"response";
 }
 

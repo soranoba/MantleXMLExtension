@@ -17,7 +17,7 @@ typedef enum : NSUInteger {
 
 @interface NSError (MantleXMLExtension)
 
-+ (instancetype _Nonnull) errorWithMXEErrorCode:(MXEErrorCode)code;
-+ (instancetype _Nonnull) errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
++ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code;
++ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
 
 @end

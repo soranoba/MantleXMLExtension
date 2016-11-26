@@ -11,8 +11,8 @@
 
 @implementation MXEXmlAttributePath
 
-- (instancetype _Nonnull) initWithNodePath: (id _Nonnull)nodePath
-                              attributeKey: (NSString* _Nonnull)attributeKey
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
+                             attributeKey:(NSString* _Nonnull)attributeKey
 {
     NSParameterAssert(attributeKey != nil && attributeKey.length > 0);
 
@@ -22,22 +22,22 @@
     return self;
 }
 
-+ (instancetype _Nonnull) pathWithNodePath: (id _Nonnull)nodePath
-                              attributeKey: (NSString* _Nonnull)attributeKey
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
+                             attributeKey:(NSString* _Nonnull)attributeKey
 {
     return [[self alloc] initWithNodePath:nodePath attributeKey:attributeKey];
 }
 
 #pragma mark - MXEXmlpath (override)
 
-- (id _Nullable(^ _Nonnull)(MXEXmlNode* _Nonnull)) getValueBlocks
+- (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
     return ^(MXEXmlNode* node) {
         return node.attributes[self.attributeKey];
     };
 }
 
-- (BOOL (^ _Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value)) setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
 {
     return ^(MXEXmlNode* node, id value) {
         if ([value isKindOfClass:NSString.class]) {

@@ -13,44 +13,44 @@
 @interface MXEXmlAdapter () <NSXMLParserDelegate>
 @property (nonatomic, nonnull, strong) NSMutableArray<MXEXmlNode*>* xmlParseStack;
 @property (nonatomic, nullable, strong) NSError* parseError;
-+ (NSStringEncoding) xmlDeclarationToEncoding:(NSString*)xmlDeclaration;
++ (NSStringEncoding)xmlDeclarationToEncoding:(NSString*)xmlDeclaration;
 @end
 
 QuickSpecBegin(MXEXmlAdapterTests)
 
-describe(@"Initializer validation", ^{
-    __block id mock = nil;
+    describe(@"Initializer validation", ^{
+        __block id mock = nil;
 
-    beforeEach(^{
-        mock = OCMClassMock(MXETSampleModel.class);
+        beforeEach(^{
+            mock = OCMClassMock(MXETSampleModel.class);
+        });
+
+        afterEach(^{
+            [mock stopMocking];
+        });
+
+        it(@"xmlKeyPathsByPropertyKey included properties isn't found in model", ^{
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"notFound" : @"a" });
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
+        });
+        it(@"xmlKeyPathsByPropertyKey is array", ^{
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @[] });
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
+        });
+        it(@"xmlKeyPathsByPropertyKey is valid", ^{
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @"hoge.fuga" });
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @"a" });
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{ @"a" : MXEXmlAttribute(@"hoge", @"fuga") }));
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{ @"a" : MXEXmlArray(@"hoge", @"fuga") }));
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+        });
     });
-
-    afterEach(^{
-        [mock stopMocking];
-    });
-
-    it(@"xmlKeyPathsByPropertyKey included properties isn't found in model", ^{
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"notFound":@"a"});
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
-    });
-    it(@"xmlKeyPathsByPropertyKey is array", ^{
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":@[]});
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
-    });
-    it(@"xmlKeyPathsByPropertyKey is valid", ^{
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":@"hoge.fuga"});
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
-
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{@"a":@"a"});
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
-
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":MXEXmlAttribute(@"hoge", @"fuga")}));
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
-
-        OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{@"a":MXEXmlArray(@"hoge", @"fuga")}));
-        expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
-    });
-});
 
 describe(@"serialize / deserialize", ^{
 
@@ -174,17 +174,17 @@ describe(@"XMLParser", ^{
         MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
         parser.delegate = adapter;
         MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"];
-        expectedObj.attributes = @{@"status": @"OK"};
+        expectedObj.attributes = @{ @"status" : @"OK" };
 
         MXEXmlNode* user1 = [[MXEXmlNode alloc] initWithElementName:@"user"];
         MXEXmlNode* user2 = [[MXEXmlNode alloc] initWithElementName:@"user"];
         MXEXmlNode* userId1 = [[MXEXmlNode alloc] initWithElementName:@"id"];
         MXEXmlNode* userId2 = [[MXEXmlNode alloc] initWithElementName:@"id"];
         userId1.children = @"1";
-        user1.children = @[userId1];
+        user1.children = @[ userId1 ];
 
         userId2.children = @"2";
-        user2.children = @[userId2];
+        user2.children = @[ userId2 ];
         expectedObj.children = @[ user1, user2 ];
 
         expect([parser parse]).to(equal(YES));

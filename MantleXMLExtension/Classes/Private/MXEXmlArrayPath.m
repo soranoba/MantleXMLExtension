@@ -11,8 +11,8 @@
 
 @implementation MXEXmlArrayPath
 
-- (instancetype _Nonnull) initWithParentNodePath: (id _Nonnull)parentNodePath
-                             collectRelativePath: (id _Nonnull)collectRelativePath
+- (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
+                            collectRelativePath:(id _Nonnull)collectRelativePath
 {
     if (self = [super initWithNodePath:parentNodePath]) {
         if ([collectRelativePath isKindOfClass:MXEXmlPath.class]) {
@@ -24,8 +24,8 @@
     return self;
 }
 
-+ (instancetype _Nonnull) pathWithParentNodePath: (id _Nonnull)parentNodePath
-                             collectRelativePath: (id _Nonnull)collectRelativePath
++ (instancetype _Nonnull)pathWithParentNodePath:(id _Nonnull)parentNodePath
+                            collectRelativePath:(id _Nonnull)collectRelativePath
 {
     return [[self alloc] initWithParentNodePath:parentNodePath
                             collectRelativePath:collectRelativePath];
@@ -33,7 +33,7 @@
 
 #pragma mark - MXEXmlpath (override)
 
-- (id _Nullable(^ _Nonnull)(MXEXmlNode* _Nonnull)) getValueBlocks
+- (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
     return ^(MXEXmlNode* node) {
         if ([node.children isKindOfClass:NSArray.class]) {
@@ -60,7 +60,7 @@
     };
 }
 
-- (BOOL (^ _Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value)) setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
 {
     return ^(MXEXmlNode* node, id value) {
         if (![value isKindOfClass:NSArray.class]) {

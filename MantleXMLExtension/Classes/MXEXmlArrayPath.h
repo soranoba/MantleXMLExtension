@@ -6,8 +6,8 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "MXEXmlPath.h"
+#import <Foundation/Foundation.h>
 
 #define MXEXmlArray(_nodePath, _collectPath) \
     [MXEXmlArrayPath pathWithParentNodePath:(_nodePath) collectRelativePath:(_collectPath)]
@@ -33,14 +33,14 @@
  * @param collectRelativePath  NSString* or NSArray<NSString*>* or MXEXmlPath*
  *                             Relative path from the parent to the child node.
  */
-- (instancetype _Nonnull) initWithParentNodePath: (id _Nonnull)parentNodePath
-                             collectRelativePath: (id _Nonnull)collectRelativePath;
+- (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
+                            collectRelativePath:(id _Nonnull)collectRelativePath;
 
 /**
  * Create a children path.
  * @see initWithParentNodePath:collectRelativePath:
  */
-+ (instancetype _Nonnull) pathWithParentNodePath: (id _Nonnull)parentNodePath
-                             collectRelativePath: (id _Nonnull)collectRelativePath;
++ (instancetype _Nonnull)pathWithParentNodePath:(id _Nonnull)parentNodePath
+                            collectRelativePath:(id _Nonnull)collectRelativePath;
 
 @end
