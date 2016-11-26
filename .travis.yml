@@ -1,6 +1,8 @@
 language: objective-c
 osx_image: xcode8.2
-script: "git clean -xdf; make"
+xcode_workspace: MantleXMLExtension.xcworkspace
+xcode_scheme: MantleXMLExtension
+script: "git clean -xdf; make ci"
 notifications:
   email:
     - soranoba@gmail.com

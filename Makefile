@@ -2,6 +2,8 @@ NAME := MantleXMLExtension
 
 all: init synx format test podlint
 
+ci: init test podlint
+
 init:
 	bundle install --path vendor/bundle
 	bundle exec pod install

@@ -2,8 +2,6 @@ MantleXMLExtension
 =======
 MantleXMLExtension support mutual conversion between Model object and XML with Mantle.
 
-**This repository is WIP!!**
-
 [![CI Status](http://img.shields.io/travis/soranoba/MantleXMLExtension.svg?style=flat)](https://travis-ci.org/soranoba/MantleXMLExtension)
 [![Version](https://img.shields.io/cocoapods/v/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
 [![License](https://img.shields.io/cocoapods/l/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
@@ -74,7 +72,7 @@ Just add some to [MTLModel](https://github.com/Mantle/Mantle#mtlmodel) for MXEXm
 
 MXEXmlAdapter support 4 types of paths.
 
-- **MXEXmlPath**
+**MXEXmlPath**
 
 For example:
 
@@ -90,7 +88,7 @@ For example:
 
 If you get `value`, please use this. Value doesn't support MXEXmlSerializing object.
 
-- **MXEAttributePath**
+**MXEAttributePath**
 
 For example:
 
@@ -106,7 +104,7 @@ MXEXmlAttribute(@"parent.child", @"key")
 
 If you get value of specified attribute, please use this.
 
-- **MXEChildNodePath**
+**MXEChildNodePath**
 
 For example:
 
@@ -125,7 +123,7 @@ MXEXmlChildNode(@"parent.child")
 
 If you get nested MXEXmlSerializing object, please use this. This path only support MXEXmlSerializing object.
 
-- **MXEArrayPath**
+**MXEArrayPath**
 
 For example:
 
