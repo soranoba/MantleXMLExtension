@@ -24,7 +24,7 @@
  * e.g.
  *    <object><a key="attribute">value</a></object>
  *
- *    If you specify <a key="attribute>value</a>, use [MXEXmlChildNodePath pathWithNodePath:@"object.a"].
+ *    If you specify <a key="attribute">value</a>, use [MXEXmlChildNodePath pathWithNodePath:@"object.a"].
  *
  * @param nodePath NSString* or NSArray<NSString*>*
  *                 Path from root to the specified node.

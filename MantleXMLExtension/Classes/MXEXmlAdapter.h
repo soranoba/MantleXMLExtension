@@ -81,6 +81,13 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 + (NSValueTransformer* _Nullable)xmlTransformerForKey:(NSString* _Nonnull)key;
 
 /**
+ * Specifies the order of child nodes.
+ * Those not included in returned list are arranged randomly (in the order in which NSDictionary returns).
+ * After that, arrange them in order from the beginning included in the list.
+ */
++ (NSArray* _Nonnull)xmlChildNodeOrder;
+
+/**
  * Return a XML declaration. It use when model convert to XML.
  *
  * default: MXEXmlDeclarationDefault

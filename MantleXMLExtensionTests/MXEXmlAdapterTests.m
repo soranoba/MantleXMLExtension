@@ -56,6 +56,9 @@ describe(@"serialize / deserialize", ^{
 
     NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                        @"<response status=\"ok\">"
+                       @"<summary>"
+                       @"<count>2</count>"
+                       @"</summary>"
                        @"<user first_name=\"Ai\" last_name=\"Asada\">"
                        @"<age>25</age>"
                        @"<sex>Woman</sex>"
@@ -63,26 +66,56 @@ describe(@"serialize / deserialize", ^{
                        @"<user first_name=\"Ikuo\" last_name=\"Ikeda\">"
                        @"<age>32</age>"
                        @"<sex>Man</sex>"
+                       @"<parent first_name=\"Umeo\" last_name=\"Ueda\">"
+                       @"<age>50</age>"
+                       @"<sex>Man</sex>"
+                       @"</parent>"
+                       @"<child first_name=\"Eiko\" last_name=\"Endo\">"
+                       @"<age>10</age>"
+                       @"<sex>Woman</sex>"
+                       @"</child>"
                        @"</user>"
                        @"</response>";
     NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
-    it(@"", ^{
+    it(@"sample (1)", ^{
         MXETUsersResponse* response = [MXEXmlAdapter modelOfClass:MXETUsersResponse.class
                                                       fromXmlData:xmlData
                                                             error:nil];
         expect(response.status).to(equal(@"ok"));
+        expect(response.userCount).to(equal(2));
         expect(response.users.count).to(equal(2));
 
         expect(response.users[0].firstName).to(equal(@"Ai"));
         expect(response.users[0].lastName).to(equal(@"Asada"));
         expect(response.users[0].age).to(equal(25));
         expect(response.users[0].sex == MXETWoman).to(equal(YES));
+        expect(response.users[0].parent).to(beNil());
+        expect(response.users[0].child).to(beNil());
 
         expect(response.users[1].firstName).to(equal(@"Ikuo"));
         expect(response.users[1].lastName).to(equal(@"Ikeda"));
         expect(response.users[1].age).to(equal(32));
         expect(response.users[1].sex == MXETMan).to(equal(YES));
+        expect(response.users[1].parent).notTo(beNil());
+        expect(response.users[1].child).notTo(beNil());
+
+        expect(response.users[1].parent.firstName).to(equal("Umeo"));
+        expect(response.users[1].parent.lastName).to(equal("Ueda"));
+        expect(response.users[1].parent.age).to(equal(50));
+        expect(response.users[1].parent.sex == MXETMan).to(equal(YES));
+        expect(response.users[1].parent.parent).to(beNil());
+        expect(response.users[1].parent.child).to(beNil());
+
+        expect(response.users[1].child.firstName).to(equal("Eiko"));
+        expect(response.users[1].child.lastName).to(equal("Endo"));
+        expect(response.users[1].child.age).to(equal(10));
+        expect(response.users[1].child.sex == MXETWoman).to(equal(YES));
+        expect(response.users[1].child.parent).to(beNil());
+        expect(response.users[1].child.child).to(beNil());
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(xmlData));
     });
 });
 

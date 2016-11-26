@@ -16,6 +16,9 @@
 /**
  * <?xml version="1.0" encoding="UTF-8"?>
  * <response status="ok">
+ *   <summary>
+ *     <count>2</count>
+ *   </summary>
  *   <user>
  *   </user>
  *   <user>
@@ -26,20 +29,33 @@
 
 @property (nonatomic, nonnull, strong) NSString* status;
 @property (nonatomic, nonnull, strong) NSArray<MXETUser*>* users;
+@property (nonatomic, assign) NSInteger userCount;
 
 @end
 
-typedef enum : NSUInteger {
+typedef NS_ENUM(NSUInteger, MXETSex) {
     MXETMan = 1,
     MXETWoman = 2,
-} MXETSex;
+};
 
+/**
+ * <user first_name="Ai" last_name="Asada">
+ *   <age>20</age>
+ *   <sex>Woman</sex>
+ *   <parent first_name="Ikuo" last_name="Ikeda">
+ *     <age>30</age>
+ *     <sex>Man</age>
+ *   </parent>
+ * </user>
+ */
 @interface MXETUser : MTLModel <MXEXmlSerializing>
 
-@property (nonatomic, nonnull, strong) NSString* firstName;
-@property (nonatomic, nonnull, strong) NSString* lastName;
-@property (nonatomic, assign) NSInteger age;
-@property (nonatomic, assign) MXETSex sex;
+@property(nonatomic, nonnull, strong) NSString* firstName;
+@property(nonatomic, nonnull, strong) NSString* lastName;
+@property(nonatomic, assign) NSInteger age;
+@property(nonatomic, assign) MXETSex sex;
+@property(nonatomic, nullable, strong) MXETUser* parent;
+@property(nonatomic, nullable, strong) MXETUser* child;
 
 @end
 
@@ -54,14 +70,14 @@ typedef enum : NSUInteger {
  */
 @interface MXETErrorResponse : MTLModel <MXEXmlSerializing>
 
-@property (nonatomic, nonnull, strong) NSString* status;
-@property (nonatomic, nonnull, strong) MXETError* error;
+@property(nonatomic, nonnull, strong) NSString* status;
+@property(nonatomic, nonnull, strong) MXETError* error;
 
 @end
 
 @interface MXETError : MTLModel <MXEXmlSerializing>
 
-@property (nonatomic, assign) NSInteger code;
-@property (nonatomic, nonnull, strong) NSString* errorDescription;
+@property(nonatomic, assign) NSInteger code;
+@property(nonatomic, nonnull, strong) NSString* errorDescription;
 
 @end

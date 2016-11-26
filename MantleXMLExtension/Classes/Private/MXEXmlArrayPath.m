@@ -68,6 +68,7 @@
         }
 
         NSString* childNodeName = [self.collectRelativePath.separatedPath firstObject];
+        childNodeName = childNodeName ?: @"";
 
         if (node.children == nil) {
             node.children = [NSMutableArray array];
@@ -86,7 +87,13 @@
         }
 
         for (id v in (NSArray*)value) {
-            MXEXmlNode* insertChild = [[MXEXmlNode alloc] initWithXmlPath:self.collectRelativePath value:v];
+            MXEXmlNode* insertChild;
+            if (childNodeName.length == 0 && [v isKindOfClass:MXEXmlNode.class]) {
+                insertChild = v;
+            } else {
+                insertChild = [[MXEXmlNode alloc] initWithXmlPath:self.collectRelativePath value:v];
+            }
+
             if (!insertChild) {
                 return NO;
             }

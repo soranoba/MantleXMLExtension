@@ -61,7 +61,7 @@ typedef void(^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
 /**
  * Get children or attribute from node specified keypath.
  *
- * @param keyPath See MXEXmlSerializing +xmlKeyPathsByPropertyKey
+ * @param xmlPath See MXEXmlSerializing +xmlKeyPathsByPropertyKey
  * @return NSArray<MXEXmlNode*>* (children) or NSString* (attribute, value)
  */
 - (id _Nullable)getForXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
@@ -70,7 +70,7 @@ typedef void(^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
  * Add a child node to the location specified by keypath.
  *
  * @param value   KeyPath's node has this string.
- * @param keyPath See MXEXmlSerializing +xmlKeyPathsByPropertyKey
+ * @param xmlPath See MXEXmlSerializing +xmlKeyPathsByPropertyKey
  */
 - (BOOL)setValue:(id _Nonnull)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
 

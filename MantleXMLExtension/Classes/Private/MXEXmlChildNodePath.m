@@ -54,6 +54,8 @@
             return NO;
         }
         MXEXmlNode* insertNode = value;
+        insertNode.elementName = self.nodeName;
+        
         MXEXmlNode* foundNode = [node lookupChild:self.nodeName];
         if ([node.children isKindOfClass:NSArray.class]) {
             if (![node.children isKindOfClass:NSMutableArray.class]) {

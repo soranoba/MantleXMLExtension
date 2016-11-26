@@ -99,10 +99,8 @@ static void setError(NSError* _Nullable * _Nullable error, MXEErrorCode code)
             NSAssert([self.propertyKeys containsObject:key], @"%@ is NOT a property of %@.", key, modelClass);
 
             id value = self.xmlKeyPathsByPropertyKey[key];
-            NSAssert([value isKindOfClass:NSString.class]
-                     || [value isKindOfClass:MXEXmlAttributePath.class]
-                     || [value isKindOfClass:MXEXmlArrayPath.class],
-                    @"%@ MUST NSString or MXEXmlAttributePath or MXEXmlArrayPath. But got %@", key, value);
+            NSAssert([value isKindOfClass:NSString.class] || [value isKindOfClass:MXEXmlPath.class],
+                     @"%@ MUST NSString or MXEXmlPath. But got %@", key, value);
         }
         self.valueTransformersByPropertyKey = [self.class valueTransformersForModelClass:modelClass];
     }
@@ -348,6 +346,24 @@ static void setError(NSError* _Nullable * _Nullable error, MXEErrorCode code)
 
 #pragma mark - Utility
 
++ (NSArray<NSString*>* _Nonnull) sortProperties:(NSArray<NSString*>*)propertyKeys
+                                          order:(NSArray<NSString*>*)orderedKeys
+{
+    return [propertyKeys sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+        NSUInteger index1 = [orderedKeys indexOfObject:obj1];
+        NSUInteger index2 = [orderedKeys indexOfObject:obj2];
+        index1 = index1 == NSNotFound ? 0 : index1 + 1;
+        index2 = index2 == NSNotFound ? 0 : index2 + 1;
+        if (index1 < index2) {
+            return NSOrderedAscending;
+        } else if (index1 == index2) {
+            return NSOrderedSame;
+        } else {
+            return NSOrderedDescending;
+        }
+    }];
+}
+
 + (NSStringEncoding) xmlDeclarationToEncoding:(NSString*)xmlDeclaration
 {
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"encoding=[\"'](.*)[\"']"
@@ -479,19 +495,31 @@ didStartElement:(NSString*)elementName
     NSParameterAssert(model != nil);
     NSParameterAssert([model isKindOfClass:self.modelClass]);
 
-    NSSet *propertyKeysToSerialize = [NSSet setWithArray:self.xmlKeyPathsByPropertyKey.allKeys];
+    NSArray *order;
+    if ([model.class respondsToSelector:@selector(xmlChildNodeOrder)]) {
+        order = [model.class xmlChildNodeOrder];
+    } else {
+        order = [NSArray array];
+    }
+    NSArray *orderedPropertyKeys = [self.class sortProperties:self.xmlKeyPathsByPropertyKey.allKeys
+                                                        order:order];
 
-    NSDictionary *dictionaryValue
-        = [model.dictionaryValue dictionaryWithValuesForKeys:propertyKeysToSerialize.allObjects];
+    NSDictionary *dictionaryValue = [model.dictionaryValue dictionaryWithValuesForKeys:orderedPropertyKeys];
     MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:[model.class xmlRootElementName]];
 
-    __block BOOL success = YES;
-    __block NSError *tmpError = nil;
+    BOOL success = YES;
+    NSError *tmpError = nil;
 
-    [dictionaryValue enumerateKeysAndObjectsUsingBlock:^(NSString *propertyKey, id value, BOOL *stop) {
+    for (NSString* propertyKey in orderedPropertyKeys) {
+        id value = dictionaryValue[propertyKey];
+
+        if ([value isEqual:NSNull.null]) {
+            value = nil;
+        }
+
         id xmlKeyPaths = self.xmlKeyPathsByPropertyKey[propertyKey];
         if (!xmlKeyPaths) {
-            return;
+            continue;
         }
         if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {
             xmlKeyPaths = [MXEXmlPath pathWithNodePath:xmlKeyPaths];
@@ -505,15 +533,16 @@ didStartElement:(NSString*)elementName
                 value = [errorHandlingTransformer reverseTransformedValue:value success:&success error:&tmpError];
 
                 if (!success) {
-                    *stop = YES;
-                    return;
+                    break;
                 }
             } else {
                 value = [transformer reverseTransformedValue:value];
             }
         }
-        [node setValue:value forXmlPath:(MXEXmlPath*)xmlKeyPaths];
-    }];
+        if (value) {
+            [node setValue:value forXmlPath:(MXEXmlPath*)xmlKeyPaths];
+        }
+    }
 
     if (success) {
         return node;
