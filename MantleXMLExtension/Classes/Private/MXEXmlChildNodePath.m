@@ -48,15 +48,15 @@
     };
 }
 
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
 {
-    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nonnull value) {
-        NSParameterAssert(node != nil && value != nil);
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nullable value) {
+        NSParameterAssert(node != nil);
 
-        if (!([value isKindOfClass:MXEXmlNode.class]
-              && ([node.children isKindOfClass:NSArray.class] || node.children == nil))) {
+        if (value && ![value isKindOfClass:MXEXmlNode.class]) {
             return NO;
         }
+
         MXEXmlNode* insertNode = value;
         insertNode.elementName = self.nodeName;
 
@@ -69,11 +69,16 @@
             node.children = [NSMutableArray array];
         }
 
-        if (foundNode) {
+        if (foundNode && insertNode) {
             NSUInteger index = [node.children indexOfObject:foundNode];
             ((NSMutableArray*)node.children)[index] = insertNode;
         } else {
-            [(NSMutableArray*)node.children addObject:insertNode];
+            if (foundNode) {
+                [node.children removeObject:foundNode];
+            }
+            if (insertNode) {
+                [(NSMutableArray*)node.children addObject:insertNode];
+            }
         }
         return YES;
     };

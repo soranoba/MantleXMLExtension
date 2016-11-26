@@ -39,16 +39,21 @@
     };
 }
 
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
 {
-    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nonnull value) {
-        NSParameterAssert(node != nil && value != nil);
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nullable value) {
+        NSParameterAssert(node != nil);
 
-        if ([value isKindOfClass:NSString.class]) {
+        if (!value || [value isKindOfClass:NSString.class]) {
             if (![node.attributes isKindOfClass:NSMutableDictionary.class]) {
                 node.attributes = [node.attributes mutableCopy];
             }
-            ((NSMutableDictionary*)node.attributes)[self.attributeKey] = value;
+
+            if (value) {
+                ((NSMutableDictionary*)node.attributes)[self.attributeKey] = value;
+            } else {
+                [((NSMutableDictionary*)node.attributes) removeObjectForKey:self.attributeKey];
+            }
             return YES;
         }
         return NO;

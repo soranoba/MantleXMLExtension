@@ -65,10 +65,10 @@
     };
 }
 
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
 {
-    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nonnull value) {
-        NSParameterAssert(node != nil && value != nil);
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nullable value) {
+        NSParameterAssert(node != nil);
 
         if (![value isKindOfClass:NSArray.class]) {
             return NO;

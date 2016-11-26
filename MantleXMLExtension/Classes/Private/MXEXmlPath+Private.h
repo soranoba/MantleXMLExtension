@@ -35,6 +35,6 @@
  *
  * @return blocks setting value to node.
  */
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks;
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks;
 
 @end
