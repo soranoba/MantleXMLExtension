@@ -60,8 +60,10 @@
 {
     if ([children isKindOfClass:NSArray.class]) {
         for (id child in children) {
-            NSAssert([child isKindOfClass:self.class],
-                     @"Children MUST be array of %@ or NSString. But, array include %@", self.class, [child class]);
+            if (![child isKindOfClass:self.class]) {
+                NSAssert(NO, @"Children MUST be array of %@ or NSString. But, array include %@",
+                         self.class, [child class]);
+            }
         }
     } else {
         NSAssert([children isKindOfClass:NSString.class],

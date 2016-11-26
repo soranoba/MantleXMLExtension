@@ -1,6 +1,6 @@
 NAME := MantleXMLExtension
 
-all: init test synx format
+all: init synx format test podlint
 
 init:
 	bundle install --path vendor/bundle
@@ -14,8 +14,11 @@ test:
 		-destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' \
 		-destination 'platform=iOS Simulator,name=iPhone 6,OS=9.0' \
 		-destination 'platform=iOS Simulator,name=iPhone 6,OS=10.0' \
-		-destination 'platform=iOS Simulator,name=iPhone 7,OS=10.0' \
+		-destination 'platform=iOS Simulator,name=iPhone 7,OS=10.1' \
 		clean test
+
+podlint:
+	bundle exec pod lib lint --use-libraries
 
 synx:
 	bundle exec synx ${NAME}.xcodeproj

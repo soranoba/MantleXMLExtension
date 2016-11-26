@@ -99,8 +99,9 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
             NSAssert([self.propertyKeys containsObject:key], @"%@ is NOT a property of %@.", key, modelClass);
 
             id value = self.xmlKeyPathsByPropertyKey[key];
-            NSAssert([value isKindOfClass:NSString.class] || [value isKindOfClass:MXEXmlPath.class],
-                     @"%@ MUST NSString or MXEXmlPath. But got %@", key, value);
+            if (!([value isKindOfClass:NSString.class] || [value isKindOfClass:MXEXmlPath.class])) {
+                NSAssert(NO, @"%@ MUST NSString or MXEXmlPath. But got %@", key, value);
+            }
         }
         self.valueTransformersByPropertyKey = [self.class valueTransformersForModelClass:modelClass];
     }

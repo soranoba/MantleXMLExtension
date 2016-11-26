@@ -65,7 +65,7 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 /**
  * Return a element name of XML root node.
  *
- * @see +xmlKeyPathsByPropertyKey
+ * @see xmlKeyPathsByPropertyKey
  */
 + (NSString* _Nonnull)xmlRootElementName;
 
@@ -74,9 +74,8 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 /**
  * Specifies how to convert a Xml value to the given property key.
  *
- * If the receiver implements a `+<key>XmlTransformer` method, MXEXmlAdapter
- * will use the result of that method instead.
- *
+ * If the receiver implements a `+<key>XmlTransformer` method,
+ * MXEXmlAdapter will use the result of that method instead.
  */
 + (NSValueTransformer* _Nullable)xmlTransformerForKey:(NSString* _Nonnull)key;
 
@@ -97,30 +96,65 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 
 @interface MXEXmlAdapter : NSObject
 
-#pragma mark - Life cycle
+#pragma mark - Lifecycle
 
+/**
+ * Create a adapter
+ *
+ * @param modelClass MXEXmlSerializing model class
+ * @return instance
+ */
 - (instancetype _Nullable)initWithModelClass:(Class _Nonnull)modelClass;
 
 #pragma mark - Conversion between XML and Model
 
+/**
+ * Convert xml to model
+ *
+ * @param modelClass MXEXmlSerializing model class
+ * @param xmlData    XML data
+ * @param error      If it return nil, error information is saved here.
+ * @return If conversion is success, return model object. Otherwise, return nil.
+ */
 + (id<MXEXmlSerializing> _Nullable)modelOfClass:(Class _Nonnull)modelClass
                                     fromXmlData:(NSData* _Nullable)XmlData
                                           error:(NSError* _Nullable* _Nullable)error;
 
+/**
+ * Convert model to xml
+ *
+ * @param model MXEXmlSerializing model object
+ * @param error If it return nil, error information is saved here.
+ * @return If conversion is success, return xml data. Otherwise, return nil.
+ */
 + (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
 
+/**
+ * @see modelOfClass:fromXmlData:error:
+ */
 - (id<MXEXmlSerializing> _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
                                               error:(NSError* _Nullable* _Nullable)error;
 
+/**
+ * @see xmlDataFromModel:error:
+ */
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
 
 #pragma mark - Transformer
 
+/**
+ * Return the transformer that specify when use MXEXmlArray.
+ *
+ * @return transformer
+ */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
     xmlNodeArrayTransformerWithModelClass:(Class _Nonnull)modelClass;
 
+/**
+ * Return the transformer that used when nested child node is a MXEXmlSerializing object.
+ */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
     xmlNodeTransformerWithModelClass:(Class _Nonnull)modelClass;
 

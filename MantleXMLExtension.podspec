@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
 
   s.source_files         = 'MantleXMLExtension/Classes/**/*.{m,h}'
-  s.private_header_files = 'MantleXMLExtension/Classes/Private/**/*.{h,m}'
+  s.private_header_files = 'MantleXMLExtension/Classes/Private/*.h'
 
   s.dependency 'Mantle', '~> 2.0'
 end
