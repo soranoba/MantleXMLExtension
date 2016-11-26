@@ -85,7 +85,15 @@
 - (BOOL)validate:(NSError* _Nullable* _Nullable)error
 {
     // NOTE: parent and child are nullable.
-    return self.firstName != nil && self.lastName != nil && self.age > 0 && self.sex != 0;
+    if (self.firstName != nil && self.lastName != nil && self.age > 0 && self.sex != 0) {
+        return YES;
+    }
+    if (error) {
+        *error = [NSError errorWithDomain:@"MXETestErrorDomain"
+                                     code:400
+                                 userInfo:@{ NSLocalizedDescriptionKey : @"MXETUser object is unvalid" }];
+    }
+    return NO;
 }
 
 @end

@@ -21,7 +21,7 @@
  * @param nodePath Path from root to the specified point.
  * @return Separated node path
  */
-+ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nonnull)nodePath;
++ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nullable)nodePath;
 
 /**
  * Return blocks getting value from node of path.

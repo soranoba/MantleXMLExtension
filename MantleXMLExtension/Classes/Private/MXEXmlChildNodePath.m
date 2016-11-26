@@ -41,14 +41,18 @@
 
 - (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
-    return ^(MXEXmlNode* node) {
+    return ^id _Nullable(MXEXmlNode* _Nonnull node)
+    {
+        NSParameterAssert(node != nil);
         return [node lookupChild:self.nodeName];
     };
 }
 
 - (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
 {
-    return ^(MXEXmlNode* node, id value) {
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nonnull value) {
+        NSParameterAssert(node != nil && value != nil);
+
         if (!([value isKindOfClass:MXEXmlNode.class]
               && ([node.children isKindOfClass:NSArray.class] || node.children == nil))) {
             return NO;
@@ -73,6 +77,18 @@
         }
         return YES;
     };
+}
+
+#pragma mark - NSCopying
+
+- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
+{
+    MXEXmlChildNodePath* result = [super copyWithZone:zone];
+
+    if (result) {
+        result.nodeName = [self.nodeName copyWithZone:zone];
+    }
+    return result;
 }
 
 @end

@@ -32,14 +32,18 @@
 
 - (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
-    return ^(MXEXmlNode* node) {
+    return ^id _Nullable(MXEXmlNode* _Nonnull node)
+    {
+        NSParameterAssert(node != nil);
         return node.attributes[self.attributeKey];
     };
 }
 
 - (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
 {
-    return ^(MXEXmlNode* node, id value) {
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nonnull value) {
+        NSParameterAssert(node != nil && value != nil);
+
         if ([value isKindOfClass:NSString.class]) {
             if (![node.attributes isKindOfClass:NSMutableDictionary.class]) {
                 node.attributes = [node.attributes mutableCopy];
@@ -49,6 +53,18 @@
         }
         return NO;
     };
+}
+
+#pragma mark - NSCopying
+
+- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
+{
+    MXEXmlAttributePath* result = [super copyWithZone:zone];
+
+    if (result) {
+        result.attributeKey = [self.attributeKey copyWithZone:zone];
+    }
+    return result;
 }
 
 @end

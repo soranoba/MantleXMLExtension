@@ -9,10 +9,6 @@
 #import "MXEXmlNode.h"
 #import "MXEXmlPath+Private.h"
 
-@interface MXEXmlPath ()
-
-@end
-
 @implementation MXEXmlPath
 
 - (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
@@ -42,7 +38,7 @@
     return [[self alloc] initWithNodePath:nodePath];
 }
 
-+ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nonnull)nodePath
++ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nullable)nodePath
 {
     NSArray<NSString*>* separatedPath = [nodePath componentsSeparatedByString:@"."];
     NSMutableArray<NSString*>* filteredPath = [NSMutableArray array];
@@ -74,6 +70,18 @@
         }
         return NO;
     };
+}
+
+#pragma mark - NSCopying
+
+- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
+{
+    MXEXmlPath* result = [[[self class] allocWithZone:zone] init];
+
+    if (result) {
+        result.separatedPath = [[NSArray allocWithZone:zone] initWithArray:self.separatedPath copyItems:YES];
+    }
+    return result;
 }
 
 @end

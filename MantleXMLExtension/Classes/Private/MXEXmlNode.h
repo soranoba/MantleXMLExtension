@@ -14,8 +14,12 @@
 @class MXEXmlNode;
 typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
 
+/**
+ * Node instance of XML.
+ */
 @interface MXEXmlNode : NSObject
 
+/// Node name.
 @property (nonatomic, nonnull, copy) NSString* elementName;
 
 /// It MUST set strong. Because, MXEXmlNode insert a NSMutableDictionary and edit later.

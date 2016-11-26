@@ -14,6 +14,8 @@
 - (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
                             collectRelativePath:(id _Nonnull)collectRelativePath
 {
+    NSParameterAssert(parentNodePath != nil && collectRelativePath != nil);
+
     if (self = [super initWithNodePath:parentNodePath]) {
         if ([collectRelativePath isKindOfClass:MXEXmlPath.class]) {
             self.collectRelativePath = collectRelativePath;
@@ -35,7 +37,10 @@
 
 - (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
-    return ^(MXEXmlNode* node) {
+    return ^id _Nullable(MXEXmlNode* _Nonnull node)
+    {
+        NSParameterAssert(node != nil);
+
         if ([node.children isKindOfClass:NSArray.class]) {
             NSArray* children = node.children;
             NSMutableArray* result = [NSMutableArray array];
@@ -62,7 +67,9 @@
 
 - (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
 {
-    return ^(MXEXmlNode* node, id value) {
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nonnull value) {
+        NSParameterAssert(node != nil && value != nil);
+
         if (![value isKindOfClass:NSArray.class]) {
             return NO;
         }
@@ -101,6 +108,18 @@
         }
         return YES;
     };
+}
+
+#pragma mark - NSCopying
+
+- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
+{
+    MXEXmlArrayPath* result = [super copyWithZone:zone];
+
+    if (result) {
+        result.collectRelativePath = [self.collectRelativePath copyWithZone:zone];
+    }
+    return result;
 }
 
 @end

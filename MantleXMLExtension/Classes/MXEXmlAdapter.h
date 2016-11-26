@@ -117,7 +117,7 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
  * @return If conversion is success, return model object. Otherwise, return nil.
  */
 + (id<MXEXmlSerializing> _Nullable)modelOfClass:(Class _Nonnull)modelClass
-                                    fromXmlData:(NSData* _Nullable)XmlData
+                                    fromXmlData:(NSData* _Nullable)xmlData
                                           error:(NSError* _Nullable* _Nullable)error;
 
 /**
