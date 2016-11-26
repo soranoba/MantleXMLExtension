@@ -44,8 +44,8 @@
 		A4BCF32F1DDFDE2C00EF672C = {
 			isa = PBXGroup;
 			children = (
-				A4BCF36C1DDFEC6600EF672C /* MantleXMLExtensionTests */,
 				EA9637E886BB15C86946631C /* Frameworks */,
+				A4BCF36C1DDFEC6600EF672C /* MantleXMLExtensionTests */,
 				AA1B2A2DFC10CA1729817594 /* Pods */,
 				A4BCF3391DDFDE2C00EF672C /* Products */,
 			);
@@ -63,9 +63,9 @@
 			isa = PBXGroup;
 			children = (
 				A4BCF3801DE0168F00EF672C /* Models */,
+				A4BCF36F1DDFEC6600EF672C /* Info.plist */,
 				A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */,
 				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
-				A4BCF36F1DDFEC6600EF672C /* Info.plist */,
 				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
 			);
 			path = MantleXMLExtensionTests;
@@ -74,12 +74,12 @@
 		A4BCF3801DE0168F00EF672C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
-				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
 				A4BCF3911DE04F7B00EF672C /* MXETSampleModel.h */,
 				A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */,
+				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
+				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
 			);
-			name = Models;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		AA1B2A2DFC10CA1729817594 /* Pods */ = {
@@ -326,6 +326,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = Q67BJ4H5A7;
 				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -338,6 +339,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = Q67BJ4H5A7;
 				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

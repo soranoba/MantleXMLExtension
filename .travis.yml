@@ -1,0 +1,6 @@
+language: objective-c
+osx_image: xcode8.2
+script: "git clean -xdf; make"
+notifications:
+  email:
+    - soranoba@gmail.com
