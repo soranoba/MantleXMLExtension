@@ -12,7 +12,7 @@ open:
 	open ${NAME}.xcworkspace
 
 test:
-	xcodebuild -workspace ${NAME}.xcworkspace -scheme ${NAME} -sdk iphonesimulator \
+	xcodebuild -workspace ${NAME}.xcworkspace -scheme ${NAME}Scheme -sdk iphonesimulator -verbose \
 		-destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' \
 		-destination 'platform=iOS Simulator,name=iPhone 6,OS=9.0' \
 		-destination 'platform=iOS Simulator,name=iPhone 6,OS=10.0' \
