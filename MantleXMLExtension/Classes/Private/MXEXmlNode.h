@@ -14,8 +14,12 @@
 @class MXEXmlNode;
 typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
 
+/**
+ * Node instance of XML.
+ */
 @interface MXEXmlNode : NSObject
 
+/// Node name.
 @property (nonatomic, nonnull, copy) NSString* elementName;
 
 /// It MUST set strong. Because, MXEXmlNode insert a NSMutableDictionary and edit later.
@@ -72,6 +76,6 @@ typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
  * @param value   KeyPath's node has this string.
  * @param xmlPath See MXEXmlSerializing # xmlKeyPathsByPropertyKey
  */
-- (BOOL)setValue:(id _Nonnull)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
+- (BOOL)setValue:(id _Nullable)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
 
 @end

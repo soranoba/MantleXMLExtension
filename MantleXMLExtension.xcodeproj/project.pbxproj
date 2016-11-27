@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		826A9804BB27E5742444AC9E /* Pods_MantleXMLExtensionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */; };
+		A41C79D11DE9D6BE000F0A28 /* MXEXmlPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D01DE9D6BE000F0A28 /* MXEXmlPathTests.m */; };
+		A41C79D31DE9E082000F0A28 /* MXEXmlChildNodePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D21DE9E082000F0A28 /* MXEXmlChildNodePathTests.m */; };
+		A41C79D51DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */; };
+		A41C79D71DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */; };
 		A4BCF37E1DE0162F00EF672C /* MXETUsersResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */; };
 		A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */; };
 		A4BCF3931DE04F9B00EF672C /* MXETSampleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */; };
@@ -15,6 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A41C79D01DE9D6BE000F0A28 /* MXEXmlPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlPathTests.m; sourceTree = "<group>"; };
+		A41C79D21DE9E082000F0A28 /* MXEXmlChildNodePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlChildNodePathTests.m; sourceTree = "<group>"; };
+		A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlAttributePathTests.m; sourceTree = "<group>"; };
+		A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlArrayPathTests.m; sourceTree = "<group>"; };
 		A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantleXMLExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4BCF36F1DDFEC6600EF672C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETUsersResponse.m; sourceTree = "<group>"; };
@@ -65,7 +73,11 @@
 				A4BCF3801DE0168F00EF672C /* Models */,
 				A4BCF36F1DDFEC6600EF672C /* Info.plist */,
 				A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */,
+				A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */,
+				A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */,
+				A41C79D21DE9E082000F0A28 /* MXEXmlChildNodePathTests.m */,
 				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
+				A41C79D01DE9D6BE000F0A28 /* MXEXmlPathTests.m */,
 				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
 			);
 			path = MantleXMLExtensionTests;
@@ -218,10 +230,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A41C79D31DE9E082000F0A28 /* MXEXmlChildNodePathTests.m in Sources */,
 				A4BCF3981DE0AD8200EF672C /* MXEXmlNodeTests.m in Sources */,
 				A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */,
+				A41C79D71DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m in Sources */,
 				A4BCF3931DE04F9B00EF672C /* MXETSampleModel.m in Sources */,
 				A4BCF37E1DE0162F00EF672C /* MXETUsersResponse.m in Sources */,
+				A41C79D51DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m in Sources */,
+				A41C79D11DE9D6BE000F0A28 /* MXEXmlPathTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

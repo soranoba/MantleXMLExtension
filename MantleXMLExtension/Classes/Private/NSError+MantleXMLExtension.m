@@ -11,13 +11,6 @@
 /// The domain for errors originating from MantleXMLExtension
 static NSString* const MXEErrorDomain = @"MXEErrorDomain";
 
-@interface NSError (MantleXMLExtension_Private)
-/**
- * Return a LocalizedDescription.
- */
-+ (NSString* _Nonnull)description:(MXEErrorCode)code;
-@end
-
 @implementation NSError (MantleXMLExtension)
 
 + (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code
@@ -35,11 +28,23 @@ static NSString* const MXEErrorDomain = @"MXEErrorDomain";
 
 #pragma mark - Private Method
 
+/**
+ * Return a LocalizedDescription.
+ *
+ * @param code
+ * @return description string
+ */
 + (NSString* _Nonnull)description:(MXEErrorCode)code
 {
     switch (code) {
+        case MXEErrorNil:
+            return @"Model doesn't allow nil but nil had be passed";
+        case MXEErrorInvalidRootNode:
+            return @"Root node has different name from defined in model";
+        case MXEErrorInvalidInputData:
+            return @"Input data is invalid";
         default:
-            return @"";
+            return @"Unknown error";
     }
 }
 

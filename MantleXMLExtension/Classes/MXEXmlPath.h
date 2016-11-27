@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MXEXmlPath : NSObject
+@interface MXEXmlPath : NSObject <NSCopying>
 
 /**
  * Create a path

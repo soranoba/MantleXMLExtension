@@ -28,7 +28,6 @@
 //
 
 #import <Mantle/EXTRuntimeExtensions.h>
-#import <Mantle/EXTRuntimeExtensions.h>
 #import <Mantle/EXTScope.h>
 #import <Mantle/MTLReflection.h>
 #import <Mantle/MTLValueTransformer.h>
@@ -41,10 +40,14 @@
 #import "MXEXmlNode.h"
 #import "NSError+MantleXMLExtension.h"
 
-static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
+static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSString* _Nullable reason)
 {
     if (error) {
-        *error = [NSError errorWithMXEErrorCode:code];
+        if (reason) {
+            *error = [NSError errorWithMXEErrorCode:code reason:reason];
+        } else {
+            *error = [NSError errorWithMXEErrorCode:code];
+        }
     }
 }
 
@@ -61,18 +64,9 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
 /// A stack of MXEXmlNode to use when parsing XML.
 /// First object is a top level node.
 @property (nonatomic, nonnull, strong) NSMutableArray<MXEXmlNode*>* xmlParseStack;
+/// It is user error that occurred during parse XML.
 @property (nonatomic, nullable, strong) NSError* parseError;
 
-- (id<MXEXmlSerializing> _Nullable)modelFromMXEXmlNode:(MXEXmlNode* _Nonnull)xmlNode
-                                                 error:(NSError* _Nullable* _Nullable)error;
-
-- (MXEXmlNode* _Nullable)MXEXmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
-                                       error:(NSError* _Nullable* _Nullable)error;
-
-/**
- * Get NSStringEncoding from xmlDeclaration.
- */
-+ (NSStringEncoding)xmlDeclarationToEncoding:(NSString*)xmlDeclaration;
 @end
 
 @implementation MXEXmlAdapter
@@ -114,10 +108,8 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
                                     fromXmlData:(NSData* _Nullable)xmlData
                                           error:(NSError* _Nullable* _Nullable)error
 {
-    NSParameterAssert(modelClass != nil);
-
     if (!xmlData) {
-        setError(error, MXEErrorNil);
+        setError(error, MXEErrorNil, nil);
         return nil;
     }
     MXEXmlAdapter* adapter = [[self alloc] initWithModelClass:modelClass];
@@ -128,7 +120,7 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
                                 error:(NSError* _Nullable* _Nullable)error
 {
     if (!model) {
-        setError(error, MXEErrorNil);
+        setError(error, MXEErrorNil, nil);
         return nil;
     }
     MXEXmlAdapter* adapter = [[self alloc] initWithModelClass:model.class];
@@ -139,7 +131,7 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
                                               error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
-        setError(error, MXEErrorNil);
+        setError(error, MXEErrorNil, nil);
         return nil;
     }
 
@@ -157,9 +149,12 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
     }
 
     NSAssert(self.xmlParseStack.count == 1, @"The number of elements of xmlParseStack MUST be 1");
+
     MXEXmlNode* root = [self.xmlParseStack lastObject];
     NSAssert([root.elementName isEqualToString:[self.modelClass xmlRootElementName]],
-             @"Top level node MUST be specified element name (%@).", [self.modelClass xmlRootElementName]);
+             @"Top level node MUST be specified element name (%@).",
+             [self.modelClass xmlRootElementName]);
+
     return [self modelFromMXEXmlNode:root error:error];
 }
 
@@ -169,7 +164,7 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
     NSParameterAssert(model == nil || [model isKindOfClass:self.modelClass]);
 
     if (!model) {
-        setError(error, MXEErrorNil);
+        setError(error, MXEErrorNil, nil);
         return nil;
     }
 
@@ -179,6 +174,7 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
 
     MXEXmlNode* root = [self MXEXmlNodeFromModel:model error:error];
     if (!root) {
+        NSAssert(!error || *error, @"It is expected that there stored details of Error, but it is nil.");
         return nil;
     }
 
@@ -188,7 +184,8 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
     } else {
         xmlDeclaration = MXEXmlDeclarationDefault;
     }
-    NSString* responseStr = [NSString stringWithFormat:@"%@%@", xmlDeclaration, [root toString]];
+
+    NSString* responseStr = [xmlDeclaration stringByAppendingString:[root toString]];
     return [responseStr dataUsingEncoding:[self.class xmlDeclarationToEncoding:xmlDeclaration]];
 }
 
@@ -196,50 +193,57 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
 
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberTransformer
 {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString* str, BOOL* success, NSError** error) {
-        if (!str) {
-            return nil;
-        }
-        if (![str isKindOfClass:NSString.class]) {
-            if (!error) {
-                *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
-                                                 reason:@""];
-            }
-            *success = NO;
-            return nil;
-        }
-        NSString* pattern = @"^[0-9]*(\\.[0-9]*)?$";
-        NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
-        NSTextCheckingResult* match = [regex firstMatchInString:str
-                                                        options:0
-                                                          range:NSMakeRange(0, str.length)];
-        switch ([match numberOfRanges]) {
-            case 2:
-                *success = YES;
-                return [NSNumber numberWithFloat:[str floatValue]];
-            case 1:
-                *success = YES;
-                return [NSNumber numberWithInteger:[str integerValue]];
-            default:
-                *success = NO;
-                return nil;
-        }
-    }
-        reverseBlock:^id(id value, BOOL* success, NSError** error) {
-            if (!value) {
-                return nil;
-            }
-            if (![value isKindOfClass:NSNumber.class]) {
-                if (!error) {
-                    *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
-                                                     reason:@""];
+    return [MTLValueTransformer
+        transformerUsingForwardBlock:
+            ^NSNumber* _Nullable(id _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+
+                if (!str) {
+                    return nil;
                 }
-                *success = NO;
-                return nil;
+                if (![str isKindOfClass:NSString.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected a numeric string, but got %@.",
+                                                        [str class]]);
+                    *success = NO;
+                    return nil;
+                }
+
+                NSString* pattern = @"^[0-9]*(\\.[0-9]*)?$";
+                NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                                       options:0
+                                                                                         error:nil];
+                NSTextCheckingResult* match = [regex firstMatchInString:str
+                                                                options:0
+                                                                  range:NSMakeRange(0, [str length])];
+
+                switch ([match numberOfRanges]) {
+                    case 2:
+                        *success = YES;
+                        return [NSNumber numberWithFloat:[str floatValue]];
+                    case 1:
+                        *success = YES;
+                        return [NSNumber numberWithInteger:[str integerValue]];
+                    default:
+                        setError(error, MXEErrorInvalidInputData,
+                                 [NSString stringWithFormat:@"Could not convert String to Number. Got %@", str]);
+                        *success = NO;
+                        return nil;
+                }
             }
-            *success = YES;
-            return [(NSNumber*)value stringValue];
-        }];
+        reverseBlock:
+            ^NSString* _Nullable(id _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                if (!value) {
+                    return nil;
+                }
+                if (![value isKindOfClass:NSNumber.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected NSNumber, but got %@", [value class]]);
+                    *success = NO;
+                    return nil;
+                }
+                *success = YES;
+                return [(NSNumber*)value stringValue];
+            }];
 }
 
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
@@ -250,50 +254,57 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
 
     __block id<MTLTransformerErrorHandling> transformer = [self xmlNodeTransformerWithModelClass:modelClass];
 
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(id xmlNodes, BOOL* success, NSError** error) {
-        if (!xmlNodes) {
-            return nil;
-        }
-        if (![xmlNodes isKindOfClass:NSArray.class]) {
-            if (!error) {
-                *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
-                                                 reason:@""];
-            }
-            *success = NO;
-            return nil;
-        }
-        NSMutableArray* models = [NSMutableArray array];
-        for (id xmlNode in xmlNodes) {
-            id model = [transformer transformedValue:xmlNode success:success error:error];
-            if (!model) {
-                return nil;
-            }
-            [models addObject:model];
-        }
-        return models;
-    }
-        reverseBlock:^id(id models, BOOL* success, NSError** error) {
-            if (!models) {
-                return nil;
-            }
-            if (![models isKindOfClass:NSArray.class]) {
-                if (error != NULL) {
-                    *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
-                                                     reason:@""];
-                }
-                *success = NO;
-                return nil;
-            }
-            NSMutableArray* xmlNodes = [NSMutableArray array];
-            for (id model in models) {
-                id xmlNode = [transformer reverseTransformedValue:model success:success error:error];
-                if (!xmlNode) {
+    return [MTLValueTransformer
+        transformerUsingForwardBlock:
+            ^NSArray* _Nullable(id _Nullable xmlNodes, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+
+                if (!xmlNodes) {
                     return nil;
                 }
-                [xmlNodes addObject:xmlNode];
+
+                if (![xmlNodes isKindOfClass:NSArray.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected a array, but got %@.",
+                                                        [xmlNodes class]]);
+                    *success = NO;
+                    return nil;
+                }
+
+                NSMutableArray* models = [NSMutableArray array];
+                for (id xmlNode in (NSArray*)xmlNodes) {
+                    id model = [transformer transformedValue:xmlNode success:success error:error];
+                    if (!model) {
+                        return nil;
+                    }
+                    [models addObject:model];
+                }
+                return models;
             }
-            return xmlNodes;
-        }];
+        reverseBlock:
+            ^NSArray* _Nullable(id _Nullable models, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+
+                if (!models) {
+                    return nil;
+                }
+
+                if (![models isKindOfClass:NSArray.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected a array, but got %@.",
+                                                        [models class]]);
+                    *success = NO;
+                    return nil;
+                }
+
+                NSMutableArray* xmlNodes = [NSMutableArray array];
+                for (id model in models) {
+                    id xmlNode = [transformer reverseTransformedValue:model success:success error:error];
+                    if (!xmlNode) {
+                        return nil;
+                    }
+                    [xmlNodes addObject:xmlNode];
+                }
+                return xmlNodes;
+            }];
 }
 
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
@@ -303,53 +314,55 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
     NSParameterAssert([modelClass conformsToProtocol:@protocol(MXEXmlSerializing)]);
     __block MXEXmlAdapter* adapter;
 
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(id xmlNode, BOOL* success, NSError** error) {
-        if (!xmlNode) {
-            return nil;
-        }
+    return [MTLValueTransformer
+        transformerUsingForwardBlock:
+            ^id _Nullable(id _Nullable xmlNode, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
 
-        if (![xmlNode isKindOfClass:MXEXmlNode.class]) {
-            if (error != NULL) {
-                *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
-                                                 reason:@""];
-            }
-            *success = NO;
-            return nil;
-        }
-
-        adapter = adapter ?: [[self alloc] initWithModelClass:modelClass];
-        id model = [adapter modelFromMXEXmlNode:xmlNode error:error];
-        if (model == nil) {
-            *success = NO;
-        }
-        return model;
-
-    }
-        reverseBlock:^MXEXmlNode*(id model, BOOL* success, NSError** error) {
-            if (!model) {
-                return nil;
-            }
-
-            if (!([model conformsToProtocol:@protocol(MTLModel)]
-                  && [model conformsToProtocol:@protocol(MXEXmlSerializing)])) {
-
-                if (error != NULL) {
-                    *error = [NSError errorWithMXEErrorCode:MXEErrorInputDataInvalid
-                                                     reason:@""];
+                if (!xmlNode) {
+                    return nil;
                 }
-                *success = NO;
-                return nil;
-            }
 
-            adapter = adapter ?: [[self alloc] initWithModelClass:modelClass];
-            MXEXmlNode* result = [adapter MXEXmlNodeFromModel:model error:error];
-            *success = result != nil;
-            return result;
-        }];
+                if (![xmlNode isKindOfClass:MXEXmlNode.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected %@, but got %@.",
+                                                        MXEXmlNode.class, [xmlNode class]]);
+                    *success = NO;
+                    return nil;
+                }
+
+                adapter = adapter ?: [[self alloc] initWithModelClass:modelClass];
+                id model = [adapter modelFromMXEXmlNode:xmlNode error:error];
+                *success = model != nil;
+                return model;
+
+            }
+        reverseBlock:
+            ^MXEXmlNode* _Nullable(id _Nullable model, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                if (!model) {
+                    return nil;
+                }
+
+                if (!([model conformsToProtocol:@protocol(MTLModel)]
+                      && [model conformsToProtocol:@protocol(MXEXmlSerializing)])) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected MXEXmlSerializing object, but got %@.",
+                                                        [model class]]);
+                    *success = NO;
+                    return nil;
+                }
+
+                adapter = adapter ?: [[self alloc] initWithModelClass:modelClass];
+                MXEXmlNode* result = [adapter MXEXmlNodeFromModel:model error:error];
+                *success = result != nil;
+                return result;
+            }];
 }
 
 #pragma mark - Utility
 
+/**
+ * Sort according to orderedKey.
+ */
 + (NSArray<NSString*>* _Nonnull)sortProperties:(NSArray<NSString*>*)propertyKeys
                                          order:(NSArray<NSString*>*)orderedKeys
 {
@@ -368,6 +381,12 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
     }];
 }
 
+/**
+ * Get NSStringEncoding from xmlDeclaration.
+ *
+ * @param xmlDeclaration string of XML declaration
+ * @return Encoding setting written in XML declaration
+ */
 + (NSStringEncoding)xmlDeclarationToEncoding:(NSString*)xmlDeclaration
 {
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"encoding=[\"'](.*)[\"']"
@@ -403,7 +422,7 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code)
         if (![[self.modelClass xmlRootElementName] isEqualToString:elementName]) {
             NSString* reason = [NSString stringWithFormat:@"Root node expect %@, but got %@",
                                                           [self.modelClass xmlRootElementName], elementName];
-            self.parseError = [NSError errorWithMXEErrorCode:MXEErrorRootNodeInvalid
+            self.parseError = [NSError errorWithMXEErrorCode:MXEErrorInvalidRootNode
                                                       reason:reason];
             [parser abortParsing];
         }

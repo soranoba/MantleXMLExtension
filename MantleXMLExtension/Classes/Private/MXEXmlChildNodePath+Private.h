@@ -9,6 +9,6 @@
 #import "MXEXmlChildNodePath.h"
 #import "MXEXmlPath+Private.h"
 
-@interface MXEXmlPath ()
+@interface MXEXmlChildNodePath ()
 @property (nonatomic, nonnull, copy) NSString* nodeName;
 @end

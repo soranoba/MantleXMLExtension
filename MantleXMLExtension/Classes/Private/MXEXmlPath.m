@@ -9,10 +9,6 @@
 #import "MXEXmlNode.h"
 #import "MXEXmlPath+Private.h"
 
-@interface MXEXmlPath ()
-
-@end
-
 @implementation MXEXmlPath
 
 - (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
@@ -42,7 +38,7 @@
     return [[self alloc] initWithNodePath:nodePath];
 }
 
-+ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nonnull)nodePath
++ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nullable)nodePath
 {
     NSArray<NSString*>* separatedPath = [nodePath componentsSeparatedByString:@"."];
     NSMutableArray<NSString*>* filteredPath = [NSMutableArray array];
@@ -57,7 +53,9 @@
 
 - (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
-    return ^(MXEXmlNode* node) {
+    return ^id(MXEXmlNode* _Nonnull node) {
+        NSParameterAssert(node != nil);
+
         if ([node.children isKindOfClass:NSString.class]) {
             return node.children;
         }
@@ -65,15 +63,29 @@
     };
 }
 
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
 {
-    return ^(MXEXmlNode* node, id value) {
-        if ([value isKindOfClass:NSString.class]) {
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nullable value) {
+        NSParameterAssert(node != nil);
+
+        if (!value || [value isKindOfClass:NSString.class]) {
             node.children = value;
             return YES;
         }
         return NO;
     };
+}
+
+#pragma mark - NSCopying
+
+- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
+{
+    MXEXmlPath* result = [[[self class] allocWithZone:zone] init];
+
+    if (result) {
+        result.separatedPath = [[NSArray allocWithZone:zone] initWithArray:self.separatedPath copyItems:YES];
+    }
+    return result;
 }
 
 @end

@@ -14,6 +14,8 @@
 - (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
                             collectRelativePath:(id _Nonnull)collectRelativePath
 {
+    NSParameterAssert(parentNodePath != nil && collectRelativePath != nil);
+
     if (self = [super initWithNodePath:parentNodePath]) {
         if ([collectRelativePath isKindOfClass:MXEXmlPath.class]) {
             self.collectRelativePath = collectRelativePath;
@@ -35,7 +37,10 @@
 
 - (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
 {
-    return ^(MXEXmlNode* node) {
+    return ^id _Nullable(MXEXmlNode* _Nonnull node)
+    {
+        NSParameterAssert(node != nil);
+
         if ([node.children isKindOfClass:NSArray.class]) {
             NSArray* children = node.children;
             NSMutableArray* result = [NSMutableArray array];
@@ -60,9 +65,14 @@
     };
 }
 
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nonnull value))setValueBlocks
+- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
 {
-    return ^(MXEXmlNode* node, id value) {
+    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nullable value) {
+        NSParameterAssert(node != nil);
+
+        if (!value) {
+            value = @[];
+        }
         if (![value isKindOfClass:NSArray.class]) {
             return NO;
         }
@@ -70,37 +80,64 @@
         NSString* childNodeName = [self.collectRelativePath.separatedPath firstObject];
         childNodeName = childNodeName ?: @"";
 
-        if (node.children == nil) {
-            node.children = [NSMutableArray array];
-        } else if ([node.children isKindOfClass:NSArray.class]) {
-            NSMutableArray* children = [NSMutableArray array];
-            for (id child in node.children) {
-                if ([child isKindOfClass:MXEXmlNode.class]
-                    && ![((MXEXmlNode*)child).elementName isEqualToString:childNodeName]) {
-
-                    [children addObject:child];
-                }
-            }
-            node.children = children;
-        } else {
-            return NO;
+        MXEXmlPath* collectRelativePath = [self.collectRelativePath copy];
+        if (collectRelativePath.separatedPath.count > 0) {
+            NSRange range = NSMakeRange(1, collectRelativePath.separatedPath.count - 1);
+            collectRelativePath.separatedPath = [collectRelativePath.separatedPath subarrayWithRange:range];
         }
 
-        for (id v in (NSArray*)value) {
+        NSMutableArray* children;
+        if ([node.children isKindOfClass:NSArray.class]) {
+            children = [node.children mutableCopy];
+        } else {
+            children = [NSMutableArray arrayWithCapacity:((NSArray*)value).count];
+        }
+
+        int i = 0;
+        for (id child in children) {
+            NSAssert([child isKindOfClass:MXEXmlNode.class], @"");
+            if ([((MXEXmlNode*)child).elementName isEqualToString:childNodeName]) {
+                if (i >= [value count]) {
+                    if (![(MXEXmlNode*)child setValue:nil forXmlPath:collectRelativePath]) {
+                        return NO;
+                    }
+                } else {
+                    if (![(MXEXmlNode*)child setValue:value[i] forXmlPath:collectRelativePath]) {
+                        return NO;
+                    }
+                    i++;
+                }
+            }
+        }
+        for (; i < [value count]; i++) {
             MXEXmlNode* insertChild;
-            if (childNodeName.length == 0 && [v isKindOfClass:MXEXmlNode.class]) {
-                insertChild = v;
+            if (childNodeName.length == 0 && [value[i] isKindOfClass:MXEXmlNode.class]) {
+                insertChild = value[i];
             } else {
-                insertChild = [[MXEXmlNode alloc] initWithXmlPath:self.collectRelativePath value:v];
+                insertChild = [[MXEXmlNode alloc] initWithXmlPath:self.collectRelativePath value:value[i]];
             }
 
             if (!insertChild) {
                 return NO;
             }
-            [(NSMutableArray*)node.children addObject:insertChild];
+            [(NSMutableArray*)children addObject:insertChild];
         }
+
+        node.children = children;
         return YES;
     };
+}
+
+#pragma mark - NSCopying
+
+- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
+{
+    MXEXmlArrayPath* result = [super copyWithZone:zone];
+
+    if (result) {
+        result.collectRelativePath = [self.collectRelativePath copyWithZone:zone];
+    }
+    return result;
 }
 
 @end
