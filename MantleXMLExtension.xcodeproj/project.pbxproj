@@ -73,12 +73,12 @@
 				A4BCF3801DE0168F00EF672C /* Models */,
 				A4BCF36F1DDFEC6600EF672C /* Info.plist */,
 				A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */,
-				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
-				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
-				A41C79D01DE9D6BE000F0A28 /* MXEXmlPathTests.m */,
-				A41C79D21DE9E082000F0A28 /* MXEXmlChildNodePathTests.m */,
-				A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */,
 				A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */,
+				A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */,
+				A41C79D21DE9E082000F0A28 /* MXEXmlChildNodePathTests.m */,
+				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
+				A41C79D01DE9D6BE000F0A28 /* MXEXmlPathTests.m */,
+				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
 			);
 			path = MantleXMLExtensionTests;
 			sourceTree = "<group>";

@@ -11,19 +11,19 @@
 
 QuickSpecBegin(MXEXmlChildNodePathTests)
 
-describe(@"copyWithZone:", ^{
-    it(@"can copy properties", ^{
-        MXEXmlChildNodePath* path = [MXEXmlChildNodePath pathWithNodePath:@"a.b"];
-        MXEXmlChildNodePath* copyPath = [path copy];
+    describe(@"copyWithZone:", ^{
+        it(@"can copy properties", ^{
+            MXEXmlChildNodePath* path = [MXEXmlChildNodePath pathWithNodePath:@"a.b"];
+            MXEXmlChildNodePath* copyPath = [path copy];
 
-        expect(path != copyPath).to(equal(YES));
+            expect(path != copyPath).to(equal(YES));
 
-        path.nodeName = @"new";
-        expect(path.nodeName).notTo(equal(copyPath.nodeName));
+            path.nodeName = @"new";
+            expect(path.nodeName).notTo(equal(copyPath.nodeName));
 
-        expect(path.separatedPath != copyPath.separatedPath).to(equal(YES));
+            expect(path.separatedPath != copyPath.separatedPath).to(equal(YES));
+        });
     });
-});
 
 describe(@"initWithNodePath:", ^{
     it(@"failed, if input path is empty", ^{

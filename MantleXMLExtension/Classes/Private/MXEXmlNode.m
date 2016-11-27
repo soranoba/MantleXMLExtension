@@ -128,7 +128,7 @@
     return [xmlPath getValueBlocks](iterator);
 }
 
-- (BOOL)setValue:(id _Nonnull)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath
+- (BOOL)setValue:(id _Nullable)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath
 {
     NSParameterAssert(xmlPath != nil);
 

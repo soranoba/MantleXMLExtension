@@ -76,6 +76,6 @@ typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
  * @param value   KeyPath's node has this string.
  * @param xmlPath See MXEXmlSerializing # xmlKeyPathsByPropertyKey
  */
-- (BOOL)setValue:(id _Nonnull)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
+- (BOOL)setValue:(id _Nullable)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
 
 @end

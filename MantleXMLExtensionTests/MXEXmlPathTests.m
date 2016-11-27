@@ -6,22 +6,22 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlPath+Private.h"
 #import "MXEXmlNode.h"
+#import "MXEXmlPath+Private.h"
 
 QuickSpecBegin(MXEXmlPathTests)
 
-describe(@"separateNodePath:", ^{
-    it(@"Null character is excluded", ^{
-        NSArray* array1 = [MXEXmlPath separateNodePath:@".."];
-        expect(array1.count).to(equal(0));
+    describe(@"separateNodePath:", ^{
+        it(@"Null character is excluded", ^{
+            NSArray* array1 = [MXEXmlPath separateNodePath:@".."];
+            expect(array1.count).to(equal(0));
 
-        NSArray* array2 = [MXEXmlPath separateNodePath:@".a..b."];
-        expect(array2.count).to(equal(2));
-        expect(array2[0]).to(equal(@"a"));
-        expect(array2[1]).to(equal(@"b"));
+            NSArray* array2 = [MXEXmlPath separateNodePath:@".a..b."];
+            expect(array2.count).to(equal(2));
+            expect(array2[0]).to(equal(@"a"));
+            expect(array2[1]).to(equal(@"b"));
+        });
     });
-});
 
 describe(@"copyWithZone:", ^{
     it(@"Properties was copied", ^{

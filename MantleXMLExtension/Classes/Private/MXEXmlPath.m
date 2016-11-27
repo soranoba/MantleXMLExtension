@@ -55,7 +55,7 @@
 {
     return ^id(MXEXmlNode* _Nonnull node) {
         NSParameterAssert(node != nil);
-        
+
         if ([node.children isKindOfClass:NSString.class]) {
             return node.children;
         }

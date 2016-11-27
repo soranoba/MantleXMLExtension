@@ -11,27 +11,27 @@
 
 QuickSpecBegin(MXEXmlArrayPathTests)
 
-describe(@"initWithParentNodePath:collectRelativePath:", ^{
-    it(@"failed, if collectRelativePath isn't MXEXmlPath or string", ^{
-        expect([[MXEXmlArrayPath alloc] initWithParentNodePath:@"a.b" collectRelativePath:@1]).to(raiseException());
-    });
+    describe(@"initWithParentNodePath:collectRelativePath:", ^{
+        it(@"failed, if collectRelativePath isn't MXEXmlPath or string", ^{
+            expect([[MXEXmlArrayPath alloc] initWithParentNodePath:@"a.b" collectRelativePath:@1]).to(raiseException());
+        });
 
-    it(@"return a instance, if collectRelativePath is MXEXmlPath", ^{
-        MXEXmlArrayPath* path = [[MXEXmlArrayPath alloc] initWithParentNodePath:@"a.b"
-                                                            collectRelativePath:MXEXmlChildNode(@"a.c")];
-        expect([path.collectRelativePath isKindOfClass:MXEXmlChildNodePath.class]).to(equal(YES));
-        expect(((MXEXmlChildNodePath*)path.collectRelativePath).nodeName).to(equal(@"c"));
-    });
+        it(@"return a instance, if collectRelativePath is MXEXmlPath", ^{
+            MXEXmlArrayPath* path = [[MXEXmlArrayPath alloc] initWithParentNodePath:@"a.b"
+                                                                collectRelativePath:MXEXmlChildNode(@"a.c")];
+            expect([path.collectRelativePath isKindOfClass:MXEXmlChildNodePath.class]).to(equal(YES));
+            expect(((MXEXmlChildNodePath*)path.collectRelativePath).nodeName).to(equal(@"c"));
+        });
 
-    it(@"return a instance, if collectRelativePath is string", ^{
-        MXEXmlArrayPath* path = [[MXEXmlArrayPath alloc] initWithParentNodePath:@"a.b"
-                                                            collectRelativePath:@"c.d"];
-        expect([path.collectRelativePath isKindOfClass:MXEXmlPath.class]).to(equal(YES));
-        expect(path.collectRelativePath.separatedPath.count).to(equal(2));
-        expect(path.collectRelativePath.separatedPath[0]).to(equal(@"c"));
-        expect(path.collectRelativePath.separatedPath[1]).to(equal(@"d"));
+        it(@"return a instance, if collectRelativePath is string", ^{
+            MXEXmlArrayPath* path = [[MXEXmlArrayPath alloc] initWithParentNodePath:@"a.b"
+                                                                collectRelativePath:@"c.d"];
+            expect([path.collectRelativePath isKindOfClass:MXEXmlPath.class]).to(equal(YES));
+            expect(path.collectRelativePath.separatedPath.count).to(equal(2));
+            expect(path.collectRelativePath.separatedPath[0]).to(equal(@"c"));
+            expect(path.collectRelativePath.separatedPath[1]).to(equal(@"d"));
+        });
     });
-});
 
 describe(@"copyWithZone:", ^{
     it(@"can copy properties", ^{
@@ -63,9 +63,11 @@ describe(@"getValueBlocks", ^{
 
         id mock = OCMPartialMock(path.collectRelativePath);
         __block int getValueBlocksCounter = 0;
-        OCMStub([mock getValueBlocks]).andDo(^(NSInvocation* invocation) {
-            getValueBlocksCounter++;
-        }).andForwardToRealObject();
+        OCMStub([mock getValueBlocks])
+            .andDo(^(NSInvocation* invocation) {
+                getValueBlocksCounter++;
+            })
+            .andForwardToRealObject();
 
         NSArray* result = [path getValueBlocks](node);
         expect(result.count).to(equal(2));
@@ -95,15 +97,12 @@ describe(@"getValueBlocks", ^{
 describe(@"setValueBlocks", ^{
     MXEXmlArrayPath* path = [MXEXmlArrayPath pathWithParentNodePath:@"a.b" collectRelativePath:@"c.d"];
 
-    it(@"return NO, if children isn't exist", ^{
+    it(@"return NO, if value isn't array", ^{
         MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"b"];
-        expect([path setValueBlocks](root, @"new")).to(equal(NO));
-
-        root.children = @"value";
         expect([path setValueBlocks](root, @"new")).to(equal(NO));
     });
 
-    it(@"return YES and update, if it is found", ^{
+    it(@"return YES and update, if value is array", ^{
         MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"b"];
         MXEXmlNode* c1 = [[MXEXmlNode alloc] initWithElementName:@"c"];
         MXEXmlNode* c2 = [[MXEXmlNode alloc] initWithElementName:@"c"];
@@ -116,7 +115,39 @@ describe(@"setValueBlocks", ^{
         d1.children = @"d1";
         d2.children = @"d2";
 
-        expect([path setValueBlocks](node, @[@"new1", @"new2", @"new3"])).to(equal(YES));
+        NSArray* expectList = @[ @"new1", @"new2", @"new3" ];
+        expect([path setValueBlocks](node, expectList)).to(equal(YES));
+        expect([node.children count]).to(equal(3));
+
+        for (int i = 0; i < expectList.count; i++) {
+            expect([((MXEXmlNode*)node.children[i]).children count]).to(equal(1));
+            expect([((MXEXmlNode*)node.children[i]).children[0] children]).to(equal(expectList[i]));
+        }
+
+        expectList = @[ @"feature1", @"feature2" ];
+        expect([path setValueBlocks](node, expectList)).to(equal(YES));
+        expect([node.children count]).to(equal(3));
+
+        for (int i = 0; i < expectList.count; i++) {
+            expect([((MXEXmlNode*)node.children[i]).children count]).to(equal(1));
+            expect([((MXEXmlNode*)node.children[i]).children[0] children]).to(equal(expectList[i]));
+        }
+        expect([((MXEXmlNode*)node.children[2]).children[0] children]).to(beNil());
+    });
+
+    it(@"does not change other elements", ^{
+        MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"b"];
+        MXEXmlArrayPath* path1 = [MXEXmlArrayPath pathWithParentNodePath:@"a.b" collectRelativePath:@"c.d"];
+        expect([path1 setValueBlocks](node, @[ @"d1", @"d2" ])).to(equal(YES));
+
+        MXEXmlArrayPath* path2 = [MXEXmlArrayPath pathWithParentNodePath:@"a.b" collectRelativePath:@"c.e"];
+        expect([path2 setValueBlocks](node, @[ @"e1", @"e2", @"e3" ])).to(equal(YES));
+
+        expect([node toString]).to(equal(@"<b>"
+                                         @"<c><d>d1</d><e>e1</e></c>"
+                                         @"<c><d>d2</d><e>e2</e></c>"
+                                         @"<c><e>e3</e></c>"
+                                         @"</b>"));
     });
 });
 
