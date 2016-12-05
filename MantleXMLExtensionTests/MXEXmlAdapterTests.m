@@ -7,6 +7,7 @@
 //
 
 #import "MXETSampleModel.h"
+#import "MXETTypeModel.h"
 #import "MXETUsersResponse.h"
 #import "MXEXmlNode.h"
 
@@ -116,6 +117,307 @@ describe(@"serialize / deserialize", ^{
 
         NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
         expect(gotXmlData).to(equal(xmlData));
+    });
+});
+
+describe(@"-boolTransformer:", ^{
+
+    NSString* expectedXmlStrTrue = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"true\" double=\"0\" float=\"0\" int=\"0\" />";
+    NSData* expectedXmlDataTrue = [expectedXmlStrTrue dataUsingEncoding:NSUTF8StringEncoding];
+
+    NSString* expectedXmlStrFalse = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                    @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"0\" />";
+    NSData* expectedXmlDataFalse = [expectedXmlStrFalse dataUsingEncoding:NSUTF8StringEncoding];
+
+    it(@"integer to bool", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response bool=\"1\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.boolNum).to(equal(YES));
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlDataTrue));
+    });
+
+    it(@"true string to bool", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response bool=\"true\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.boolNum).to(equal(YES));
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlDataTrue));
+    });
+
+    it(@"false string to bool", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response bool=\"false\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.boolNum).to(equal(NO));
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlDataFalse));
+    });
+
+    it(@"0 integer to bool", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response bool=\"0\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.boolNum).to(equal(NO));
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlDataFalse));
+    });
+});
+
+describe(@"-numberTransformer:", ^{
+    it(@"integer", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response int=\"20\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.intNum).to(equal(20));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"20\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"plus integer", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response int=\"+20\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.intNum).to(equal(20));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"20\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"minus integer", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response int=\"-20\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.intNum).to(equal(-20));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"-20\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"zero integer", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response int=\"0\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.intNum).to(equal(0));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"float", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response float=\"20.25f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.floatNum).to(equal(20.25));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"20.25\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"plus float", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response float=\"+20.25f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.floatNum).to(equal(20.25));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"20.25\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"minus float", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response float=\"-20.25f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.floatNum).to(equal(-20.25));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"-20.25\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"zero float", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response float=\"0.0f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.floatNum).to(equal(0));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"double", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response double=\"20.25f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.doubleNum).to(equal(20.25));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"20.25\" float=\"0\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"plus double", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response double=\"+20.25f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.doubleNum).to(equal(20.25));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"20.25\" float=\"0\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"minus double", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response double=\"-20.25f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.doubleNum).to(equal(-20.25));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"-20.25\" float=\"0\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
+    });
+
+    it(@"zero double", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<response double=\"0.0f\" />";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                  fromXmlData:xmlData
+                                                        error:nil];
+
+        expect(response.doubleNum).to(equal(0));
+
+        NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                   @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"0\" />";
+        NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
+        expect(gotXmlData).to(equal(expectedXmlData));
     });
 });
 

@@ -208,7 +208,7 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSS
                     return nil;
                 }
 
-                NSString* pattern = @"^[0-9]*(\\.[0-9]*)?$";
+                NSString* pattern = @"^[\\-\\+]?[0-9]*(\\.[0-9]*)?(f)?$";
                 NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern
                                                                                        options:0
                                                                                          error:nil];
@@ -217,9 +217,12 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSS
                                                                   range:NSMakeRange(0, [str length])];
 
                 switch ([match numberOfRanges]) {
-                    case 2:
+                    case 3:
                         *success = YES;
                         return [NSNumber numberWithFloat:[str floatValue]];
+                    case 2:
+                        *success = YES;
+                        return [NSNumber numberWithDouble:[str doubleValue]];
                     case 1:
                         *success = YES;
                         return [NSNumber numberWithInteger:[str integerValue]];
@@ -243,6 +246,42 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSS
                 }
                 *success = YES;
                 return [(NSNumber*)value stringValue];
+            }];
+}
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolTransformer
+{
+    return [MTLValueTransformer
+        transformerUsingForwardBlock:
+            ^NSNumber* _Nullable(id _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+
+                if (!str) {
+                    return nil;
+                }
+                if (![str isKindOfClass:NSString.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected a numeric string, but got %@.",
+                                                        [str class]]);
+                    *success = NO;
+                    return nil;
+                }
+
+                *success = YES;
+                return [NSNumber numberWithBool:[str boolValue]];
+            }
+        reverseBlock:
+            ^NSString* _Nullable(id _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                if (!value) {
+                    return nil;
+                }
+                if (![value isKindOfClass:NSNumber.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Input data expected NSNumber, but got %@", [value class]]);
+                    *success = NO;
+                    return nil;
+                }
+                *success = YES;
+                return [(NSNumber*)value integerValue] ? @"true" : @"false";
             }];
 }
 
@@ -663,13 +702,15 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSS
 {
     NSParameterAssert(objCType != NULL);
 
-    if (strcmp(objCType, @encode(BOOL)) == 0) {
-        return [NSValueTransformer valueTransformerForName:MTLBooleanValueTransformerName];
-    }
     if (strcmp(objCType, @encode(NSInteger)) == 0
         || strcmp(objCType, @encode(NSUInteger)) == 0
-        || strcmp(objCType, @encode(NSNumber)) == 0) {
+        || strcmp(objCType, @encode(NSNumber)) == 0
+        || strcmp(objCType, @encode(float)) == 0
+        || strcmp(objCType, @encode(double)) == 0) {
         return [self.class numberTransformer];
+    }
+    if (strcmp(objCType, @encode(BOOL)) == 0) {
+        return [self.class boolTransformer];
     }
 
     return nil;
