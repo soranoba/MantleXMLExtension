@@ -161,7 +161,7 @@ You can use serializer for MXEXmlSerializing object.
 
 ### Other information
 
-Please refer to documentation and [unit tests](MantleXMLExtensionTests), [Mantle](https://github.com/Mantle/Mantle).
+Please refer to documentation, [unit tests](MantleXMLExtensionTests) and [Mantle](https://github.com/Mantle/Mantle).
 
 ## Contribute
 
