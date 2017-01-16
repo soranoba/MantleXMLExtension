@@ -10,6 +10,7 @@
 #import <Mantle/MTLModel.h>
 #import <Mantle/MTLTransformerErrorHandling.h>
 
+#import "MXEErrorCode.h"
 #import "MXEXmlArrayPath.h"
 #import "MXEXmlAttributePath.h"
 #import "MXEXmlChildNodePath.h"

@@ -6,14 +6,8 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
+#import "MXEErrorCode.h"
 #import <Foundation/Foundation.h>
-
-typedef NS_ENUM(NSUInteger, MXEErrorCode) {
-    MXEErrorUnknown = 0,
-    MXEErrorNil,
-    MXEErrorInvalidRootNode,
-    MXEErrorInvalidInputData,
-};
 
 @interface NSError (MantleXMLExtension)
 

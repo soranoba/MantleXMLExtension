@@ -8,8 +8,7 @@
 
 #import "NSError+MantleXMLExtension.h"
 
-/// The domain for errors originating from MantleXMLExtension
-static NSString* const MXEErrorDomain = @"MXEErrorDomain";
+NSString* _Nonnull const MXEErrorDomain = @"MXEErrorDomain";
 
 @implementation NSError (MantleXMLExtension)
 
