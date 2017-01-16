@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
  * @param code Error code
  * @return instance
  */
-+ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code;
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code;
 
 /**
  * Create NSError with error code and reason
@@ -32,6 +32,6 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
  * @param reason Error reason
  * @return instance
  */
-+ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
 
 @end

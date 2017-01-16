@@ -9,9 +9,6 @@
 #import "MXEXmlPath.h"
 #import <Foundation/Foundation.h>
 
-#define MXEXmlArray(_nodePath, _collectPath) \
-    [MXEXmlArrayPath pathWithParentNodePath:(_nodePath) collectRelativePath:(_collectPath)]
-
 /**
  * A class for expressing the children that has some element name, out of elements of xml.
  *
@@ -44,3 +41,13 @@
                             collectRelativePath:(id _Nonnull)collectRelativePath;
 
 @end
+
+/**
+ * Short syntax of MXEXmlArrayPath initializer
+ *
+ * @see MXEXmlArrayPath # initWithParentNodePath:collectRelativePath:
+ */
+static inline MXEXmlArrayPath* _Nonnull MXEXmlArray(id _Nonnull parentNodePath, id _Nonnull collectRelativePath)
+{
+    return [MXEXmlArrayPath pathWithParentNodePath:parentNodePath collectRelativePath:collectRelativePath];
+}

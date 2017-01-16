@@ -44,12 +44,14 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSS
 {
     if (error) {
         if (reason) {
-            *error = [NSError errorWithMXEErrorCode:code reason:reason];
+            *error = [NSError mxe_errorWithMXEErrorCode:code reason:reason];
         } else {
-            *error = [NSError errorWithMXEErrorCode:code];
+            *error = [NSError mxe_errorWithMXEErrorCode:code];
         }
     }
 }
+
+NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
 @interface MXEXmlAdapter () <NSXMLParserDelegate>
 
@@ -461,8 +463,8 @@ static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSS
         if (![[self.modelClass xmlRootElementName] isEqualToString:elementName]) {
             NSString* reason = [NSString stringWithFormat:@"Root node expect %@, but got %@",
                                                           [self.modelClass xmlRootElementName], elementName];
-            self.parseError = [NSError errorWithMXEErrorCode:MXEErrorInvalidRootNode
-                                                      reason:reason];
+            self.parseError = [NSError mxe_errorWithMXEErrorCode:MXEErrorInvalidRootNode
+                                                          reason:reason];
             [parser abortParsing];
         }
     }

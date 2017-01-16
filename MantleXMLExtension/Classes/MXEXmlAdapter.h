@@ -14,7 +14,7 @@
 #import "MXEXmlAttributePath.h"
 #import "MXEXmlChildNodePath.h"
 
-static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 
 @protocol MXEXmlSerializing <MTLModel>
 @required

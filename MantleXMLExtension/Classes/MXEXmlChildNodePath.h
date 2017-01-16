@@ -9,8 +9,6 @@
 #import "MXEXmlPath.h"
 #import <Foundation/Foundation.h>
 
-#define MXEXmlChildNode(_path) [MXEXmlChildNodePath pathWithNodePath:(_path)]
-
 /**
  * A class for expressing the XML node, out of elements of xml.
  *
@@ -39,3 +37,13 @@
 + (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath;
 
 @end
+
+/**
+ * Short syntax of MXEXmlChildNodePath initializer.
+ *
+ * @see MXEXmlChildNodePath # initWithNodePath:
+ */
+static inline MXEXmlChildNodePath* _Nonnull MXEXmlChildNode(id _Nonnull path)
+{
+    return [MXEXmlChildNodePath pathWithNodePath:path];
+}
