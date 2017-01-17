@@ -194,17 +194,17 @@ QuickSpecBegin(MXEXmlAdapterTests)
     describe(@"-numberTransformer:", ^{
         it(@"integer", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<response int=\"20\" />";
+                               @"<response int=\"1389477961\" />";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
                                                       fromXmlData:xmlData
                                                             error:nil];
 
-            expect(response.intNum).to(equal(20));
+            expect(response.intNum).to(equal(1389477961));
 
             NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                                       @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"20\" />";
+                                       @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"1389477961\" />";
             NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
@@ -213,17 +213,17 @@ QuickSpecBegin(MXEXmlAdapterTests)
 
         it(@"plus integer", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<response int=\"+20\" />";
+                               @"<response int=\"+1389477961\" />";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
                                                       fromXmlData:xmlData
                                                             error:nil];
 
-            expect(response.intNum).to(equal(20));
+            expect(response.intNum).to(equal(1389477961));
 
             NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                                       @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"20\" />";
+                                       @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"1389477961\" />";
             NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
@@ -232,17 +232,17 @@ QuickSpecBegin(MXEXmlAdapterTests)
 
         it(@"minus integer", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<response int=\"-20\" />";
+                               @"<response int=\"-1389477961\" />";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
                                                       fromXmlData:xmlData
                                                             error:nil];
 
-            expect(response.intNum).to(equal(-20));
+            expect(response.intNum).to(equal(-1389477961));
 
             NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                                       @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"-20\" />";
+                                       @"<response bool=\"false\" double=\"0\" float=\"0\" int=\"-1389477961\" />";
             NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
@@ -346,17 +346,17 @@ QuickSpecBegin(MXEXmlAdapterTests)
 
         it(@"double", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<response double=\"20.25f\" />";
+                               @"<response double=\"1.797693\" />";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
                                                       fromXmlData:xmlData
                                                             error:nil];
 
-            expect(response.doubleNum).to(equal(20.25));
+            expect(response.doubleNum).to(equal(1.797693));
 
             NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                                       @"<response bool=\"false\" double=\"20.25\" float=\"0\" int=\"0\" />";
+                                       @"<response bool=\"false\" double=\"1.797693\" float=\"0\" int=\"0\" />";
             NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
@@ -365,17 +365,17 @@ QuickSpecBegin(MXEXmlAdapterTests)
 
         it(@"plus double", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<response double=\"+20.25f\" />";
+                               @"<response double=\"+1.797693\" />";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
                                                       fromXmlData:xmlData
                                                             error:nil];
 
-            expect(response.doubleNum).to(equal(20.25));
+            expect(response.doubleNum).to(equal(1.797693));
 
             NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                                       @"<response bool=\"false\" double=\"20.25\" float=\"0\" int=\"0\" />";
+                                       @"<response bool=\"false\" double=\"1.797693\" float=\"0\" int=\"0\" />";
             NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
@@ -384,17 +384,17 @@ QuickSpecBegin(MXEXmlAdapterTests)
 
         it(@"minus double", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<response double=\"-20.25f\" />";
+                               @"<response double=\"-1.797693\" />";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             MXETTypeModel* response = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
                                                       fromXmlData:xmlData
                                                             error:nil];
 
-            expect(response.doubleNum).to(equal(-20.25));
+            expect(response.doubleNum).to(equal(-1.797693));
 
             NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                                       @"<response bool=\"false\" double=\"-20.25\" float=\"0\" int=\"0\" />";
+                                       @"<response bool=\"false\" double=\"-1.797693\" float=\"0\" int=\"0\" />";
             NSData* expectedXmlData = [expectedXmlStr dataUsingEncoding:NSUTF8StringEncoding];
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];

@@ -217,22 +217,22 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                 NSTextCheckingResult* match = [regex firstMatchInString:str
                                                                 options:0
                                                                   range:NSMakeRange(0, [str length])];
+                NSAssert([match numberOfRanges] == 3, @"The number of elements of match MUST be 3");
 
-                switch ([match numberOfRanges]) {
-                    case 3:
-                        *success = YES;
-                        return [NSNumber numberWithFloat:[str floatValue]];
-                    case 2:
-                        *success = YES;
-                        return [NSNumber numberWithDouble:[str doubleValue]];
-                    case 1:
-                        *success = YES;
-                        return [NSNumber numberWithInteger:[str integerValue]];
-                    default:
-                        setError(error, MXEErrorInvalidInputData,
-                                 [NSString stringWithFormat:@"Could not convert String to Number. Got %@", str]);
-                        *success = NO;
-                        return nil;
+                if ([match rangeAtIndex:2].location != NSNotFound) {
+                    *success = YES;
+                    return [NSNumber numberWithFloat:[str floatValue]];
+                } else if ([match rangeAtIndex:1].location != NSNotFound) {
+                    *success = YES;
+                    return [NSNumber numberWithDouble:[str doubleValue]];
+                } else if ([match rangeAtIndex:0].location != NSNotFound) {
+                    *success = YES;
+                    return [NSNumber numberWithInteger:[str integerValue]];
+                } else {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Could not convert String to Number. Got %@", str]);
+                    *success = NO;
+                    return nil;
                 }
             }
         reverseBlock:
