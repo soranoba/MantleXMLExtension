@@ -1,11 +1,11 @@
 MantleXMLExtension
 =======
-MantleXMLExtension support mutual conversion between Model object and XML with Mantle.
-
 [![CI Status](http://img.shields.io/travis/soranoba/MantleXMLExtension.svg?style=flat)](https://travis-ci.org/soranoba/MantleXMLExtension)
 [![Version](https://img.shields.io/cocoapods/v/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
 [![License](https://img.shields.io/cocoapods/l/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
 [![Platform](https://img.shields.io/cocoapods/p/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
+
+MantleXMLExtension support mutual conversion between Model object and XML with Mantle.
 
 ## Overview
 

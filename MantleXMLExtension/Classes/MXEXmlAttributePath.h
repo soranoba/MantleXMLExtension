@@ -9,9 +9,6 @@
 #import "MXEXmlPath.h"
 #import <Foundation/Foundation.h>
 
-#define MXEXmlAttribute(_nodePath, _attribute) \
-    [MXEXmlAttributePath pathWithNodePath:(_nodePath) attributeKey:(_attribute)]
-
 /**
  * A class for expressing the attribute, out of elements of xml.
  *
@@ -44,3 +41,13 @@
                              attributeKey:(NSString* _Nonnull)attributeKey;
 
 @end
+
+/**
+ * Short syntax of MXEXmlAttributePath initializer
+ *
+ * @see MXEXmlAttributePath # initWithNodePath:attributeKey:
+ */
+static inline MXEXmlAttributePath* _Nonnull MXEXmlAttribute(id _Nonnull nodePath, NSString* _Nonnull attributeKey)
+{
+    return [MXEXmlAttributePath pathWithNodePath:nodePath attributeKey:attributeKey];
+}

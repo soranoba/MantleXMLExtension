@@ -6,14 +6,8 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
+#import "MXEErrorCode.h"
 #import <Foundation/Foundation.h>
-
-typedef NS_ENUM(NSUInteger, MXEErrorCode) {
-    MXEErrorUnknown = 0,
-    MXEErrorNil,
-    MXEErrorInvalidRootNode,
-    MXEErrorInvalidInputData,
-};
 
 @interface NSError (MantleXMLExtension)
 
@@ -23,7 +17,7 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
  * @param code Error code
  * @return instance
  */
-+ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code;
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code;
 
 /**
  * Create NSError with error code and reason
@@ -32,6 +26,6 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
  * @param reason Error reason
  * @return instance
  */
-+ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
 
 @end

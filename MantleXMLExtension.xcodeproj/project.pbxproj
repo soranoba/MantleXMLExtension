@@ -91,10 +91,10 @@
 			children = (
 				A4BCF3911DE04F7B00EF672C /* MXETSampleModel.h */,
 				A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */,
-				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
-				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
 				A84EC6D61DF59B9A0001FC73 /* MXETTypeModel.h */,
 				A84EC6D71DF59B9A0001FC73 /* MXETTypeModel.m */,
+				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
+				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";

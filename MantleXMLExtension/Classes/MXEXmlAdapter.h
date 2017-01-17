@@ -10,11 +10,12 @@
 #import <Mantle/MTLModel.h>
 #import <Mantle/MTLTransformerErrorHandling.h>
 
+#import "MXEErrorCode.h"
 #import "MXEXmlArrayPath.h"
 #import "MXEXmlAttributePath.h"
 #import "MXEXmlChildNodePath.h"
 
-static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 
 @protocol MXEXmlSerializing <MTLModel>
 @required

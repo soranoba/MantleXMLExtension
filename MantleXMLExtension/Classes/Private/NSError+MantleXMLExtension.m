@@ -8,20 +8,19 @@
 
 #import "NSError+MantleXMLExtension.h"
 
-/// The domain for errors originating from MantleXMLExtension
-static NSString* const MXEErrorDomain = @"MXEErrorDomain";
+NSString* _Nonnull const MXEErrorDomain = @"MXEErrorDomain";
 
 @implementation NSError (MantleXMLExtension)
 
-+ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code
 {
-    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self description:code] };
+    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self mxe_description:code] };
     return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
 }
 
-+ (instancetype _Nonnull)errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason
 {
-    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self description:code],
+    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self mxe_description:code],
                                 NSLocalizedFailureReasonErrorKey : reason };
     return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
 }
@@ -34,7 +33,7 @@ static NSString* const MXEErrorDomain = @"MXEErrorDomain";
  * @param code
  * @return description string
  */
-+ (NSString* _Nonnull)description:(MXEErrorCode)code
++ (NSString* _Nonnull)mxe_description:(MXEErrorCode)code
 {
     switch (code) {
         case MXEErrorNil:
