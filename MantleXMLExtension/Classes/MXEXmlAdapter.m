@@ -193,7 +193,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - Transformer
 
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberTransformer
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer
 {
     return [MTLValueTransformer
         transformerUsingForwardBlock:
@@ -251,7 +251,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             }];
 }
 
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolTransformer
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolStringTransformer
 {
     return [MTLValueTransformer
         transformerUsingForwardBlock:
@@ -709,10 +709,10 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         || strcmp(objCType, @encode(NSNumber)) == 0
         || strcmp(objCType, @encode(float)) == 0
         || strcmp(objCType, @encode(double)) == 0) {
-        return [self.class numberTransformer];
+        return [self.class numberStringTransformer];
     }
     if (strcmp(objCType, @encode(BOOL)) == 0) {
-        return [self.class boolTransformer];
+        return [self.class boolStringTransformer];
     }
 
     return nil;

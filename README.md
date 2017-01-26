@@ -158,6 +158,8 @@ You can use serializer for MXEXmlSerializing object.
 
 - `MXEXmlAdapter # xmlNodeArrayTransformerWithModelClass:`
 - `MXEXmlAdapter # xmlNodeTransformerWithModelClass:`
+- `MXEXmlAdapter # numberStringTransformer`
+- `MXEXmlAdapter # boolStringTransformer`
 
 ### Other information
 

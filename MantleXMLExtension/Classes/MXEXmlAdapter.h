@@ -146,7 +146,7 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 #pragma mark - Transformer
 
 /**
- * Return the transformer that specify when use MXEXmlArray.
+ * Return a transformer that specify when use MXEXmlArray.
  *
  * @return transformer
  */
@@ -154,9 +154,25 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
     xmlNodeArrayTransformerWithModelClass:(Class _Nonnull)modelClass;
 
 /**
- * Return the transformer that used when nested child node is a MXEXmlSerializing object.
+ * Return a transformer that used when nested child node is a MXEXmlSerializing object.
+ *
+ * @return transformer
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
     xmlNodeTransformerWithModelClass:(Class _Nonnull)modelClass;
+
+/**
+ * Return a transformer that convert between number and string of number.
+ *
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer;
+
+/**
+ * Return a transformer that convert between bool and string of boolean.
+ *
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolStringTransformer;
 
 @end
