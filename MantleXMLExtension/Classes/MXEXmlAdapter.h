@@ -164,6 +164,14 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 /**
  * Return a transformer that convert between number and string of number.
  *
+ * NOTE:
+ * It is similar to NSValueTransformer # mtl_numberTransformerWithNumberStype:locale: but there are some differences.
+ *
+ * When using NSNumberFormatterDecimalStyle it support decimal, but comma will be inserted automatically
+ * and the effective number of digits is very small.
+ *
+ * This transformer resolves those problems.
+ *
  * @return transformer
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer;

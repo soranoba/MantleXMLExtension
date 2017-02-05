@@ -154,10 +154,13 @@ If you use this, you **MUST** use `MXEXmlAdapter # xmlNodeArrayTransformerWithMo
 ```
 
 ### Transformer
-You can use serializer for MXEXmlSerializing object.
+You can use these transformer for MXEXmlSerializing object.
 
 - `MXEXmlAdapter # xmlNodeArrayTransformerWithModelClass:`
 - `MXEXmlAdapter # xmlNodeTransformerWithModelClass:`
+
+You can use these transformer for primitive type.
+
 - `MXEXmlAdapter # numberStringTransformer`
 - `MXEXmlAdapter # boolStringTransformer`
 
