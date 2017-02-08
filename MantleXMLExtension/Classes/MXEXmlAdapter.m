@@ -112,9 +112,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - Conversion between XML and Model
 
-+ (id<MXEXmlSerializing> _Nullable)modelOfClass:(Class _Nonnull)modelClass
-                                    fromXmlData:(NSData* _Nullable)xmlData
-                                          error:(NSError* _Nullable* _Nullable)error
++ (id _Nullable)modelOfClass:(Class _Nonnull)modelClass
+                 fromXmlData:(NSData* _Nullable)xmlData
+                       error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
         setError(error, MXEErrorNil, nil);
@@ -135,8 +135,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     return [adapter xmlDataFromModel:model error:error];
 }
 
-- (id<MXEXmlSerializing> _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
-                                              error:(NSError* _Nullable* _Nullable)error
+- (id _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
+                           error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
         setError(error, MXEErrorNil, nil);

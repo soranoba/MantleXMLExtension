@@ -164,7 +164,7 @@ For example:
 </parent>
 ```
 
-``objc
+```objc
 @[@"parent.element_a", MXEXmlAttribute(@"parent.element_b", @"title")]
 ```
 

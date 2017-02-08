@@ -131,9 +131,9 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  * @param error      If it return nil, error information is saved here.
  * @return If conversion is success, return model object. Otherwise, return nil.
  */
-+ (id<MXEXmlSerializing> _Nullable)modelOfClass:(Class _Nonnull)modelClass
-                                    fromXmlData:(NSData* _Nullable)xmlData
-                                          error:(NSError* _Nullable* _Nullable)error;
++ (id _Nullable)modelOfClass:(Class _Nonnull)modelClass
+                 fromXmlData:(NSData* _Nullable)xmlData
+                       error:(NSError* _Nullable* _Nullable)error;
 
 /**
  * Convert model to xml
@@ -148,8 +148,8 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 /**
  * @see modelOfClass:fromXmlData:error:
  */
-- (id<MXEXmlSerializing> _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
-                                              error:(NSError* _Nullable* _Nullable)error;
+- (id _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
+                           error:(NSError* _Nullable* _Nullable)error;
 
 /**
  * @see xmlDataFromModel:error:
