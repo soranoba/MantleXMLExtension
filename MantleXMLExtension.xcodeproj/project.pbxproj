@@ -12,6 +12,7 @@
 		A41C79D31DE9E082000F0A28 /* MXEXmlChildNodePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D21DE9E082000F0A28 /* MXEXmlChildNodePathTests.m */; };
 		A41C79D51DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */; };
 		A41C79D71DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */; };
+		A456FC781E4B695D002EA7B0 /* MXETFilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */; };
 		A4BCF37E1DE0162F00EF672C /* MXETUsersResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */; };
 		A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */; };
 		A4BCF3931DE04F9B00EF672C /* MXETSampleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */; };
@@ -24,6 +25,8 @@
 		A41C79D21DE9E082000F0A28 /* MXEXmlChildNodePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlChildNodePathTests.m; sourceTree = "<group>"; };
 		A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlAttributePathTests.m; sourceTree = "<group>"; };
 		A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlArrayPathTests.m; sourceTree = "<group>"; };
+		A456FC761E4B695D002EA7B0 /* MXETFilterModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXETFilterModel.h; sourceTree = "<group>"; };
+		A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETFilterModel.m; sourceTree = "<group>"; };
 		A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantleXMLExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4BCF36F1DDFEC6600EF672C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETUsersResponse.m; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 				A84EC6D71DF59B9A0001FC73 /* MXETTypeModel.m */,
 				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
 				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
+				A456FC761E4B695D002EA7B0 /* MXETFilterModel.h */,
+				A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -236,6 +241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A41C79D31DE9E082000F0A28 /* MXEXmlChildNodePathTests.m in Sources */,
+				A456FC781E4B695D002EA7B0 /* MXETFilterModel.m in Sources */,
 				A4BCF3981DE0AD8200EF672C /* MXEXmlNodeTests.m in Sources */,
 				A84EC6D81DF59B9A0001FC73 /* MXETTypeModel.m in Sources */,
 				A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */,

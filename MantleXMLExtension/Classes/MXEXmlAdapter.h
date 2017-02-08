@@ -23,43 +23,57 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 /**
  * Specifies how to map property keys to different key paths in XML.
  *
- * <?xml version="1.0" encoding="UTF-8"?>
- * <response>
- *   <status code="200" value="OK" />
- *   <summary>
- *      <total>2</total>
- *   </summary>
- *   <user><id>1</id></user>
- *   <user><id>2</id></user>
- * </response>
+ * When create the following XML model
  *
- * --- 1st case is...
+ *     <?xml version="1.0" encoding="UTF-8"?>
+ *     <response>
+ *       <status code="200">OK</status>
+ *       <total>100</total>
+ *       <par_page>2</par_page>
+ *       <user><id>1</id></user>
+ *       <user><id>2</id></user>
+ *     </response>
  *
- * + (NSString*) xmlRootElementName { return @"response"; }
- * + (NSDictionary*) xmlKeyPathsByPropertyKey
- * {
- *     return @{ @"statusCode" : MXEXmlAttribute(@"status", @"code"),
- *               @"statusValue": MXEXmlAttribute(@"status", @"value"),
- *               @"totalCount" : @"summary.total",
- *               @"userIds"    : MXEArray(@".", @"user.id")}
- * }
+ * First, specify the XML Root Element name.
  *
- * --- 2nd case: Replace user to MXEXmlSerializing model class in 1st case.
+ *     + (NSString*) xmlRootElementName
+ *     {
+ *          return @"response";
+ *     }
  *
- * + (NSDictionary*) xmlKeyPathsByPropertyKey
- * {
- *     return @{ @"statusCode" : MXEXmlAttribute(@"status", @"code"),
- *               @"statusValue": MXEXmlAttribute(@"status", @"value"),
- *               @"totalCount" : @"summary.total",
- *               @"userIds"    : MXEArray(@".", @"user")}
- * }
+ * Next, define the correspondence between XML elements and @property.
  *
- * User model
- * + (NSString*) xmlRootElementName { return @"user"; }
- * + (NSDictionary*) xmlKeyPathsByPropertyKey
- * {
- *     return @{ @"userId" : @"id" }
- * }
+ *     + (NSDictionary*) xmlKeyPathsByPropertyKey
+ *     {
+ *         return @{ @"statusCode" : MXEXmlAttribute(@"status", @"code"),
+ *                   @"statusValue": @"status"
+ *                   @"summary"    : @[@"total", @"par_page"],
+ *                   @"userIds"    : MXEArray(@"", @"user.id")}
+ *     }
+ *
+ * The key of dictionary is @property.
+ * The value of dictionary support several kinds.
+ *
+ * @see MXEXmlArrayPath
+ * @see MXEXmlAttributePath
+ * @see MXEXmlChildNodePath
+ * @see MXEXmlPath
+ *
+ * In all cases, use `.` to specify a child element of an element.
+ * This is the same format as MTLJSONSerializing.
+ *
+ * NSString is treated as a syntax suger which generates MXEXmlPath.
+ * (e.g. `@"user.id"` means `[MXEXmlPath pathWithNodePath:@"user.id"]`)
+ *
+ * If you want to associate XML and @property that extracted some elements, use NSArray.
+ * In the above example, summary is associated with the following XML.
+ *
+ *     <?xml version="1.0" encoding="UTF-8"?>
+ *     <response>
+ *       <total>100</total>
+ *       <par_page>2</par_page>
+ *     </response>
+ *
  */
 + (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey;
 
