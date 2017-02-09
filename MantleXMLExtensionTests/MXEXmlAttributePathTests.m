@@ -36,6 +36,13 @@ QuickSpecBegin(MXEXmlAttributePathTests)
         });
     });
 
+    describe(@"description", ^{
+        it(@"is correct description", ^{
+            MXEXmlAttributePath* path = MXEXmlAttribute(@"a.b", @"c");
+            expect([path description]).to(equal(@"MXEXmlAttribute(@\"a.b\", @\"c\")"));
+        });
+    });
+
     describe(@"getValueBlocks", ^{
         MXEXmlAttributePath* path = [MXEXmlAttributePath pathWithNodePath:@"a.b" attributeKey:@"key"];
 

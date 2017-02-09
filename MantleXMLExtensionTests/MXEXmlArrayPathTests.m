@@ -44,6 +44,13 @@ QuickSpecBegin(MXEXmlArrayPathTests)
         });
     });
 
+    describe(@"description", ^{
+        it(@"is correct description", ^{
+            MXEXmlArrayPath* path = MXEXmlArray(@"a.b", @"c");
+            expect([path description]).to(equal(@"MXEXmlArray(@\"a.b\", MXEXmlPath(@\"c\"))"));
+        });
+    });
+
     describe(@"getValueBlocks", ^{
         MXEXmlArrayPath* path = [MXEXmlArrayPath pathWithParentNodePath:@"a.b" collectRelativePath:@"c.d"];
 

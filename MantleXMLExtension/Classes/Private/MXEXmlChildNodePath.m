@@ -96,4 +96,13 @@
     return result;
 }
 
+#pragma mark - NSObject (Override)
+
+- (NSString* _Nonnull)description
+{
+    NSArray<NSString*>* separatedFullPath = [self.separatedPath arrayByAddingObject:self.nodeName];
+    return [NSString stringWithFormat:@"MXEXmlChildNode(@\"%@\")",
+                                      [separatedFullPath componentsJoinedByString:@"."]];
+}
+
 @end

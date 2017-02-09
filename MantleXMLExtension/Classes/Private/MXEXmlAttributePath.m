@@ -72,4 +72,12 @@
     return result;
 }
 
+#pragma mark - NSObject (Override)
+
+- (NSString* _Nonnull)description
+{
+    return [NSString stringWithFormat:@"MXEXmlAttribute(@\"%@\", @\"%@\")",
+                                      [self.separatedPath componentsJoinedByString:@"."], self.attributeKey];
+}
+
 @end

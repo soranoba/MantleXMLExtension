@@ -140,4 +140,12 @@
     return result;
 }
 
+#pragma mark - NSObject (Override)
+
+- (NSString* _Nonnull)description
+{
+    return [NSString stringWithFormat:@"MXEXmlArray(@\"%@\", %@)",
+                                      [self.separatedPath componentsJoinedByString:@"."], self.collectRelativePath];
+}
+
 @end
