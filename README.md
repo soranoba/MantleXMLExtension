@@ -70,7 +70,7 @@ Just add some to [MTLModel](https://github.com/Mantle/Mantle#mtlmodel) for MXEXm
 
 ### Path type
 
-MXEXmlAdapter support 4 types of paths.
+MXEXmlAdapter support 5 types of paths.
 
 **MXEXmlPath**
 
@@ -153,11 +153,32 @@ If you use this, you **MUST** use `MXEXmlAdapter # xmlNodeArrayTransformerWithMo
 }
 ```
 
+**Multiple elements of XML**
+
+For example:
+
+```
+<parent>
+  <element_a>....</element_a>
+  <element_b title=\"....\" />
+</parent>
+```
+
+```objc
+@[@"parent.element_a", MXEXmlAttribute(@"parent.element_b", @"title")]
+```
+
+It is used when you want to transfer multiple elements of XML to another model.
+Please notice that root element of XML does not change.
+
 ### Transformer
-You can use serializer for MXEXmlSerializing object.
+You can use these transformer for MXEXmlSerializing object.
 
 - `MXEXmlAdapter # xmlNodeArrayTransformerWithModelClass:`
 - `MXEXmlAdapter # xmlNodeTransformerWithModelClass:`
+
+You can use these transformer for primitive type.
+
 - `MXEXmlAdapter # numberStringTransformer`
 - `MXEXmlAdapter # boolStringTransformer`
 

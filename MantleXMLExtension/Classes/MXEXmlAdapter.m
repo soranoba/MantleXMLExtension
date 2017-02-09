@@ -94,9 +94,15 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         for (NSString* key in self.xmlKeyPathsByPropertyKey) {
             NSAssert([self.propertyKeys containsObject:key], @"%@ is NOT a property of %@.", key, modelClass);
 
-            id value = self.xmlKeyPathsByPropertyKey[key];
-            if (!([value isKindOfClass:NSString.class] || [value isKindOfClass:MXEXmlPath.class])) {
-                NSAssert(NO, @"%@ MUST NSString or MXEXmlPath. But got %@", key, value);
+            id paths = self.xmlKeyPathsByPropertyKey[key];
+            if (![paths isKindOfClass:NSArray.class]) {
+                paths = @[ paths ];
+            }
+
+            for (id singlePath in paths) {
+                if (!([singlePath isKindOfClass:NSString.class] || [singlePath isKindOfClass:MXEXmlPath.class])) {
+                    NSAssert(NO, @"%@ MUST NSString, MXEXmlPath or NSArray. But got %@", key, singlePath);
+                }
             }
         }
         self.valueTransformersByPropertyKey = [self.class valueTransformersForModelClass:modelClass];
@@ -106,9 +112,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - Conversion between XML and Model
 
-+ (id<MXEXmlSerializing> _Nullable)modelOfClass:(Class _Nonnull)modelClass
-                                    fromXmlData:(NSData* _Nullable)xmlData
-                                          error:(NSError* _Nullable* _Nullable)error
++ (id _Nullable)modelOfClass:(Class _Nonnull)modelClass
+                 fromXmlData:(NSData* _Nullable)xmlData
+                       error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
         setError(error, MXEErrorNil, nil);
@@ -129,8 +135,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     return [adapter xmlDataFromModel:model error:error];
 }
 
-- (id<MXEXmlSerializing> _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
-                                              error:(NSError* _Nullable* _Nullable)error
+- (id _Nullable)modelFromXmlData:(NSData* _Nullable)xmlData
+                           error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
         setError(error, MXEErrorNil, nil);
@@ -509,7 +515,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - License Github
 
-- (id<MXEXmlSerializing> _Nullable)modelFromMXEXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+- (id<MXEXmlSerializing> _Nullable)modelFromMXEXmlNode:(MXEXmlNode* _Nonnull)topXmlNode
                                                  error:(NSError* _Nullable* _Nullable)error
 {
     NSMutableDictionary* dictionaryValue = [NSMutableDictionary dictionary];
@@ -520,13 +526,28 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         if (!xmlKeyPaths) {
             continue;
         }
-        if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {
-            xmlKeyPaths = [MXEXmlPath pathWithNodePath:xmlKeyPaths];
-        }
 
-        id value = [xmlNode getForXmlPath:(MXEXmlPath*)xmlKeyPaths];
-        if (!value) {
-            continue;
+        id value = nil;
+        if ([xmlKeyPaths isKindOfClass:NSArray.class]) {
+            MXEXmlNode* currentXmlNode = [[MXEXmlNode alloc] initWithElementName:topXmlNode.elementName];
+            for (id __strong singleXmlKeyPath in xmlKeyPaths) {
+                if (![singleXmlKeyPath isKindOfClass:MXEXmlPath.class]) {
+                    singleXmlKeyPath = [MXEXmlPath pathWithNodePath:singleXmlKeyPath];
+                }
+                id v = [topXmlNode getForXmlPath:singleXmlKeyPath];
+                if (v) {
+                    [currentXmlNode setValue:v forXmlPath:singleXmlKeyPath];
+                }
+            }
+            value = currentXmlNode;
+        } else {
+            if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {
+                xmlKeyPaths = [MXEXmlPath pathWithNodePath:xmlKeyPaths];
+            }
+            value = [topXmlNode getForXmlPath:xmlKeyPaths];
+            if (!value) {
+                continue;
+            }
         }
 
         @try {
@@ -584,9 +605,6 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         if (!xmlKeyPaths) {
             continue;
         }
-        if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {
-            xmlKeyPaths = [MXEXmlPath pathWithNodePath:xmlKeyPaths];
-        }
 
         NSValueTransformer* transformer = self.valueTransformersByPropertyKey[propertyKey];
         if ([transformer.class allowsReverseTransformation]) {
@@ -602,7 +620,33 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                 value = [transformer reverseTransformedValue:value];
             }
         }
-        if (value) {
+
+        if (!value) {
+            continue;
+        }
+
+        if ([xmlKeyPaths isKindOfClass:NSArray.class]) {
+            if (![value isKindOfClass:MXEXmlNode.class]) {
+                success = NO;
+                tmpError = [NSError mxe_errorWithMXEErrorCode:MXEErrorInvalidInputData
+                                                       reason:[NSString stringWithFormat:@"input data expected MXEXmlNode, but got %@",
+                                                                                         [value class]]];
+                break;
+            }
+
+            for (id __strong singleXmlPath in xmlKeyPaths) {
+                if (![singleXmlPath isKindOfClass:MXEXmlPath.class]) {
+                    singleXmlPath = [MXEXmlPath pathWithNodePath:singleXmlPath];
+                }
+                id v = [value getForXmlPath:singleXmlPath];
+                if (v) {
+                    [node setValue:v forXmlPath:singleXmlPath];
+                }
+            }
+        } else {
+            if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {
+                xmlKeyPaths = [MXEXmlPath pathWithNodePath:xmlKeyPaths];
+            }
             [node setValue:value forXmlPath:(MXEXmlPath*)xmlKeyPaths];
         }
     }

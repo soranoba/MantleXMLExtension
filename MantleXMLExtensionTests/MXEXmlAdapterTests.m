@@ -6,6 +6,7 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
+#import "MXETFilterModel.h"
 #import "MXETSampleModel.h"
 #import "MXETTypeModel.h"
 #import "MXETUsersResponse.h"
@@ -34,8 +35,8 @@ QuickSpecBegin(MXEXmlAdapterTests)
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"notFound" : @"a" });
             expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
         });
-        it(@"xmlKeyPathsByPropertyKey is array", ^{
-            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @[] });
+        it(@"xmlKeyPathsByPropertyKey is array of NSNumber", ^{
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @[ @1 ] });
             expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).to(raiseException());
         });
         it(@"xmlKeyPathsByPropertyKey is valid", ^{
@@ -45,41 +46,42 @@ QuickSpecBegin(MXEXmlAdapterTests)
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @"a" });
             expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
 
-            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{ @"a" : MXEXmlAttribute(@"hoge", @"fuga") }));
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : MXEXmlAttribute(@"hoge", @"fuga") });
             expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
 
-            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{ @"a" : MXEXmlArray(@"hoge", @"fuga") }));
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : MXEXmlArray(@"hoge", @"fuga") });
             expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+
+            OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{ @"a" : @[ MXEXmlArray(@"hoge", @"fugo"), @"hoge.fugo" ] }));
         });
     });
 
     describe(@"serialize / deserialize", ^{
-
-        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                           @"<response status=\"ok\">"
-                           @"<summary>"
-                           @"<count>2</count>"
-                           @"</summary>"
-                           @"<user first_name=\"Ai\" last_name=\"Asada\">"
-                           @"<age>25</age>"
-                           @"<sex>Woman</sex>"
-                           @"</user>"
-                           @"<user first_name=\"Ikuo\" last_name=\"Ikeda\">"
-                           @"<age>32</age>"
-                           @"<sex>Man</sex>"
-                           @"<parent first_name=\"Umeo\" last_name=\"Ueda\">"
-                           @"<age>50</age>"
-                           @"<sex>Man</sex>"
-                           @"</parent>"
-                           @"<child first_name=\"Eiko\" last_name=\"Endo\">"
-                           @"<age>10</age>"
-                           @"<sex>Woman</sex>"
-                           @"</child>"
-                           @"</user>"
-                           @"</response>";
-        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
-
         it(@"sample (1)", ^{
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<response status=\"ok\">"
+                               @"<summary>"
+                               @"<count>2</count>"
+                               @"</summary>"
+                               @"<user first_name=\"Ai\" last_name=\"Asada\">"
+                               @"<age>25</age>"
+                               @"<sex>Woman</sex>"
+                               @"</user>"
+                               @"<user first_name=\"Ikuo\" last_name=\"Ikeda\">"
+                               @"<age>32</age>"
+                               @"<sex>Man</sex>"
+                               @"<parent first_name=\"Umeo\" last_name=\"Ueda\">"
+                               @"<age>50</age>"
+                               @"<sex>Man</sex>"
+                               @"</parent>"
+                               @"<child first_name=\"Eiko\" last_name=\"Endo\">"
+                               @"<age>10</age>"
+                               @"<sex>Woman</sex>"
+                               @"</child>"
+                               @"</user>"
+                               @"</response>";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
             MXETUsersResponse* response = [MXEXmlAdapter modelOfClass:MXETUsersResponse.class
                                                           fromXmlData:xmlData
                                                                 error:nil];
@@ -117,6 +119,26 @@ QuickSpecBegin(MXEXmlAdapterTests)
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
             expect(gotXmlData).to(equal(xmlData));
+        });
+
+        it(@"sample (2) : Take multiple elements of an xml element", ^{
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<root attribute=\"aaa\">"
+                               @"<data><user>Alice</user></data>"
+                               @"</root>";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+            __block MXETFilterModel* model;
+            __block NSError* error = nil;
+            expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
+            expect(model.node.attribute).to(equal(@"aaa"));
+            expect(model.node.userName).to(equal(@"Alice"));
+            expect(error).to(beNil());
+
+            __block NSData* gotData;
+            expect(gotData = [MXEXmlAdapter xmlDataFromModel:model error:&error]).notTo(beNil());
+            expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
+            expect(error).to(beNil());
         });
     });
 
