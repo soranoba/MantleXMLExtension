@@ -55,6 +55,11 @@ typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
 - (NSString* _Nonnull)toString;
 
 /**
+ * If it is no attribute and no children, it returns YES. Otherwise, it returns NO.
+ */
+- (BOOL)isEmpty;
+
+/**
  * Lookup for child that name is nodeName and return the found node.
  *
  * @param nodeName Search for nodeName

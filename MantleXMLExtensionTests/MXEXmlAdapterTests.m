@@ -140,6 +140,23 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
             expect(error).to(beNil());
         });
+
+        it(@"returns model that does not have node, if the specified elements does not exist", ^{
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<root />";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+            __block MXETFilterModel* model;
+            __block NSError* error = nil;
+            expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
+            expect(model.node).to(beNil());
+            expect(error).to(beNil());
+
+            __block NSData* gotData;
+            expect(gotData = [MXEXmlAdapter xmlDataFromModel:model error:&error]).notTo(beNil());
+            expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
+            expect(error).to(beNil());
+        });
     });
 
     describe(@"-boolTransformer:", ^{

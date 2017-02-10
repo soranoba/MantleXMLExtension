@@ -96,6 +96,11 @@
     }
 }
 
+- (BOOL)isEmpty
+{
+    return (self.attributes.count == 0 && !self.children);
+}
+
 - (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)nodeName
 {
     NSParameterAssert(nodeName != nil);
