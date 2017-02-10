@@ -539,6 +539,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                     [currentXmlNode setValue:v forXmlPath:singleXmlKeyPath];
                 }
             }
+            if (currentXmlNode.isEmpty) {
+                continue;
+            }
             value = currentXmlNode;
         } else {
             if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {

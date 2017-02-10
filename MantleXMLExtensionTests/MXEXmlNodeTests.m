@@ -210,6 +210,23 @@ QuickSpecBegin(MXEXmlNodeTests)
         });
     });
 
+    describe(@"isEmpty", ^{
+        it(@"returns YES, if it is no attributes and no children", ^{
+            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            expect(node.isEmpty).to(equal(YES));
+        });
+
+        it(@"returns NO, if it have some attributes or some children", ^{
+            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            node.children = @"a";
+            expect(node.isEmpty).to(equal(NO));
+
+            node.children = nil;
+            node.attributes = @{ @"a" : @"b" };
+            expect(node.isEmpty).to(equal(NO));
+        });
+    });
+
     describe(@"lookupChild:", ^{
 
         it(@"found / not found", ^{
