@@ -6,7 +6,11 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
+#import "MXEXmlArrayPath+Private.h"
+#import "MXEXmlAttributePath+Private.h"
+#import "MXEXmlChildNodePath+Private.h"
 #import "MXEXmlNode.h"
+#import "MXEXmlPath+Private.h"
 #import <Foundation/Foundation.h>
 
 QuickSpecBegin(MXEXmlNodeTests)

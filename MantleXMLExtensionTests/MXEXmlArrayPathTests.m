@@ -7,6 +7,7 @@
 //
 
 #import "MXEXmlArrayPath+Private.h"
+#import "MXEXmlChildNodePath+Private.h"
 #import "MXEXmlNode.h"
 
 QuickSpecBegin(MXEXmlArrayPathTests)

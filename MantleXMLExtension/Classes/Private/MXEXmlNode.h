@@ -6,9 +6,7 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlArrayPath+Private.h"
-#import "MXEXmlAttributePath+Private.h"
-#import "MXEXmlChildNodePath+Private.h"
+#import "MXEXmlPath.h"
 #import <Foundation/Foundation.h>
 
 /**
@@ -16,25 +14,36 @@
  */
 @interface MXEXmlNode : NSObject <NSMutableCopying, NSCopying>
 
-/// Node name.
+/// A XML element name.
 @property (nonatomic, nonnull, copy, readonly) NSString* elementName;
 
-/// It MUST set strong. Because, MXEXmlNode insert a NSMutableDictionary and edit later.
-/// Therefore, it SHOULD NOT be used as a public instance.
+/// Attributes held by this XML node.
+///
+/// MXEXmlNode treats it as copy.
+/// MXEMutableXMLNode treats it as strong.
 @property (nonatomic, nonnull, readonly) NSDictionary<NSString*, NSString*>* attributes;
 
-/// NSString* or NSArray<MXEXmlNode*>*
-/// It MUST set strong. Because, parser insert a NSMutableArray and edit later.
-/// Therefore, it SHOULD NOT be used as a public instance.
+/// Children held by this XML node.
+///
+/// MXEXmlNode treats it as copy.
+/// MXEMutableXMLNode treats it as strong.
+///
+/// Its types supported are NSString or NSArray<MXEXmlNode>
 @property (nonatomic, nullable, readonly) id children;
 
 /**
- * Initialize with element name.
- * @param elementName XML element name
- * @return instance
+ * @see initWithElementName:attributes:children:
  */
 - (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName;
 
+/**
+ * Create an instance.
+ *
+ * @param elementName A XML element name.
+ * @param attributes  Attributes held by this XML node.
+ * @param children    Children held by this XML node.
+ * @return instance
+ */
 - (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
                                   attributes:(NSDictionary<NSString*, NSString*>* _Nullable)attributes
                                     children:(id _Nullable)children;

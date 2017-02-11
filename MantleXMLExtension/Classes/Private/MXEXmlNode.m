@@ -7,6 +7,7 @@
 //
 
 #import "MXEXmlNode.h"
+#import "MXEXmlPath+Private.h"
 
 @implementation MXEXmlNode {
 @protected
