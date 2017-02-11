@@ -52,7 +52,7 @@ QuickSpecBegin(MXEXmlChildNodePathTests)
         MXEXmlChildNodePath* path = [MXEXmlChildNodePath pathWithNodePath:@"a.b"];
 
         it(@"called MXEXmlNode # lookupChild:, and return child", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @[ [[MXEXmlNode alloc] initWithElementName:@"b"] ];
 
             id mock = OCMPartialMock(node);
@@ -70,13 +70,13 @@ QuickSpecBegin(MXEXmlChildNodePathTests)
         });
 
         it(@"return nil, if children is string", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @"value";
             expect([path getValueBlocks](node)).to(beNil());
         });
 
         it(@"return nil, if it specify anything other than children", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @[ [[MXEXmlNode alloc] initWithElementName:@"c"] ];
             expect([path getValueBlocks](node)).to(beNil());
         });
@@ -86,7 +86,7 @@ QuickSpecBegin(MXEXmlChildNodePathTests)
         MXEXmlPath* path = [MXEXmlChildNodePath pathWithNodePath:@"a.b"];
 
         it(@"return NO and children didn't change, if value isn't MXEXmlNode", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @"old";
 
             expect([path setValueBlocks](node, @"new")).to(equal(NO));
@@ -94,12 +94,12 @@ QuickSpecBegin(MXEXmlChildNodePathTests)
         });
 
         it(@"return YES and delete the child, if value is nil", ^{
-            MXEXmlNode* b1 = [[MXEXmlNode alloc] initWithElementName:@"b"];
+            MXEMutableXmlNode* b1 = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
             b1.children = @"b1";
-            MXEXmlNode* b2 = [[MXEXmlNode alloc] initWithElementName:@"b"];
+            MXEMutableXmlNode* b2 = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
             b2.children = @"b2";
 
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @[ b1, b2 ];
 
             expect([path setValueBlocks](node, nil)).to(equal(YES));
@@ -108,7 +108,7 @@ QuickSpecBegin(MXEXmlChildNodePathTests)
         });
 
         it(@"return YES and append child, if value is MXEXmlNode and child is not found", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @[ [[MXEXmlNode alloc] initWithElementName:@"c"] ];
 
             expect([path setValueBlocks](node, [[MXEXmlNode alloc] initWithElementName:@"b"])).to(equal(YES));
@@ -118,11 +118,11 @@ QuickSpecBegin(MXEXmlChildNodePathTests)
         });
 
         it(@"return YES and update child, if value is MXEXmlNode and child is found", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @[ [[MXEXmlNode alloc] initWithElementName:@"b"],
                                [[MXEXmlNode alloc] initWithElementName:@"c"] ];
 
-            MXEXmlNode* b = [[MXEXmlNode alloc] initWithElementName:@"b"];
+            MXEMutableXmlNode* b = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
             b.children = @"new";
 
             expect([path setValueBlocks](node, b)).to(equal(YES));
@@ -133,11 +133,11 @@ QuickSpecBegin(MXEXmlChildNodePathTests)
         });
 
         it(@"update child and elementName is changed, if value's elementName isn't same", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
             node.children = @[ [[MXEXmlNode alloc] initWithElementName:@"b"],
                                [[MXEXmlNode alloc] initWithElementName:@"c"] ];
 
-            MXEXmlNode* b = [[MXEXmlNode alloc] initWithElementName:@"d"];
+            MXEMutableXmlNode* b = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
             b.children = @"new";
 
             expect([path setValueBlocks](node, b)).to(equal(YES));

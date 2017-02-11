@@ -9,6 +9,7 @@
 #import "MXEXmlPath.h"
 
 @class MXEXmlNode;
+@class MXEMutableXmlNode;
 
 @interface MXEXmlPath ()
 
@@ -35,6 +36,6 @@
  *
  * @return blocks setting value to node.
  */
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks;
+- (BOOL (^_Nonnull)(MXEMutableXmlNode* _Nonnull node, id _Nullable value))setValueBlocks;
 
 @end

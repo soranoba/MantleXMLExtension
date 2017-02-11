@@ -54,15 +54,15 @@ QuickSpecBegin(MXEXmlArrayPathTests)
     describe(@"getValueBlocks", ^{
         MXEXmlArrayPath* path = [MXEXmlArrayPath pathWithParentNodePath:@"a.b" collectRelativePath:@"c.d"];
 
-        MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"b"];
-        MXEXmlNode* c1 = [[MXEXmlNode alloc] initWithElementName:@"c"];
-        MXEXmlNode* c2 = [[MXEXmlNode alloc] initWithElementName:@"c"];
+        MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
+        MXEMutableXmlNode* c1 = [[MXEMutableXmlNode alloc] initWithElementName:@"c"];
+        MXEMutableXmlNode* c2 = [[MXEMutableXmlNode alloc] initWithElementName:@"c"];
 
         node.children = @[ c1, c2 ];
 
         it(@"return array of value and MXEXmlPath # getValueBlocks is called", ^{
-            MXEXmlNode* d1 = [[MXEXmlNode alloc] initWithElementName:@"d"];
-            MXEXmlNode* d2 = [[MXEXmlNode alloc] initWithElementName:@"d"];
+            MXEMutableXmlNode* d1 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
+            MXEMutableXmlNode* d2 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
             c1.children = @[ d1 ];
             c2.children = @[ d2 ];
             d1.children = @"d1";
@@ -93,7 +93,7 @@ QuickSpecBegin(MXEXmlArrayPathTests)
         });
 
         it(@"return nil, if children isn't exist", ^{
-            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"b"];
+            MXEMutableXmlNode* root = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
             expect([path getValueBlocks](root)).to(beNil());
 
             root.children = @"value";
@@ -105,16 +105,16 @@ QuickSpecBegin(MXEXmlArrayPathTests)
         MXEXmlArrayPath* path = [MXEXmlArrayPath pathWithParentNodePath:@"a.b" collectRelativePath:@"c.d"];
 
         it(@"return NO, if value isn't array", ^{
-            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"b"];
+            MXEMutableXmlNode* root = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
             expect([path setValueBlocks](root, @"new")).to(equal(NO));
         });
 
         it(@"return YES and update, if value is array", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"b"];
-            MXEXmlNode* c1 = [[MXEXmlNode alloc] initWithElementName:@"c"];
-            MXEXmlNode* c2 = [[MXEXmlNode alloc] initWithElementName:@"c"];
-            MXEXmlNode* d1 = [[MXEXmlNode alloc] initWithElementName:@"d"];
-            MXEXmlNode* d2 = [[MXEXmlNode alloc] initWithElementName:@"d"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
+            MXEMutableXmlNode* c1 = [[MXEMutableXmlNode alloc] initWithElementName:@"c"];
+            MXEMutableXmlNode* c2 = [[MXEMutableXmlNode alloc] initWithElementName:@"c"];
+            MXEMutableXmlNode* d1 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
+            MXEMutableXmlNode* d2 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
 
             node.children = @[ c1, c2 ];
             c1.children = @[ d1 ];
@@ -143,7 +143,7 @@ QuickSpecBegin(MXEXmlArrayPathTests)
         });
 
         it(@"does not change other elements", ^{
-            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"b"];
+            MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
             MXEXmlArrayPath* path1 = [MXEXmlArrayPath pathWithParentNodePath:@"a.b" collectRelativePath:@"c.d"];
             expect([path1 setValueBlocks](node, @[ @"d1", @"d2" ])).to(equal(YES));
 

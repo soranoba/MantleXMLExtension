@@ -65,7 +65,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 /// A stack of MXEXmlNode to use when parsing XML.
 /// First object is a top level node.
-@property (nonatomic, nonnull, strong) NSMutableArray<MXEXmlNode*>* xmlParseStack;
+@property (nonatomic, nonnull, strong) NSMutableArray<MXEMutableXmlNode*>* xmlParseStack;
 /// It is user error that occurred during parse XML.
 @property (nonatomic, nullable, strong) NSError* parseError;
 
@@ -474,16 +474,16 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             [parser abortParsing];
         }
     }
-    MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:elementName];
+    MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:elementName];
     if (node) {
-        node.attributes = attributeDict;
+        node.attributes = [attributeDict mutableCopy];
         [self.xmlParseStack addObject:node];
     }
 }
 
 - (void)parser:(NSXMLParser*)parser foundCharacters:(NSString*)string
 {
-    MXEXmlNode* node = [self.xmlParseStack lastObject];
+    MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
 
     // NOTE: Ignore character string when child node and character string are mixed.
     if (!node.children) {
@@ -497,10 +497,10 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     qualifiedName:(NSString* _Nullable)qName
 {
     if (self.xmlParseStack.count > 1) {
-        MXEXmlNode* node = [self.xmlParseStack lastObject];
+        MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
         [self.xmlParseStack removeLastObject];
 
-        MXEXmlNode* parentNode = [self.xmlParseStack lastObject];
+        MXEMutableXmlNode* parentNode = [self.xmlParseStack lastObject];
         if ([parentNode.children isKindOfClass:NSArray.class]) {
             [parentNode.children addObject:node];
         } else if (!parentNode.children || [parentNode.children isKindOfClass:NSString.class]) {
@@ -508,7 +508,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             parentNode.children = [NSMutableArray array];
             [parentNode.children addObject:node];
         } else {
-            NSAssert(NO, @"Children MUST be array of %@ or NSArray. But got %@", node.class, parentNode.children);
+            NSAssert(NO, @"Children MUST be array of %@ or NSArray. But got %@", MXEXmlNode.class, parentNode.children);
         }
     }
 }
@@ -529,7 +529,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
         id value = nil;
         if ([xmlKeyPaths isKindOfClass:NSArray.class]) {
-            MXEXmlNode* currentXmlNode = [[MXEXmlNode alloc] initWithElementName:topXmlNode.elementName];
+            MXEMutableXmlNode* currentXmlNode = [[MXEMutableXmlNode alloc] initWithElementName:topXmlNode.elementName];
             for (id __strong singleXmlKeyPath in xmlKeyPaths) {
                 if (![singleXmlKeyPath isKindOfClass:MXEXmlPath.class]) {
                     singleXmlKeyPath = [MXEXmlPath pathWithNodePath:singleXmlKeyPath];
@@ -592,7 +592,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                                                         order:order];
 
     NSDictionary* dictionaryValue = [model.dictionaryValue dictionaryWithValuesForKeys:orderedPropertyKeys];
-    MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:[model.class xmlRootElementName]];
+    MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:[model.class xmlRootElementName]];
 
     BOOL success = YES;
     NSError* tmpError = nil;

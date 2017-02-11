@@ -11,25 +11,22 @@
 #import "MXEXmlChildNodePath+Private.h"
 #import <Foundation/Foundation.h>
 
-@class MXEXmlNode;
-typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
-
 /**
  * Node instance of XML.
  */
-@interface MXEXmlNode : NSObject
+@interface MXEXmlNode : NSObject <NSMutableCopying, NSCopying>
 
 /// Node name.
-@property (nonatomic, nonnull, copy) NSString* elementName;
+@property (nonatomic, nonnull, copy, readonly) NSString* elementName;
 
 /// It MUST set strong. Because, MXEXmlNode insert a NSMutableDictionary and edit later.
 /// Therefore, it SHOULD NOT be used as a public instance.
-@property (nonatomic, nonnull, strong) NSDictionary<NSString*, NSString*>* attributes;
+@property (nonatomic, nonnull, readonly) NSDictionary<NSString*, NSString*>* attributes;
 
 /// NSString* or NSArray<MXEXmlNode*>*
 /// It MUST set strong. Because, parser insert a NSMutableArray and edit later.
 /// Therefore, it SHOULD NOT be used as a public instance.
-@property (nonatomic, nullable, strong) id children;
+@property (nonatomic, nullable, readonly) id children;
 
 /**
  * Initialize with element name.
@@ -38,6 +35,9 @@ typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
  */
 - (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName;
 
+- (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
+                                  attributes:(NSDictionary<NSString*, NSString*>* _Nullable)attributes
+                                    children:(id _Nullable)children;
 /**
  * Initialize with key path and value.
  *
@@ -74,6 +74,17 @@ typedef void (^MXEXmlNodeInsertBlock)(MXEXmlNode* _Nonnull);
  * @return NSArray<MXEXmlNode*>* (children) or NSString* (attribute, value)
  */
 - (id _Nullable)getForXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
+
+@end
+
+@interface MXEMutableXmlNode : MXEXmlNode
+
+/// @see MXEXmlNode # elementName
+@property (nonatomic, nonnull, copy, readwrite) NSString* elementName;
+/// @see MXEXmlNode # attributes
+@property (nonatomic, nonnull, strong, readwrite) NSMutableDictionary<NSString*, NSString*>* attributes;
+/// @see MXEXmlNode # children
+@property (nonatomic, nullable, strong, readwrite) id children;
 
 /**
  * Add a child node to the location specified by keypath.

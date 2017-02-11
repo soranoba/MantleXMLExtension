@@ -13,7 +13,7 @@
 #import "MXEXmlNode.h"
 
 @interface MXEXmlAdapter () <NSXMLParserDelegate>
-@property (nonatomic, nonnull, strong) NSMutableArray<MXEXmlNode*>* xmlParseStack;
+@property (nonatomic, nonnull, strong) NSMutableArray<MXEMutableXmlNode*>* xmlParseStack;
 @property (nonatomic, nullable, strong) NSError* parseError;
 + (NSStringEncoding)xmlDeclarationToEncoding:(NSString*)xmlDeclaration;
 @end
@@ -514,13 +514,14 @@ QuickSpecBegin(MXEXmlAdapterTests)
             NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[xmlStr dataUsingEncoding:NSUTF8StringEncoding]];
             MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
             parser.delegate = adapter;
-            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"];
-            expectedObj.attributes = @{ @"status" : @"OK" };
+            MXEMutableXmlNode* expectedObj = [[MXEMutableXmlNode alloc] initWithElementName:@"response"
+                                                                                 attributes:@{ @"status" : @"OK" }
+                                                                                   children:nil];
 
-            MXEXmlNode* user1 = [[MXEXmlNode alloc] initWithElementName:@"user"];
-            MXEXmlNode* user2 = [[MXEXmlNode alloc] initWithElementName:@"user"];
-            MXEXmlNode* userId1 = [[MXEXmlNode alloc] initWithElementName:@"id"];
-            MXEXmlNode* userId2 = [[MXEXmlNode alloc] initWithElementName:@"id"];
+            MXEMutableXmlNode* user1 = [[MXEMutableXmlNode alloc] initWithElementName:@"user"];
+            MXEMutableXmlNode* user2 = [[MXEMutableXmlNode alloc] initWithElementName:@"user"];
+            MXEMutableXmlNode* userId1 = [[MXEMutableXmlNode alloc] initWithElementName:@"id"];
+            MXEMutableXmlNode* userId2 = [[MXEMutableXmlNode alloc] initWithElementName:@"id"];
             userId1.children = @"1";
             user1.children = @[ userId1 ];
 

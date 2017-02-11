@@ -48,16 +48,16 @@
     };
 }
 
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
+- (BOOL (^_Nonnull)(MXEMutableXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
 {
-    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nullable value) {
+    return ^BOOL(MXEMutableXmlNode* _Nonnull node, id _Nullable value) {
         NSParameterAssert(node != nil);
 
         if (value && ![value isKindOfClass:MXEXmlNode.class]) {
             return NO;
         }
 
-        MXEXmlNode* insertNode = value;
+        MXEMutableXmlNode* insertNode = [value mutableCopy];
         insertNode.elementName = self.nodeName;
 
         MXEXmlNode* foundNode = [node lookupChild:self.nodeName];

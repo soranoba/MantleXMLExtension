@@ -47,9 +47,9 @@
 
             for (id child in children) {
                 NSAssert([child isKindOfClass:MXEXmlNode.class],
-                         @"children MUST be NSString* or array of MXEXmlNode*, but got %@", [child class]);
+                         @"children MUST be NSString or array of MXEXmlNode, but got %@", [child class]);
 
-                MXEXmlNode* dummyNode = [[MXEXmlNode alloc] initWithElementName:@""];
+                MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:@""];
                 dummyNode.children = @[ child ];
                 id value = [dummyNode getForXmlPath:self.collectRelativePath];
                 if (value) {
@@ -65,9 +65,9 @@
     };
 }
 
-- (BOOL (^_Nonnull)(MXEXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
+- (BOOL (^_Nonnull)(MXEMutableXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
 {
-    return ^BOOL(MXEXmlNode* _Nonnull node, id _Nullable value) {
+    return ^BOOL(MXEMutableXmlNode* _Nonnull node, id _Nullable value) {
         NSParameterAssert(node != nil);
 
         if (!value) {
@@ -98,11 +98,11 @@
             NSAssert([child isKindOfClass:MXEXmlNode.class], @"");
             if ([((MXEXmlNode*)child).elementName isEqualToString:childNodeName]) {
                 if (i >= [value count]) {
-                    if (![(MXEXmlNode*)child setValue:nil forXmlPath:collectRelativePath]) {
+                    if (![(MXEMutableXmlNode*)child setValue:nil forXmlPath:collectRelativePath]) {
                         return NO;
                     }
                 } else {
-                    if (![(MXEXmlNode*)child setValue:value[i] forXmlPath:collectRelativePath]) {
+                    if (![(MXEMutableXmlNode*)child setValue:value[i] forXmlPath:collectRelativePath]) {
                         return NO;
                     }
                     i++;
