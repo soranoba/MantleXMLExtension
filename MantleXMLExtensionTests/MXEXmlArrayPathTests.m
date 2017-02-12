@@ -59,15 +59,16 @@ QuickSpecBegin(MXEXmlArrayPathTests)
         MXEMutableXmlNode* c1 = [[MXEMutableXmlNode alloc] initWithElementName:@"c"];
         MXEMutableXmlNode* c2 = [[MXEMutableXmlNode alloc] initWithElementName:@"c"];
 
-        node.children = @[ c1, c2 ];
+        [node addChild:c1];
+        [node addChild:c2];
 
         it(@"return array of value and MXEXmlPath # getValueBlocks is called", ^{
             MXEMutableXmlNode* d1 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
             MXEMutableXmlNode* d2 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
-            c1.children = @[ d1 ];
-            c2.children = @[ d2 ];
-            d1.children = @"d1";
-            d2.children = @"d2";
+            [c1 addChild:d1];
+            [c2 addChild:d2];
+            d1.value = @"d1";
+            d2.value = @"d2";
 
             id mock = OCMPartialMock(path.collectRelativePath);
             __block int getValueBlocksCounter = 0;
@@ -87,8 +88,9 @@ QuickSpecBegin(MXEXmlArrayPathTests)
         });
 
         it(@"return nil, if it is not found", ^{
-            c1.children = @"value";
-            c2.children = @[ [[MXEXmlNode alloc] initWithElementName:@"e"] ];
+            c1.value = @"value";
+            c2.children = nil;
+            [c2 addChild:[[MXEXmlNode alloc] initWithElementName:@"e"]];
 
             expect([path getValueBlocks](node)).to(beNil());
         });
@@ -97,7 +99,7 @@ QuickSpecBegin(MXEXmlArrayPathTests)
             MXEMutableXmlNode* root = [[MXEMutableXmlNode alloc] initWithElementName:@"b"];
             expect([path getValueBlocks](root)).to(beNil());
 
-            root.children = @"value";
+            root.value = @"value";
             expect([path getValueBlocks](root)).to(beNil());
         });
     });
@@ -117,11 +119,12 @@ QuickSpecBegin(MXEXmlArrayPathTests)
             MXEMutableXmlNode* d1 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
             MXEMutableXmlNode* d2 = [[MXEMutableXmlNode alloc] initWithElementName:@"d"];
 
-            node.children = @[ c1, c2 ];
-            c1.children = @[ d1 ];
-            c2.children = @[ d2 ];
-            d1.children = @"d1";
-            d2.children = @"d2";
+            [node addChild:c1];
+            [node addChild:c2];
+            [c1 addChild:d1];
+            [c2 addChild:d2];
+            d1.value = @"d1";
+            d2.value = @"d2";
 
             NSArray* expectList = @[ @"new1", @"new2", @"new3" ];
             expect([path setValueBlocks](node, expectList)).to(equal(YES));
@@ -129,7 +132,7 @@ QuickSpecBegin(MXEXmlArrayPathTests)
 
             for (int i = 0; i < expectList.count; i++) {
                 expect([((MXEXmlNode*)node.children[i]).children count]).to(equal(1));
-                expect([((MXEXmlNode*)node.children[i]).children[0] children]).to(equal(expectList[i]));
+                expect(((MXEXmlNode*)node.children[i]).children[0].value).to(equal(expectList[i]));
             }
 
             expectList = @[ @"feature1", @"feature2" ];
@@ -138,9 +141,9 @@ QuickSpecBegin(MXEXmlArrayPathTests)
 
             for (int i = 0; i < expectList.count; i++) {
                 expect([((MXEXmlNode*)node.children[i]).children count]).to(equal(1));
-                expect([((MXEXmlNode*)node.children[i]).children[0] children]).to(equal(expectList[i]));
+                expect(((MXEXmlNode*)node.children[i]).children[0].value).to(equal(expectList[i]));
             }
-            expect([((MXEXmlNode*)node.children[2]).children[0] children]).to(beNil());
+            expect(((MXEXmlNode*)node.children[2]).children[0].value).to(beNil());
         });
 
         it(@"does not change other elements", ^{

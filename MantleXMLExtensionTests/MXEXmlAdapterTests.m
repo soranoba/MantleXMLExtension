@@ -522,12 +522,14 @@ QuickSpecBegin(MXEXmlAdapterTests)
             MXEMutableXmlNode* user2 = [[MXEMutableXmlNode alloc] initWithElementName:@"user"];
             MXEMutableXmlNode* userId1 = [[MXEMutableXmlNode alloc] initWithElementName:@"id"];
             MXEMutableXmlNode* userId2 = [[MXEMutableXmlNode alloc] initWithElementName:@"id"];
-            userId1.children = @"1";
-            user1.children = @[ userId1 ];
+            userId1.value = @"1";
+            [user1 addChild:userId1];
 
-            userId2.children = @"2";
-            user2.children = @[ userId2 ];
-            expectedObj.children = @[ user1, user2 ];
+            userId2.value = @"2";
+            [user2 addChild:userId2];
+
+            [expectedObj addChild:user1];
+            [expectedObj addChild:user2];
 
             expect([parser parse]).to(equal(YES));
             expect(adapter.xmlParseStack.count).to(equal(1));

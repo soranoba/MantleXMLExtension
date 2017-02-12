@@ -9,6 +9,35 @@
 #import "MXEXmlPath.h"
 #import <Foundation/Foundation.h>
 
+@class MXEXmlNode;
+@class MXEMutableXmlNode;
+
+/**
+ * A protocol that is possible to get and set value from MXEXmlNode.
+ *
+ * An instance conforming to this protocol MUST represent XML path.
+*/
+@protocol MXEXmlAccessible <NSObject>
+
+/**
+ * Get a value from the xmlNode in the path represented by this instance.
+ *
+ * @param xmlNode  The xml node at root.
+ * @return The value in the path represented by this instance. If there is no node in path, it returns nil.
+ */
+- (id _Nullable)getValueFromXmlNode:(MXEXmlNode* _Nonnull)xmlNode;
+
+/**
+ * Set a value for the xmlNode in the path represented by this instance.
+ *
+ * @param value    The value to set.
+ * @param xmlNode  The xml node at root.
+ * @return If the value can be set, it returns YES. Otherwise, it returns NO.
+ */
+- (BOOL)setValue:(id _Nonnull)value forXmlNode:(MXEMutableXmlNode* _Nonnull)xmlNode;
+
+@end
+
 /**
  * Node instance of XML.
  */
@@ -25,11 +54,20 @@
 
 /// Children held by this XML node.
 ///
+/// It exist only if hasChildren is YES. Either value or children always is nil.
+///
 /// MXEXmlNode treats it as copy.
 /// MXEMutableXMLNode treats it as strong.
+@property (nonatomic, nullable, readonly) NSArray<MXEXmlNode*>* children;
+
+/// A value held by this XML node.
 ///
-/// Its types supported are NSString or NSArray<MXEXmlNode>
-@property (nonatomic, nullable, readonly) id children;
+/// It exist only if hasChildren is NO. Either value or children always is nil.
+@property (nonatomic, nullable, copy, readonly) NSString* value;
+
+/// It returns YES, if the MXEXmlNode has children.
+/// Otherwise, it returns NO.
+@property (nonatomic, assign, readonly) BOOL hasChildren;
 
 /**
  * @see initWithElementName:attributes:children:
@@ -46,7 +84,20 @@
  */
 - (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
                                   attributes:(NSDictionary<NSString*, NSString*>* _Nullable)attributes
-                                    children:(id _Nullable)children;
+                                    children:(NSArray<MXEXmlNode*>* _Nullable)children;
+
+/**
+ * Create an instance.
+ *
+ * @param elementName A XML element name.
+ * @param attributes  Attribtues held by this XML node.
+ * @param value       A value held by this XML node.
+ * @return instance
+ */
+- (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
+                                  attributes:(NSDictionary<NSString*, NSString*>* _Nullable)attributes
+                                       value:(NSString* _Nullable)value;
+
 /**
  * Initialize with key path and value.
  *
@@ -77,10 +128,10 @@
 - (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)nodeName;
 
 /**
- * Get children or attribute from node specified keypath.
+ * Get a value from node specified keypath.
  *
  * @param xmlPath See MXEXmlSerializing # xmlKeyPathsByPropertyKey
- * @return NSArray<MXEXmlNode*>* (children) or NSString* (attribute, value)
+ * @return The value type returned by xmlPath is different.
  */
 - (id _Nullable)getForXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
 
@@ -93,12 +144,38 @@
 /// @see MXEXmlNode # attributes
 @property (nonatomic, nonnull, strong, readwrite) NSMutableDictionary<NSString*, NSString*>* attributes;
 /// @see MXEXmlNode # children
-@property (nonatomic, nullable, strong, readwrite) id children;
+@property (nonatomic, nullable, readwrite) NSMutableArray<MXEMutableXmlNode*>* children;
+/// @see MXEXmlNode # value
+@property (nonatomic, nullable, copy, readwrite) NSString* value;
 
 /**
- * Add a child node to the location specified by keypath.
+ * Add the childNode
  *
- * @param value   KeyPath's node has this string.
+ * If it have value, it delete the value and set the childNode. 
+ * Because, there MUST NOT be exist for both children and value.
+ *
+ * @param childNode A child to be added.
+ */
+- (void)addChild:(MXEXmlNode* _Nonnull)childNode;
+
+/**
+ * Delete all children with the same name as nodeName
+ *
+ * @param nodeName  The nodeName of the child to delete
+ */
+- (void)removeChildren:(NSString* _Nonnull)nodeName;
+
+/**
+ * It set to copy all elements from the sourceXmlNode.
+ *
+ * @param sourceXmlNode  A XmlNode that is source of copy
+ */
+- (void)setToCopyAllElementsFromXmlNode:(MXEXmlNode* _Nonnull)sourceXmlNode;
+
+/**
+ * Set the value to the location specified by keypath.
+ *
+ * @param value   A value to set. The types supported by xmlPath are different.
  * @param xmlPath See MXEXmlSerializing # xmlKeyPathsByPropertyKey
  */
 - (BOOL)setValue:(id _Nullable)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath;

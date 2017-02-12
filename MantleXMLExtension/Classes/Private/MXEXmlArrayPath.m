@@ -49,8 +49,9 @@
                 NSAssert([child isKindOfClass:MXEXmlNode.class],
                          @"children MUST be NSString or array of MXEXmlNode, but got %@", [child class]);
 
-                MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:@""];
-                dummyNode.children = @[ child ];
+                MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:@""
+                                                                                   attributes:nil
+                                                                                     children:@[ child ]];
                 id value = [dummyNode getForXmlPath:self.collectRelativePath];
                 if (value) {
                     [result addObject:value];

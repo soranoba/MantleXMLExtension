@@ -486,8 +486,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
 
     // NOTE: Ignore character string when child node and character string are mixed.
-    if (!node.children) {
-        node.children = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (!node.hasChildren) {
+        node.value = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     }
 }
 

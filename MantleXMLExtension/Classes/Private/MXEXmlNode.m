@@ -13,12 +13,14 @@
 @protected
     NSString* _elementName;
     NSDictionary<NSString*, NSString*>* _attributes;
-    id _children;
+    NSArray<MXEXmlNode*>* _children;
+    NSString* _value;
 }
 
-@synthesize elementName = _elementName;
 @synthesize attributes = _attributes;
 @synthesize children = _children;
+
+#pragma mark - Lifecycle
 
 - (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
 {
@@ -32,9 +34,23 @@
     NSParameterAssert(elementName != nil);
 
     if (self = [super init]) {
-        _elementName = elementName;
-        _attributes = attributes ?: [NSDictionary dictionary];
-        _children = children;
+        _elementName = [elementName copy];
+        _attributes = attributes ? [attributes copy] : [NSDictionary dictionary];
+        _children = [children copy];
+    }
+    return self;
+}
+
+- (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
+                                  attributes:(NSDictionary<NSString*, NSString*>* _Nullable)attributes
+                                       value:(NSString* _Nullable)value
+{
+    NSParameterAssert(elementName != nil);
+
+    if (self = [super init]) {
+        _elementName = [elementName copy];
+        _attributes = attributes ? [attributes copy] : [NSDictionary dictionary];
+        _value = [value copy];
     }
     return self;
 }
@@ -68,40 +84,19 @@
 
 #pragma mark - Custom Accessor
 
-- (void)setElementName:(NSString* _Nonnull)elementName
-{
-    _elementName = [elementName copy];
-}
-
 - (NSDictionary<NSString*, NSString*>* _Nonnull)attributes
 {
     return [_attributes copy];
 }
 
-- (void)setAttributes:(NSDictionary<NSString*, NSString*>* _Nonnull)attributes
-{
-    _attributes = [attributes copy];
-}
-
-- (id)children
+- (NSArray<MXEXmlNode*>* _Nullable)children
 {
     return [_children copy];
 }
 
-- (void)setChildren:(id _Nullable)children
+- (BOOL)hasChildren
 {
-    if ([children isKindOfClass:NSArray.class]) {
-        for (id child in children) {
-            if (![child isKindOfClass:MXEXmlNode.class]) {
-                NSAssert(NO, @"Children MUST be array of %@ or NSString. But, array include %@",
-                         MXEXmlNode.class, [child class]);
-            }
-        }
-    } else if (children) {
-        NSAssert([children isKindOfClass:NSString.class],
-                 @"Children MUST be array of %@ or NSString. But, got %@", MXEXmlNode.class, [children class]);
-    }
-    _children = [children copy];
+    return _children != nil;
 }
 
 #pragma mark - Public Methods
@@ -115,32 +110,24 @@
         [attributesStr appendString:appendStr];
     }
 
-    if (!self.children) {
-        return [NSString stringWithFormat:@"<%@%@ />", self.elementName, attributesStr];
-    } else if ([self.children isKindOfClass:NSString.class]) {
+    if (self.value) {
         return [NSString stringWithFormat:@"<%@%@>%@</%@>", self.elementName, attributesStr,
-                                          [self.class escapeString:self.children], self.elementName];
-    } else if ([self.children isKindOfClass:NSArray.class]) {
+                                          [self.class escapeString:self.value], self.elementName];
+    } else if (self.children.count) {
         NSMutableString* childrenStr = [NSMutableString string];
-        for (id child in self.children) {
-            if ([child isKindOfClass:MXEXmlNode.class]) {
-                [childrenStr appendString:[child toString]];
-            } else {
-                NSAssert(NO, @"Children MUST be array of %@ or NSString. But, array include %@",
-                         MXEXmlNode.class, [child class]);
-            }
+        for (MXEXmlNode* child in self.children) {
+            [childrenStr appendString:[child toString]];
         }
         return [NSString stringWithFormat:@"<%@%@>%@</%@>", self.elementName, attributesStr, childrenStr,
                                           self.elementName];
     } else {
-        NSAssert(NO, @"Children MUST be array of %@ or NSString. But, got %@", MXEXmlNode.class, self.children);
-        return @"";
+        return [NSString stringWithFormat:@"<%@%@ />", self.elementName, attributesStr];
     }
 }
 
 - (BOOL)isEmpty
 {
-    return (self.attributes.count == 0 && !self.children);
+    return (self.attributes.count == 0 && !self.children && !self.value);
 }
 
 - (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)nodeName
@@ -148,10 +135,8 @@
     NSParameterAssert(nodeName != nil);
 
     if ([self.children isKindOfClass:NSArray.class]) {
-        for (id child in self.children) {
-            NSAssert([child isKindOfClass:MXEXmlNode.class],
-                     @"Children is NSString or array of %@, but got %@", MXEXmlNode.class, [child class]);
-            if ([((MXEXmlNode*)child).elementName isEqualToString:nodeName]) {
+        for (MXEXmlNode* child in self.children) {
+            if ([child.elementName isEqualToString:nodeName]) {
                 return child;
             }
         }
@@ -173,44 +158,6 @@
         }
     }
     return [xmlPath getValueBlocks](iterator);
-}
-
-#pragma mark - NSObject (override)
-
-- (BOOL)isEqual:(id)object
-{
-    if (![object isKindOfClass:MXEXmlNode.class]) {
-        return NO;
-    }
-
-    MXEXmlNode* node = object;
-    if (![node.elementName isEqual:self.elementName]) {
-        return NO;
-    }
-
-    if (node.attributes.count != self.attributes.count) {
-        return NO;
-    }
-    for (NSString* key in node.attributes) {
-        if (![node.attributes[key] isEqual:self.attributes[key]]) {
-            return NO;
-        }
-    }
-
-    if ([node.children isKindOfClass:NSString.class] && [self.children isKindOfClass:NSString.class]) {
-        return [node.children isEqual:self.children];
-    } else if ([node.children isKindOfClass:NSArray.class] && [self.children isKindOfClass:NSArray.class]) {
-        if ([node.children count] != [self.children count]) {
-            return NO;
-        }
-        for (int i = 0; i < [node.children count]; i++) {
-            if (![node.children[i] isEqual:self.children[i]]) {
-                return NO;
-            }
-        }
-        return YES;
-    }
-    return node.children == nil && self.children == nil;
 }
 
 #pragma mark - Private methods
@@ -237,8 +184,9 @@
 {
     typeof(self) copyNode = [[self.class allocWithZone:zone] initWithElementName:self.elementName];
     if (copyNode) {
-        copyNode.attributes = [self.attributes copyWithZone:zone];
-        copyNode.children = [self.children copyWithZone:zone];
+        copyNode->_attributes = [self.attributes copyWithZone:zone];
+        copyNode->_children = [self.children copyWithZone:zone];
+        copyNode->_value = [self.value copyWithZone:zone];
     }
     return copyNode;
 }
@@ -250,11 +198,8 @@
     MXEMutableXmlNode* copyNode = [[MXEMutableXmlNode allocWithZone:zone] initWithElementName:self.elementName];
     if (copyNode) {
         copyNode.attributes = [self.attributes mutableCopyWithZone:zone];
-        if ([copyNode isKindOfClass:NSArray.class]) {
-            copyNode.children = [self.children mutableCopyWithZone:zone];
-        } else {
-            copyNode.children = self.children;
-        }
+        copyNode.children = [self.children mutableCopyWithZone:zone];
+        copyNode.value = self.value;
     }
     return copyNode;
 }
@@ -266,11 +211,25 @@
     return [NSString stringWithFormat:@"%@ # %@", self.class, self.toString];
 }
 
+- (BOOL)isEqual:(id)object
+{
+    if (![object isKindOfClass:MXEXmlNode.class]) {
+        return NO;
+    }
+
+    MXEXmlNode* node = object;
+    return [node.elementName isEqual:self.elementName]
+        && [node.attributes isEqual:self.attributes]
+        && (node.children == self.children || [node.children isEqual:self.children])
+        && (node.value == self.value || [node.value isEqual:self.value]);
+}
+
 @end
 
 @implementation MXEMutableXmlNode
 
 @dynamic elementName;
+@dynamic value;
 
 #pragma mark - Lifecycle
 
@@ -281,27 +240,38 @@
 
 - (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
                                   attributes:(NSDictionary<NSString*, NSString*>* _Nullable)attributes
-                                    children:(id _Nullable)children
+                                    children:(NSArray<MXEXmlNode*>* _Nullable)children
 {
     NSParameterAssert(elementName != nil);
 
     if (self = [super init]) {
-        _elementName = elementName;
-        if (attributes) {
-            if ([attributes isKindOfClass:NSMutableDictionary.class]) {
-                _attributes = attributes;
-            } else {
-                _attributes = [attributes mutableCopy];
-            }
-        } else {
-            _attributes = [NSMutableDictionary dictionary];
-        }
-        _children = children;
+        _elementName = [elementName copy];
+        _attributes = attributes ? [attributes mutableCopy] : [NSMutableDictionary dictionary];
+        _children = children ? [children mutableCopy] : [NSMutableArray array];
+    }
+    return self;
+}
+
+- (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
+                                  attributes:(NSDictionary<NSString*, NSString*>* _Nullable)attributes
+                                       value:(NSString* _Nullable)value
+{
+    NSParameterAssert(elementName != nil);
+
+    if (self = [super init]) {
+        _elementName = [elementName copy];
+        _attributes = attributes ? [attributes mutableCopy] : [NSMutableDictionary dictionary];
+        _value = [value copy];
     }
     return self;
 }
 
 #pragma mark - Custom Accessor
+
+- (void)setElementName:(NSString* _Nonnull)elementName
+{
+    _elementName = elementName;
+}
 
 - (NSMutableDictionary<NSString*, NSString*>* _Nonnull)attributes
 {
@@ -313,28 +283,67 @@
     _attributes = attributes;
 }
 
-- (id)children
+- (NSMutableArray<MXEMutableXmlNode*>* _Nullable)children
 {
-    return _children;
+    return (NSMutableArray<MXEMutableXmlNode*>*)_children;
 }
 
-- (void)setChildren:(id _Nullable)children
+- (void)setChildren:(NSMutableArray<MXEMutableXmlNode*>* _Nullable)children
 {
-    if ([children isKindOfClass:NSArray.class]) {
-        for (id child in children) {
-            if (![child isKindOfClass:MXEXmlNode.class]) {
-                NSAssert(NO, @"Children MUST be array of %@ or NSString. But, array include %@",
-                         MXEXmlNode.class, [child class]);
-            }
-        }
-    } else if (children) {
-        NSAssert([children isKindOfClass:NSString.class],
-                 @"Children MUST be array of %@ or NSString. But, got %@", MXEXmlNode.class, [children class]);
-    }
     _children = children;
+    _value = nil;
+}
+
+- (void)setValue:(NSString* _Nullable)value
+{
+    _children = nil;
+    _value = value;
 }
 
 #pragma mark - Public Methods
+
+- (void)addChild:(MXEXmlNode* _Nonnull)childNode
+{
+    MXEMutableXmlNode* mutableChildNode;
+    if ([childNode isKindOfClass:MXEMutableXmlNode.class]) {
+        mutableChildNode = (MXEMutableXmlNode*)childNode;
+    } else {
+        mutableChildNode = [childNode mutableCopy];
+    }
+
+    NSMutableArray* children = self.children ?: [NSMutableArray array];
+    [children addObject:mutableChildNode];
+    self.children = children;
+}
+
+- (void)removeChildren:(NSString* _Nonnull)nodeName
+{
+    if (!self.hasChildren) {
+        return;
+    }
+
+    NSMutableArray* filteredChildren = [NSMutableArray arrayWithCapacity:self.children.count];
+    for (MXEMutableXmlNode* child in self.children) {
+        if (![child.elementName isEqualToString:nodeName]) {
+            [filteredChildren addObject:child];
+        }
+    }
+    self.children = filteredChildren;
+}
+
+- (void)setToCopyAllElementsFromXmlNode:(MXEXmlNode* _Nonnull)sourceXmlNode
+{
+    self.elementName = sourceXmlNode.elementName;
+    self.attributes = [sourceXmlNode.attributes mutableCopy];
+    if (self.hasChildren) {
+        self.children = nil;
+        for (MXEXmlNode* child in sourceXmlNode.children) {
+            [self addChild:child];
+        }
+    } else {
+        self.value = sourceXmlNode.value;
+    }
+}
 
 - (BOOL)setValue:(id _Nullable)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath
 {
@@ -369,15 +378,7 @@
     if (!insertNode) {
         return NO;
     }
-
-    if (![iterator.children isKindOfClass:NSMutableArray.class]) {
-        if ([iterator.children isKindOfClass:NSArray.class]) {
-            iterator.children = [iterator.children mutableCopy];
-        } else {
-            iterator.children = [NSMutableArray array];
-        }
-    }
-    [iterator.children addObject:insertNode];
+    [iterator addChild:insertNode];
     return YES;
 }
 
