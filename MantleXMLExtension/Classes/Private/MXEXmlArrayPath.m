@@ -6,147 +6,138 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlArrayPath+Private.h"
+#import "MXEXmlArrayPath.h"
 #import "MXEXmlNode.h"
+#import "MXEXmlNodePath.h"
+#import "MXEXmlValuePath.h"
+
+@interface MXEXmlArrayPath ()
+
+@property (nonatomic, nonnull, strong) MXEXmlNodePath* parentNodePath;
+@property (nonatomic, nonnull, strong) id<MXEXmlAccessible> collectRelativePath;
+
+@end
 
 @implementation MXEXmlArrayPath
 
-- (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
-                            collectRelativePath:(id _Nonnull)collectRelativePath
-{
-    NSParameterAssert(parentNodePath != nil && collectRelativePath != nil);
+#pragma mark - Lifecycle
 
-    if (self = [super initWithNodePath:parentNodePath]) {
-        if ([collectRelativePath isKindOfClass:MXEXmlPath.class]) {
+- (instancetype _Nonnull)initWithParentPathString:(NSString* _Nonnull)parentPathString
+                              collectRelativePath:(id _Nonnull)collectRelativePath
+{
+    NSParameterAssert(parentPathString != nil && collectRelativePath != nil);
+
+    if (self = [super init]) {
+        self.parentNodePath = [MXEXmlNodePath pathWithPathString:parentPathString];
+        if ([collectRelativePath conformsToProtocol:@protocol(MXEXmlAccessible)]) {
             self.collectRelativePath = collectRelativePath;
         } else {
-            self.collectRelativePath = [MXEXmlPath pathWithNodePath:collectRelativePath];
+            NSAssert([collectRelativePath isKindOfClass:NSString.class],
+                     @"collectRelativePath MUST be NSString or MXEXmlAccessible object");
+            self.collectRelativePath = MXEXmlValue(collectRelativePath);
         }
     }
     return self;
 }
 
-+ (instancetype _Nonnull)pathWithParentNodePath:(id _Nonnull)parentNodePath
-                            collectRelativePath:(id _Nonnull)collectRelativePath
++ (instancetype _Nonnull)pathWithParentPathString:(NSString* _Nonnull)parentNodePath
+                              collectRelativePath:(id _Nonnull)collectRelativePath
 {
-    return [[self alloc] initWithParentNodePath:parentNodePath
-                            collectRelativePath:collectRelativePath];
+    return [[self alloc] initWithParentPathString:parentNodePath
+                              collectRelativePath:collectRelativePath];
 }
 
-#pragma mark - MXEXmlpath (override)
+#pragma mark - MXEXmlAccessible
 
-- (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
+- (NSArray<NSString*>* _Nonnull)separatedPath
 {
-    return ^id _Nullable(MXEXmlNode* _Nonnull node)
-    {
-        NSParameterAssert(node != nil);
-
-        if ([node.children isKindOfClass:NSArray.class]) {
-            NSArray* children = node.children;
-            NSMutableArray* result = [NSMutableArray array];
-
-            for (id child in children) {
-                NSAssert([child isKindOfClass:MXEXmlNode.class],
-                         @"children MUST be NSString or array of MXEXmlNode, but got %@", [child class]);
-
-                MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:@""
-                                                                                   attributes:nil
-                                                                                     children:@[ child ]];
-                id value = [dummyNode getForXmlPath:self.collectRelativePath];
-                if (value) {
-                    [result addObject:value];
-                }
-            }
-
-            if (result.count > 0) {
-                return result;
-            }
-        }
-        return (NSMutableArray*)nil;
-    };
+    return self.parentNodePath.separatedPath;
 }
 
-- (BOOL (^_Nonnull)(MXEMutableXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
+- (id _Nullable)getValueFromXmlNode:(MXEXmlNode* _Nonnull)rootXmlNode
 {
-    return ^BOOL(MXEMutableXmlNode* _Nonnull node, id _Nullable value) {
-        NSParameterAssert(node != nil);
+    NSParameterAssert(rootXmlNode != nil);
 
-        if (!value) {
-            value = @[];
-        }
-        if (![value isKindOfClass:NSArray.class]) {
-            return NO;
-        }
-
-        NSString* childNodeName = [self.collectRelativePath.separatedPath firstObject];
-        childNodeName = childNodeName ?: @"";
-
-        MXEXmlPath* collectRelativePath = [self.collectRelativePath copy];
-        if (collectRelativePath.separatedPath.count > 0) {
-            NSRange range = NSMakeRange(1, collectRelativePath.separatedPath.count - 1);
-            collectRelativePath.separatedPath = [collectRelativePath.separatedPath subarrayWithRange:range];
-        }
-
-        NSMutableArray* children;
-        if ([node.children isKindOfClass:NSArray.class]) {
-            children = [node.children mutableCopy];
-        } else {
-            children = [NSMutableArray arrayWithCapacity:((NSArray*)value).count];
-        }
-
-        int i = 0;
-        for (id child in children) {
-            NSAssert([child isKindOfClass:MXEXmlNode.class], @"");
-            if ([((MXEXmlNode*)child).elementName isEqualToString:childNodeName]) {
-                if (i >= [value count]) {
-                    if (![(MXEMutableXmlNode*)child setValue:nil forXmlPath:collectRelativePath]) {
-                        return NO;
-                    }
-                } else {
-                    if (![(MXEMutableXmlNode*)child setValue:value[i] forXmlPath:collectRelativePath]) {
-                        return NO;
-                    }
-                    i++;
-                }
-            }
-        }
-        for (; i < [value count]; i++) {
-            MXEXmlNode* insertChild;
-            if (childNodeName.length == 0 && [value[i] isKindOfClass:MXEXmlNode.class]) {
-                insertChild = value[i];
-            } else {
-                insertChild = [[MXEXmlNode alloc] initWithXmlPath:self.collectRelativePath value:value[i]];
-            }
-
-            if (!insertChild) {
-                return NO;
-            }
-            [(NSMutableArray*)children addObject:insertChild];
-        }
-
-        node.children = children;
-        return YES;
-    };
-}
-
-#pragma mark - NSCopying
-
-- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
-{
-    MXEXmlArrayPath* result = [super copyWithZone:zone];
-
-    if (result) {
-        result.collectRelativePath = [self.collectRelativePath copyWithZone:zone];
+    MXEXmlNode* foundNode = [self.parentNodePath getValueFromXmlNode:rootXmlNode];
+    if (!foundNode) {
+        return nil;
     }
-    return result;
+
+    NSMutableArray* resultArray = [NSMutableArray array];
+    for (MXEXmlNode* child in foundNode.children) {
+        MXEXmlNode* dummyNode;
+        if (child == [foundNode.children firstObject]) {
+            // NOTE: It should have attribute for the first time only, so it use original attributes.
+            dummyNode = [[MXEXmlNode alloc] initWithElementName:foundNode.elementName
+                                                     attributes:foundNode.attributes
+                                                       children:@[ child ]];
+        } else {
+            dummyNode = [[MXEXmlNode alloc] initWithElementName:foundNode.elementName
+                                                     attributes:nil
+                                                       children:@[ child ]];
+        }
+
+        id foundValue = [self.collectRelativePath getValueFromXmlNode:dummyNode];
+        if (foundValue) {
+            [resultArray addObject:foundValue];
+        }
+    }
+    return resultArray;
+}
+
+- (void)setValue:(NSArray* _Nullable)values forXmlNode:(MXEMutableXmlNode* _Nonnull)rootXmlNode
+{
+    NSParameterAssert(rootXmlNode != nil);
+    NSParameterAssert(values == nil || [values isKindOfClass:NSArray.class]);
+
+    MXEMutableXmlNode* foundNode = [self.parentNodePath getValueFromXmlNode:rootXmlNode];
+    if (!foundNode) {
+        foundNode = [[MXEMutableXmlNode alloc] initWithElementName:@"dummy"];
+        [self.parentNodePath setValue:foundNode forXmlNode:rootXmlNode];
+    }
+
+    NSUInteger index = 0;
+    NSString* searchChildName = [self.collectRelativePath.separatedPath firstObject];
+
+    for (MXEMutableXmlNode* child in foundNode.children) {
+        if (!(searchChildName == nil || [searchChildName isEqualToString:child.elementName])) {
+            continue;
+        }
+
+        if (index >= values.count) {
+            break;
+        }
+
+        MXEMutableXmlNode* dummyNode;
+        if (child == [foundNode.children firstObject]) {
+            // NOTE: It should have attribute for the first time only, so it use original attributes.
+            dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:foundNode.elementName
+                                                            attributes:foundNode.attributes
+                                                              children:@[ child ]];
+        } else {
+            dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:foundNode.elementName
+                                                            attributes:nil
+                                                              children:@[ child ]];
+        }
+
+        [self.collectRelativePath setValue:values[index] forXmlNode:dummyNode];
+        index++;
+    }
+
+    for (; index < values.count; index++) {
+        MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:@"dummy"];
+        [self.collectRelativePath setValue:values[index] forXmlNode:dummyNode];
+        if (dummyNode.children.count) {
+            [foundNode addChild:dummyNode.children[0]];
+        }
+    }
 }
 
 #pragma mark - NSObject (Override)
 
 - (NSString* _Nonnull)description
 {
-    return [NSString stringWithFormat:@"MXEXmlArray(@\"%@\", %@)",
-                                      [self.separatedPath componentsJoinedByString:@"."], self.collectRelativePath];
+    return [NSString stringWithFormat:@"MXEXmlArray(%@, %@)", self.parentNodePath, self.collectRelativePath];
 }
 
 @end

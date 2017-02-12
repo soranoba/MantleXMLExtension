@@ -14,6 +14,7 @@
 #import "MXEXmlArrayPath.h"
 #import "MXEXmlAttributePath.h"
 #import "MXEXmlChildNodePath.h"
+#import "MXEXmlValuePath.h"
 
 extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 

@@ -7,7 +7,6 @@
 //
 
 #import "MXEXmlNode.h"
-#import "MXEXmlPath+Private.h"
 
 @implementation MXEXmlNode {
 @protected
@@ -53,33 +52,6 @@
         _value = [value copy];
     }
     return self;
-}
-
-- (instancetype _Nullable)initWithXmlPath:(MXEXmlPath* _Nonnull)xmlPath value:(id _Nullable)value
-{
-    NSParameterAssert(xmlPath != nil);
-
-    NSString* elementName = [xmlPath.separatedPath firstObject];
-    NSArray<NSString*>* separatedPath;
-    if (xmlPath.separatedPath.count > 1) {
-        separatedPath = [xmlPath.separatedPath subarrayWithRange:NSMakeRange(1, xmlPath.separatedPath.count - 1)];
-    } else {
-        separatedPath = [NSArray array];
-    }
-
-    if (self = [[MXEMutableXmlNode alloc] initWithElementName:elementName]) {
-        MXEMutableXmlNode* iterator = (MXEMutableXmlNode*)self;
-        for (NSString* path in separatedPath) {
-            MXEMutableXmlNode* child = [[MXEMutableXmlNode alloc] initWithElementName:path];
-            iterator.children = [NSMutableArray array];
-            [iterator.children addObject:child];
-            iterator = child;
-        }
-        if (value && ![xmlPath setValueBlocks](iterator, value)) {
-            return nil;
-        }
-    }
-    return [self copy];
 }
 
 #pragma mark - Custom Accessor
@@ -144,20 +116,11 @@
     return nil;
 }
 
-- (id _Nullable)getForXmlPath:(MXEXmlPath* _Nonnull)xmlPath
+- (id _Nullable)getForXmlPath:(id<MXEXmlAccessible> _Nonnull)xmlPath
 {
     NSParameterAssert(xmlPath != nil);
 
-    MXEXmlNode* iterator = self;
-    for (NSString* path in xmlPath.separatedPath) {
-        MXEXmlNode* lookupNode = [iterator lookupChild:path];
-        if (lookupNode) {
-            iterator = lookupNode;
-        } else {
-            return nil;
-        }
-    }
-    return [xmlPath getValueBlocks](iterator);
+    return [xmlPath getValueFromXmlNode:self];
 }
 
 #pragma mark - Private methods
@@ -197,9 +160,7 @@
 {
     MXEMutableXmlNode* copyNode = [[MXEMutableXmlNode allocWithZone:zone] initWithElementName:self.elementName];
     if (copyNode) {
-        copyNode.attributes = [self.attributes mutableCopyWithZone:zone];
-        copyNode.children = [self.children mutableCopyWithZone:zone];
-        copyNode.value = self.value;
+        [copyNode setToCopyAllElementsFromXmlNode:self];
     }
     return copyNode;
 }
@@ -247,7 +208,7 @@
     if (self = [super init]) {
         _elementName = [elementName copy];
         _attributes = attributes ? [attributes mutableCopy] : [NSMutableDictionary dictionary];
-        _children = children ? [children mutableCopy] : [NSMutableArray array];
+        _children = [children mutableCopy];
     }
     return self;
 }
@@ -316,26 +277,13 @@
     self.children = children;
 }
 
-- (void)removeChildren:(NSString* _Nonnull)nodeName
-{
-    if (!self.hasChildren) {
-        return;
-    }
-
-    NSMutableArray* filteredChildren = [NSMutableArray arrayWithCapacity:self.children.count];
-    for (MXEMutableXmlNode* child in self.children) {
-        if (![child.elementName isEqualToString:nodeName]) {
-            [filteredChildren addObject:child];
-        }
-    }
-    self.children = filteredChildren;
-}
-
 - (void)setToCopyAllElementsFromXmlNode:(MXEXmlNode* _Nonnull)sourceXmlNode
 {
+    NSParameterAssert(sourceXmlNode != nil);
+
     self.elementName = sourceXmlNode.elementName;
     self.attributes = [sourceXmlNode.attributes mutableCopy];
-    if (self.hasChildren) {
+    if (sourceXmlNode.hasChildren) {
         self.children = nil;
         for (MXEXmlNode* child in sourceXmlNode.children) {
             [self addChild:child];
@@ -345,41 +293,10 @@
     }
 }
 
-- (BOOL)setValue:(id _Nullable)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath
+- (void)setValue:(id _Nullable)value forXmlPath:(id<MXEXmlAccessible> _Nonnull)xmlPath
 {
     NSParameterAssert(xmlPath != nil);
-
-    NSArray<NSString*>* separatedPath = xmlPath.separatedPath;
-
-    MXEMutableXmlNode* iterator = self;
-    int i;
-
-    for (i = 0; i < separatedPath.count; i++) {
-        NSString* path = separatedPath[i];
-        MXEXmlNode* lookupNode = [iterator lookupChild:path];
-        if ([lookupNode isKindOfClass:MXEMutableXmlNode.class]) {
-            iterator = (MXEMutableXmlNode*)lookupNode;
-        } else if (lookupNode) {
-            iterator = [lookupNode mutableCopy];
-        } else {
-            break;
-        }
-    }
-
-    NSArray* notEnoughxmlPath = [separatedPath subarrayWithRange:NSMakeRange(i, separatedPath.count - i)];
-    if (!notEnoughxmlPath.count) {
-        return [xmlPath setValueBlocks](iterator, value);
-    }
-
-    MXEXmlPath* copyPath = [xmlPath copy];
-    copyPath.separatedPath = notEnoughxmlPath;
-    MXEXmlNode* insertNode = [[self.class alloc] initWithXmlPath:copyPath
-                                                           value:value];
-    if (!insertNode) {
-        return NO;
-    }
-    [iterator addChild:insertNode];
-    return YES;
+    [xmlPath setValue:value forXmlNode:self];
 }
 
 #pragma mark - NSMutableCopying

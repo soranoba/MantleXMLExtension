@@ -8,35 +8,43 @@
 
 #import "MXEXmlNodePath.h"
 
+@interface MXEXmlNodePath ()
+
+/// An array of element name of node in order from the parent node.
+@property (nonatomic, nonnull, copy) NSArray<NSString*>* separatedPath;
+
+@end
+
 @implementation MXEXmlNodePath
 
 #pragma mark - Lifecycle
 
-- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
+- (instancetype _Nonnull)initWithPathString:(NSString* _Nonnull)pathString
 {
-    NSParameterAssert([nodePath isKindOfClass:NSString.class]);
+    NSParameterAssert([pathString isKindOfClass:NSString.class]);
 
     if (self = [super init]) {
-        self.separatedPath = [self.class separateNodePath:nodePath];
+        self.separatedPath = [self.class separatePathString:pathString];
     }
     return self;
 }
 
-+ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
++ (instancetype _Nonnull)pathWithPathString:(NSString* _Nonnull)pathString
 {
-    return [[self alloc] initWithNodePath:nodePath];
+    return [[self alloc] initWithPathString:pathString];
 }
 
 #pragma mark - Public Methods
 
-+ (NSArray<NSString*>* _Nonnull)separateNodePath:(NSString* _Nullable)nodePath
++ (NSArray<NSString*>* _Nonnull)separatePathString:(NSString* _Nullable)pathString
 {
-    NSArray<NSString*>* separatedPath = [nodePath componentsSeparatedByString:@"."];
+    NSArray<NSString*>* separatedPath = [pathString componentsSeparatedByString:@"."];
     NSMutableArray<NSString*>* filteredPath = [NSMutableArray array];
 
-    for (NSString* path in separatedPath) {
-        if (path.length) {
-            [filteredPath addObject:path];
+    // NOTE: Remove empty string
+    for (NSString* pathFragment in separatedPath) {
+        if (pathFragment.length) {
+            [filteredPath addObject:pathFragment];
         }
     }
     return filteredPath;
@@ -44,9 +52,11 @@
 
 #pragma mark - MXEXmlAccessible
 
-- (MXEXmlNode* _Nullable)getValueFromXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+- (MXEXmlNode* _Nullable)getValueFromXmlNode:(MXEXmlNode* _Nonnull)rootXmlNode
 {
-    MXEXmlNode* iterator = xmlNode;
+    NSParameterAssert(rootXmlNode != nil);
+
+    MXEXmlNode* iterator = rootXmlNode;
     for (NSString* path in self.separatedPath) {
         iterator = [iterator lookupChild:path];
         if (!iterator) {
@@ -56,26 +66,61 @@
     return iterator;
 }
 
-- (BOOL)setValue:(MXEXmlNode* _Nonnull)xmlNodeToSet forXmlNode:(MXEMutableXmlNode* _Nonnull)targetXmlNode
+- (void)setValue:(MXEXmlNode* _Nullable)xmlNodeToSet forXmlNode:(MXEMutableXmlNode* _Nonnull)rootXmlNode
 {
+    NSParameterAssert(rootXmlNode != nil);
+    NSParameterAssert(xmlNodeToSet == nil || [xmlNodeToSet isKindOfClass:MXEXmlNode.class]);
+
     if (!self.separatedPath.count) {
-        [targetXmlNode setToCopyAllElementsFromXmlNode:xmlNodeToSet];
-        return YES;
+        NSAssert(xmlNodeToSet != nil, @"It can NOT set nil to root node");
+        [rootXmlNode setToCopyAllElementsFromXmlNode:xmlNodeToSet];
+        return;
     }
 
-    NSArray<NSString*>* separatedParentPath = [self.separatedPath subarrayWithRange:NSMakeRange(1, self.separatedPath.count - 1)];
-    MXEMutableXmlNode* iterator = targetXmlNode;
+    NSArray<NSString*>* separatedParentPath = [self.separatedPath subarrayWithRange:NSMakeRange(0, self.separatedPath.count - 1)];
+    MXEMutableXmlNode* iterator = rootXmlNode;
 
     for (NSString* path in separatedParentPath) {
-        iterator = (MXEMutableXmlNode*)[iterator lookupChild:path];
-        if (!iterator) {
-            return NO;
+        MXEMutableXmlNode* nextIterator = (MXEMutableXmlNode*)[iterator lookupChild:path];
+        if (!nextIterator) {
+            nextIterator = [[MXEMutableXmlNode alloc] initWithElementName:path];
+            [iterator addChild:nextIterator];
         }
+        iterator = nextIterator;
     }
 
-    [iterator removeChildren:[self.separatedPath lastObject]];
-    [iterator addChild:xmlNodeToSet];
-    return YES;
+    NSString* elementNameToSet = [self.separatedPath lastObject];
+
+    // NOTE: Rewrite the elementName to match the path
+    MXEMutableXmlNode* mutableXmlNodeToSet;
+    if ([xmlNodeToSet isKindOfClass:MXEMutableXmlNode.class]) {
+        mutableXmlNodeToSet = (MXEMutableXmlNode*)xmlNodeToSet;
+    } else {
+        mutableXmlNodeToSet = [xmlNodeToSet mutableCopy];
+    }
+    mutableXmlNodeToSet.elementName = elementNameToSet;
+
+    NSUInteger index = 0;
+    for (; index < iterator.children.count; index++) {
+        MXEMutableXmlNode* child = iterator.children[index];
+
+        if ([child.elementName isEqualToString:elementNameToSet]) {
+            if (mutableXmlNodeToSet) {
+                [child setToCopyAllElementsFromXmlNode:mutableXmlNodeToSet];
+            } else {
+                [iterator.children removeObjectAtIndex:index];
+            }
+            return;
+        }
+    }
+    [iterator addChild:mutableXmlNodeToSet];
+}
+
+#pragma mark - NSObject (Override)
+
+- (NSString* _Nonnull)description
+{
+    return [NSString stringWithFormat:@"@\"%@\"", [self.separatedPath componentsJoinedByString:@"."]];
 }
 
 @end

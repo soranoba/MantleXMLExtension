@@ -6,44 +6,25 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlPath.h"
+#import "MXEXmlNodePath.h"
 #import <Foundation/Foundation.h>
 
 /**
  * A class for expressing the XML node, out of elements of xml.
+ * It is a wrapper class overriding to description easier to read.
  *
- * @see MXEXmlSerializing # xmlKeyPathsByPropertyKey:
+ * @see MXEXmlNodePath
  */
-@interface MXEXmlChildNodePath : MXEXmlPath
-
-/**
- * Create a node path.
- *
- * e.g.
- *    <object><a key="attribute">value</a></object>
- *
- *    If you specify <a key="attribute">value</a>, use [MXEXmlChildNodePath pathWithNodePath:@"object.a"].
- *
- * @param nodePath NSString* or NSArray<NSString*>*
- *                 Path from root to the specified node.
- * @return instance
- */
-- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath;
-
-/**
- * Create a node path.
- * @see initWithNodePath:
- */
-+ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath;
+@interface MXEXmlChildNodePath : MXEXmlNodePath
 
 @end
 
 /**
  * Short syntax of MXEXmlChildNodePath initializer.
  *
- * @see MXEXmlChildNodePath # initWithNodePath:
+ * @see MXEXmlChildNodePath # initWithPathString:
  */
 static inline MXEXmlChildNodePath* _Nonnull MXEXmlChildNode(id _Nonnull path)
 {
-    return [MXEXmlChildNodePath pathWithNodePath:path];
+    return [MXEXmlChildNodePath pathWithPathString:path];
 }

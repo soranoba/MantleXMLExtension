@@ -35,8 +35,8 @@
 #import <objc/runtime.h>
 
 #import "MXEXmlAdapter.h"
-#import "MXEXmlArrayPath+Private.h"
-#import "MXEXmlAttributePath+Private.h"
+#import "MXEXmlArrayPath.h"
+#import "MXEXmlAttributePath.h"
 #import "MXEXmlNode.h"
 #import "NSError+MantleXMLExtension.h"
 
@@ -100,7 +100,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             }
 
             for (id singlePath in paths) {
-                if (!([singlePath isKindOfClass:NSString.class] || [singlePath isKindOfClass:MXEXmlPath.class])) {
+                if (!([singlePath isKindOfClass:NSString.class]
+                      || [singlePath conformsToProtocol:@protocol(MXEXmlAccessible)])) {
                     NSAssert(NO, @"%@ MUST NSString, MXEXmlPath or NSArray. But got %@", key, singlePath);
                 }
             }
@@ -474,11 +475,10 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             [parser abortParsing];
         }
     }
-    MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:elementName];
-    if (node) {
-        node.attributes = [attributeDict mutableCopy];
-        [self.xmlParseStack addObject:node];
-    }
+    MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:elementName
+                                                                  attributes:attributeDict
+                                                                       value:nil];
+    [self.xmlParseStack addObject:node];
 }
 
 - (void)parser:(NSXMLParser*)parser foundCharacters:(NSString*)string
@@ -501,15 +501,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         [self.xmlParseStack removeLastObject];
 
         MXEMutableXmlNode* parentNode = [self.xmlParseStack lastObject];
-        if ([parentNode.children isKindOfClass:NSArray.class]) {
-            [parentNode.children addObject:node];
-        } else if (!parentNode.children || [parentNode.children isKindOfClass:NSString.class]) {
-            // NOTE: Ignore character string when child node and character string are mixed.
-            parentNode.children = [NSMutableArray array];
-            [parentNode.children addObject:node];
-        } else {
-            NSAssert(NO, @"Children MUST be array of %@ or NSArray. But got %@", MXEXmlNode.class, parentNode.children);
-        }
+        [parentNode addChild:node];
     }
 }
 
@@ -531,8 +523,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         if ([xmlKeyPaths isKindOfClass:NSArray.class]) {
             MXEMutableXmlNode* currentXmlNode = [[MXEMutableXmlNode alloc] initWithElementName:topXmlNode.elementName];
             for (id __strong singleXmlKeyPath in xmlKeyPaths) {
-                if (![singleXmlKeyPath isKindOfClass:MXEXmlPath.class]) {
-                    singleXmlKeyPath = [MXEXmlPath pathWithNodePath:singleXmlKeyPath];
+                if ([singleXmlKeyPath isKindOfClass:NSString.class]) {
+                    singleXmlKeyPath = MXEXmlValue(singleXmlKeyPath);
                 }
                 id v = [topXmlNode getForXmlPath:singleXmlKeyPath];
                 if (v) {
@@ -544,8 +536,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             }
             value = currentXmlNode;
         } else {
-            if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {
-                xmlKeyPaths = [MXEXmlPath pathWithNodePath:xmlKeyPaths];
+            if ([xmlKeyPaths isKindOfClass:NSString.class]) {
+                xmlKeyPaths = MXEXmlValue(xmlKeyPaths);
             }
             value = [topXmlNode getForXmlPath:xmlKeyPaths];
             if (!value) {
@@ -638,8 +630,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             }
 
             for (id __strong singleXmlPath in xmlKeyPaths) {
-                if (![singleXmlPath isKindOfClass:MXEXmlPath.class]) {
-                    singleXmlPath = [MXEXmlPath pathWithNodePath:singleXmlPath];
+                if ([singleXmlPath isKindOfClass:NSString.class]) {
+                    singleXmlPath = MXEXmlValue(singleXmlPath);
                 }
                 id v = [value getForXmlPath:singleXmlPath];
                 if (v) {
@@ -647,10 +639,10 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                 }
             }
         } else {
-            if (![xmlKeyPaths isKindOfClass:MXEXmlPath.class]) {
-                xmlKeyPaths = [MXEXmlPath pathWithNodePath:xmlKeyPaths];
+            if ([xmlKeyPaths isKindOfClass:NSString.class]) {
+                xmlKeyPaths = MXEXmlValue(xmlKeyPaths);
             }
-            [node setValue:value forXmlPath:(MXEXmlPath*)xmlKeyPaths];
+            [node setValue:value forXmlPath:(id<MXEXmlAccessible>)xmlKeyPaths];
         }
     }
 

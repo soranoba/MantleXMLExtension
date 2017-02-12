@@ -6,7 +6,6 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlPath.h"
 #import <Foundation/Foundation.h>
 
 @class MXEXmlNode;
@@ -20,21 +19,27 @@
 @protocol MXEXmlAccessible <NSObject>
 
 /**
+ * It return an array of element name of node in order from the parent node.
+ *
+ * @return an array of element name.
+ */
+- (NSArray<NSString*>* _Nonnull)separatedPath;
+
+/**
  * Get a value from the xmlNode in the path represented by this instance.
  *
- * @param xmlNode  The xml node at root.
+ * @param rootXmlNode  The xml node at root.
  * @return The value in the path represented by this instance. If there is no node in path, it returns nil.
  */
-- (id _Nullable)getValueFromXmlNode:(MXEXmlNode* _Nonnull)xmlNode;
+- (id _Nullable)getValueFromXmlNode:(MXEXmlNode* _Nonnull)rootXmlNode;
 
 /**
  * Set a value for the xmlNode in the path represented by this instance.
  *
- * @param value    The value to set.
- * @param xmlNode  The xml node at root.
- * @return If the value can be set, it returns YES. Otherwise, it returns NO.
+ * @param value        The value to set.
+ * @param rootXmlNode  The xml node at root.
  */
-- (BOOL)setValue:(id _Nonnull)value forXmlNode:(MXEMutableXmlNode* _Nonnull)xmlNode;
+- (void)setValue:(id _Nullable)value forXmlNode:(MXEMutableXmlNode* _Nonnull)rootXmlNode;
 
 @end
 
@@ -99,15 +104,6 @@
                                        value:(NSString* _Nullable)value;
 
 /**
- * Initialize with key path and value.
- *
- * @param xmlPath   NSArray*<NSString*> or NSString*.
- * @param value     Set value the specified path
- * @return instance
- */
-- (instancetype _Nullable)initWithXmlPath:(MXEXmlPath* _Nonnull)xmlPath value:(id _Nullable)value;
-
-/**
  * Convert to NSString.
  *
  * @return XmlString. This string does NOT include XML declaration.
@@ -133,7 +129,7 @@
  * @param xmlPath See MXEXmlSerializing # xmlKeyPathsByPropertyKey
  * @return The value type returned by xmlPath is different.
  */
-- (id _Nullable)getForXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
+- (id _Nullable)getForXmlPath:(id<MXEXmlAccessible> _Nonnull)xmlPath;
 
 @end
 
@@ -159,13 +155,6 @@
 - (void)addChild:(MXEXmlNode* _Nonnull)childNode;
 
 /**
- * Delete all children with the same name as nodeName
- *
- * @param nodeName  The nodeName of the child to delete
- */
-- (void)removeChildren:(NSString* _Nonnull)nodeName;
-
-/**
  * It set to copy all elements from the sourceXmlNode.
  *
  * @param sourceXmlNode  A XmlNode that is source of copy
@@ -178,6 +167,6 @@
  * @param value   A value to set. The types supported by xmlPath are different.
  * @param xmlPath See MXEXmlSerializing # xmlKeyPathsByPropertyKey
  */
-- (BOOL)setValue:(id _Nullable)value forXmlPath:(MXEXmlPath* _Nonnull)xmlPath;
+- (void)setValue:(id _Nullable)value forXmlPath:(id<MXEXmlAccessible> _Nonnull)xmlPath;
 
 @end

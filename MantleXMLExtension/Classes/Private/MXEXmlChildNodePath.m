@@ -6,103 +6,15 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlChildNodePath+Private.h"
-#import "MXEXmlNode.h"
+#import "MXEXmlChildNodePath.h"
 
 @implementation MXEXmlChildNodePath
-
-- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
-{
-    NSParameterAssert([nodePath isKindOfClass:NSString.class] || [nodePath isKindOfClass:NSArray.class]);
-
-    NSArray* separatedNodePath;
-    if ([nodePath isKindOfClass:NSString.class]) {
-        separatedNodePath = [super.class separateNodePath:nodePath];
-    } else {
-        separatedNodePath = nodePath;
-    }
-
-    NSString* nodeName = [separatedNodePath lastObject];
-    NSAssert(nodeName.length > 0, @"NodePath MUST contain at least one non-dot character");
-    NSArray* parentPath = [separatedNodePath subarrayWithRange:NSMakeRange(0, separatedNodePath.count - 1)];
-
-    if (self = [super initWithNodePath:parentPath]) {
-        self.nodeName = nodeName;
-    }
-    return self;
-}
-
-+ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
-{
-    return [[self alloc] initWithNodePath:nodePath];
-}
-
-#pragma mark - MXEXmlpath (override)
-
-- (id _Nullable (^_Nonnull)(MXEXmlNode* _Nonnull))getValueBlocks
-{
-    return ^id _Nullable(MXEXmlNode* _Nonnull node)
-    {
-        NSParameterAssert(node != nil);
-        return [node lookupChild:self.nodeName];
-    };
-}
-
-- (BOOL (^_Nonnull)(MXEMutableXmlNode* _Nonnull node, id _Nullable value))setValueBlocks
-{
-    return ^BOOL(MXEMutableXmlNode* _Nonnull node, id _Nullable value) {
-        NSParameterAssert(node != nil);
-
-        if (value && ![value isKindOfClass:MXEXmlNode.class]) {
-            return NO;
-        }
-
-        MXEMutableXmlNode* insertNode = [value mutableCopy];
-        insertNode.elementName = self.nodeName;
-
-        MXEXmlNode* foundNode = [node lookupChild:self.nodeName];
-        if ([node.children isKindOfClass:NSArray.class]) {
-            if (![node.children isKindOfClass:NSMutableArray.class]) {
-                node.children = [node.children mutableCopy];
-            }
-        } else {
-            node.children = [NSMutableArray array];
-        }
-
-        if (foundNode && insertNode) {
-            NSUInteger index = [node.children indexOfObject:foundNode];
-            ((NSMutableArray*)node.children)[index] = insertNode;
-        } else {
-            if (foundNode) {
-                [node.children removeObject:foundNode];
-            }
-            if (insertNode) {
-                [(NSMutableArray*)node.children addObject:insertNode];
-            }
-        }
-        return YES;
-    };
-}
-
-#pragma mark - NSCopying
-
-- (instancetype _Nonnull)copyWithZone:(NSZone* _Nullable)zone
-{
-    MXEXmlChildNodePath* result = [super copyWithZone:zone];
-
-    if (result) {
-        result.nodeName = [self.nodeName copyWithZone:zone];
-    }
-    return result;
-}
 
 #pragma mark - NSObject (Override)
 
 - (NSString* _Nonnull)description
 {
-    NSArray<NSString*>* separatedFullPath = [self.separatedPath arrayByAddingObject:self.nodeName];
-    return [NSString stringWithFormat:@"MXEXmlChildNode(@\"%@\")",
-                                      [separatedFullPath componentsJoinedByString:@"."]];
+    return [NSString stringWithFormat:@"MXEXmlChildNode(%@)", [super description]];
 }
 
 @end

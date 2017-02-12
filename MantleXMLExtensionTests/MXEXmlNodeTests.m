@@ -6,17 +6,15 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlArrayPath+Private.h"
-#import "MXEXmlAttributePath+Private.h"
-#import "MXEXmlChildNodePath+Private.h"
+#import "MXEXmlArrayPath.h"
+#import "MXEXmlAttributePath.h"
 #import "MXEXmlNode.h"
-#import "MXEXmlPath+Private.h"
+#import "MXEXmlNodePath.h"
 #import <Foundation/Foundation.h>
 
 QuickSpecBegin(MXEXmlNodeTests)
 {
     describe(@"toString", ^{
-
         it(@"attributes is exist, children isn't exist", ^{
             MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"
                                                             attributes:@{ @"key1" : @"value1",
@@ -71,8 +69,25 @@ QuickSpecBegin(MXEXmlNodeTests)
         });
     });
 
-    describe(@"isEqual:", ^{
+    describe(@"description", ^{
+        it(@"contains class name, if object class is MXEXmlNode", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"
+                                                            attributes:@{ @"key1" : @"value1",
+                                                                          @"key2" : @"value2" }
+                                                              children:nil];
+            expect([root description]).to(equal(@"MXEXmlNode # <object key1=\"value1\" key2=\"value2\" />"));
+        });
 
+        it(@"contains class name, if object class is MXEMutableXmlNode", ^{
+            MXEXmlNode* root = [[MXEXmlNode alloc] initWithElementName:@"object"
+                                                            attributes:@{ @"key1" : @"value1",
+                                                                          @"key2" : @"value2" }
+                                                              children:nil];
+            expect([[root mutableCopy] description]).to(equal(@"MXEMutableXmlNode # <object key1=\"value1\" key2=\"value2\" />"));
+        });
+    });
+
+    describe(@"isEqual:", ^{
         it(@"If the contents are the same, return YES", ^{
             MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"object"
                                                          attributes:@{ @"key1" : @"value1",
@@ -235,50 +250,6 @@ QuickSpecBegin(MXEXmlNodeTests)
         });
     });
 
-    describe(@"initWithXmlPath:value:", ^{
-
-        it(@"MXEXmlChildNodePath : value is nil", ^{
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlChildNode(@"a.b.c") value:nil];
-            expect([a toString]).to(equal(@"<a><b /></a>"));
-        });
-
-        it(@"MXEXmlChildNodePath", ^{
-            MXEXmlNode* value = [[MXEXmlNode alloc] initWithElementName:@"c"];
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlChildNode(@"a.b.c") value:value];
-            expect([a toString]).to(equal(@"<a><b><c /></b></a>"));
-        });
-
-        it(@"MXEXmlArrayPath : value is nil", ^{
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlArray(@"a.b", @"c") value:nil];
-            expect([a toString]).to(equal(@"<a><b /></a>"));
-        });
-
-        it(@"MXEXmlArrayPath : array of value", ^{
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlArray(@"a.b", @"c") value:@[ @"value1", @"value2" ]];
-            expect([a toString]).to(equal(@"<a><b><c>value1</c><c>value2</c></b></a>"));
-        });
-
-        it(@"MXEXmlAttributePath : value is nil", ^{
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlAttribute(@"a.b", @"c") value:nil];
-            expect([a toString]).to(equal(@"<a><b /></a>"));
-        });
-
-        it(@"MXEXmlAttributePath", ^{
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:MXEXmlAttribute(@"a.b", @"c") value:@"value1"];
-            expect([a toString]).to(equal(@"<a><b c=\"value1\" /></a>"));
-        });
-
-        it(@"MXEXmlPath : value is nil", ^{
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:[MXEXmlPath pathWithNodePath:@"a.b.c"] value:nil];
-            expect([a toString]).to(equal(@"<a><b><c /></b></a>"));
-        });
-
-        it(@"MXEXmlPath", ^{
-            MXEXmlNode* a = [[MXEXmlNode alloc] initWithXmlPath:[MXEXmlPath pathWithNodePath:@"a.b.c"] value:@"value"];
-            expect([a toString]).to(equal(@"<a><b><c>value</c></b></a>"));
-        });
-    });
-
     describe(@"isEmpty", ^{
         it(@"returns YES, if it is no attributes and no children", ^{
             MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"a"];
@@ -298,7 +269,6 @@ QuickSpecBegin(MXEXmlNodeTests)
     });
 
     describe(@"lookupChild:", ^{
-
         it(@"found / not found", ^{
             MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"a"
                                                          attributes:nil
@@ -326,41 +296,28 @@ QuickSpecBegin(MXEXmlNodeTests)
         });
     });
 
-    describe(@"getForXmlPath: and setValue:forXmlPath:", ^{
+    describe(@"setToCopyAllElementsFromXmlNode:", ^{
+        it(@"can copy the node that have children", ^{
+            MXEXmlNode* child = [[MXEXmlNode alloc] initWithElementName:@"child"];
 
-        it(@"root node's child", ^{
-            MXEMutableXmlNode* root = [[MXEMutableXmlNode alloc] initWithElementName:@"object"];
-            [root setValue:@"value1" forXmlPath:[MXEXmlPath pathWithNodePath:@"a"]];
-            expect([root toString]).to(equal(@"<object><a>value1</a></object>"));
+            MXEMutableXmlNode* dstNode = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
+            MXEXmlNode* srcNode = [[MXEXmlNode alloc] initWithElementName:@"source"
+                                                               attributes:@{ @"attr" : @"value" }
+                                                                 children:@[ child ]];
 
-            [root setValue:@"value2" forXmlPath:[MXEXmlPath pathWithNodePath:@"b"]];
-            expect([root toString]).to(equal(@"<object><a>value1</a><b>value2</b></object>"));
-
-            expect([root getForXmlPath:[MXEXmlPath pathWithNodePath:@"a"]]).to(equal(@"value1"));
-            expect([root getForXmlPath:[MXEXmlPath pathWithNodePath:@"b"]]).to(equal(@"value2"));
+            [dstNode setToCopyAllElementsFromXmlNode:srcNode];
+            expect(dstNode).to(equal(srcNode));
+            expect([dstNode.children[0] isKindOfClass:MXEMutableXmlNode.class]).to(equal(YES));
         });
 
-        it(@"root node's grandchild", ^{
-            MXEMutableXmlNode* root = [[MXEMutableXmlNode alloc] initWithElementName:@"object"];
-            [root setValue:@"value1" forXmlPath:[MXEXmlPath pathWithNodePath:@"a.b"]];
-            expect([root toString]).to(equal(@"<object><a><b>value1</b></a></object>"));
+        it(@"can copy the node that have value", ^{
+            MXEMutableXmlNode* dstNode = [[MXEMutableXmlNode alloc] initWithElementName:@"a"];
+            MXEXmlNode* srcNode = [[MXEXmlNode alloc] initWithElementName:@"source"
+                                                               attributes:@{ @"attr" : @"value" }
+                                                                    value:@"value"];
 
-            [root setValue:@"value2" forXmlPath:[MXEXmlPath pathWithNodePath:@"a.c"]];
-            expect([root toString]).to(equal(@"<object><a><b>value1</b><c>value2</c></a></object>"));
-
-            expect([root getForXmlPath:[MXEXmlPath pathWithNodePath:@"a.b"]]).to(equal(@"value1"));
-            expect([root getForXmlPath:[MXEXmlPath pathWithNodePath:@"a.c"]]).to(equal(@"value2"));
-        });
-
-        it(@"If node is already exist, overwrite the value", ^{
-            MXEMutableXmlNode* root = [[MXEMutableXmlNode alloc] initWithElementName:@"object"];
-            [root setValue:@"value1" forXmlPath:[MXEXmlPath pathWithNodePath:@"a.b"]];
-            expect([root toString]).to(equal(@"<object><a><b>value1</b></a></object>"));
-
-            [root setValue:@"value2" forXmlPath:[MXEXmlPath pathWithNodePath:@"a.b"]];
-            expect([root toString]).to(equal(@"<object><a><b>value2</b></a></object>"));
-
-            expect([root getForXmlPath:[MXEXmlPath pathWithNodePath:@"a.b"]]).to(equal(@"value2"));
+            [dstNode setToCopyAllElementsFromXmlNode:srcNode];
+            expect(dstNode).to(equal(srcNode));
         });
     });
 }
