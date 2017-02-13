@@ -83,11 +83,11 @@
 				A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */,
 				A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */,
 				A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */,
-				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
-				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
 				A456FC7F1E50CED5002EA7B0 /* MXEXmlChildNodePathTests.m */,
 				A456FC7D1E50890D002EA7B0 /* MXEXmlNodePathTests.m */,
+				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
 				A456FC851E51F7E9002EA7B0 /* MXEXmlValuePathTests.m */,
+				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
 			);
 			path = MantleXMLExtensionTests;
 			sourceTree = "<group>";
@@ -95,14 +95,14 @@
 		A4BCF3801DE0168F00EF672C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A456FC761E4B695D002EA7B0 /* MXETFilterModel.h */,
+				A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */,
 				A4BCF3911DE04F7B00EF672C /* MXETSampleModel.h */,
 				A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */,
 				A84EC6D61DF59B9A0001FC73 /* MXETTypeModel.h */,
 				A84EC6D71DF59B9A0001FC73 /* MXETTypeModel.m */,
 				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
 				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
-				A456FC761E4B695D002EA7B0 /* MXETFilterModel.h */,
-				A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
