@@ -23,17 +23,19 @@
  *    <object><user>Alice</user><user>Bob</user><user>Carol</user></object>
  *
  *    If you specify all user's value, 
- *    use [MXEXmlArrayPath pathWithParentNodePath:@"object" collectRelativePath:@"user"].
+ *    use `[MXEXmlArrayPath pathWithParentPathString:@"object" collectRelativePath:@"user"]`.
  *
  * @param parentPathString     Path from the root to the parent of the child nodes.
- * @param collectRelativePath  NSString* or MXEXmlPath*
+ * @param collectRelativePath  NSString* or id<MXEAccessible>
  *                             Relative path from the parent to the child node.
+ * @return instance
  */
 - (instancetype _Nonnull)initWithParentPathString:(NSString* _Nonnull)parentPathString
                               collectRelativePath:(id _Nonnull)collectRelativePath;
 
 /**
  * Create a children path.
+ *
  * @see initWithParentPathString:collectRelativePath:
  */
 + (instancetype _Nonnull)pathWithParentPathString:(NSString* _Nonnull)parentNodePath

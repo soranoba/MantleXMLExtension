@@ -12,10 +12,8 @@
 #import "MXEXmlValuePath.h"
 
 @interface MXEXmlArrayPath ()
-
 @property (nonatomic, nonnull, strong) MXEXmlNodePath* parentNodePath;
 @property (nonatomic, nonnull, strong) id<MXEXmlAccessible> collectRelativePath;
-
 @end
 
 @implementation MXEXmlArrayPath
@@ -65,17 +63,11 @@
 
     NSMutableArray* resultArray = [NSMutableArray array];
     for (MXEXmlNode* child in foundNode.children) {
-        MXEXmlNode* dummyNode;
-        if (child == [foundNode.children firstObject]) {
-            // NOTE: It should have attribute for the first time only, so it use original attributes.
-            dummyNode = [[MXEXmlNode alloc] initWithElementName:foundNode.elementName
-                                                     attributes:foundNode.attributes
-                                                       children:@[ child ]];
-        } else {
-            dummyNode = [[MXEXmlNode alloc] initWithElementName:foundNode.elementName
-                                                     attributes:nil
-                                                       children:@[ child ]];
-        }
+        // NOTE: It should have attribute for the first time only, so it use original attributes.
+        NSDictionary* attributes = (child == [foundNode.children firstObject] ? foundNode.attributes : nil);
+        MXEXmlNode* dummyNode = [[MXEXmlNode alloc] initWithElementName:foundNode.elementName
+                                                             attributes:attributes
+                                                               children:@[ child ]];
 
         id foundValue = [self.collectRelativePath getValueFromXmlNode:dummyNode];
         if (foundValue) {
@@ -108,17 +100,11 @@
             break;
         }
 
-        MXEMutableXmlNode* dummyNode;
-        if (child == [foundNode.children firstObject]) {
-            // NOTE: It should have attribute for the first time only, so it use original attributes.
-            dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:foundNode.elementName
-                                                            attributes:foundNode.attributes
-                                                              children:@[ child ]];
-        } else {
-            dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:foundNode.elementName
-                                                            attributes:nil
-                                                              children:@[ child ]];
-        }
+        // NOTE: It should have attribute for the first time only, so it use original attributes.
+        NSDictionary* attributes = (child == [foundNode.children firstObject] ? foundNode.attributes : nil);
+        MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:foundNode.elementName
+                                                                           attributes:attributes
+                                                                             children:@[ child ]];
 
         [self.collectRelativePath setValue:values[index] forXmlNode:dummyNode];
         index++;

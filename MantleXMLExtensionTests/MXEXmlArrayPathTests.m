@@ -24,10 +24,10 @@ QuickSpecBegin(MXEXmlArrayPathTests)
             expect([[MXEXmlArrayPath alloc] initWithParentPathString:@"a.b" collectRelativePath:@1]).to(raiseException());
         });
 
-        it(@"return a instance, if collectRelativePath is MXEXmlPath", ^{
+        it(@"return a instance, if collectRelativePath is MXEXmlAccessible", ^{
             MXEXmlArrayPath* path = [[MXEXmlArrayPath alloc] initWithParentPathString:@"a.b"
                                                                   collectRelativePath:MXEXmlChildNode(@"a.c")];
-            expect([path.collectRelativePath isKindOfClass:MXEXmlNodePath.class]).to(equal(YES));
+            expect([path.collectRelativePath isKindOfClass:MXEXmlChildNodePath.class]).to(equal(YES));
             expect(path.collectRelativePath.separatedPath).to(equal(@[ @"a", @"c" ]));
         });
 

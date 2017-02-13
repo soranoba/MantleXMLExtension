@@ -111,17 +111,19 @@
 - (NSString* _Nonnull)toString;
 
 /**
- * If it is no attribute and no children, it returns YES. Otherwise, it returns NO.
+ * It returns whether it is an empty node.
+ *
+ * @return If it is no attribute and no children, it returns YES. Otherwise, it returns NO.
  */
 - (BOOL)isEmpty;
 
 /**
- * Lookup for child that name is nodeName and return the found node.
+ * Lookup for child that name is elementName and return the found node.
  *
- * @param nodeName Search for nodeName
- * @return Found node
+ * @param elementName   Search for node which element name is the elementName.
+ * @return It returns a node, if it is found. Otherwise, it returns nil.
  */
-- (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)nodeName;
+- (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)elementName;
 
 /**
  * Get a value from node specified keypath.

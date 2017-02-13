@@ -102,7 +102,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             for (id singlePath in paths) {
                 if (!([singlePath isKindOfClass:NSString.class]
                       || [singlePath conformsToProtocol:@protocol(MXEXmlAccessible)])) {
-                    NSAssert(NO, @"%@ MUST NSString, MXEXmlPath or NSArray. But got %@", key, singlePath);
+                    NSAssert(NO, @"%@ MUST NSString, id<MXEXmlAccessible> or NSArray. But got %@", key, singlePath);
                 }
             }
         }

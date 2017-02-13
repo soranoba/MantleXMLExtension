@@ -1,5 +1,5 @@
 //
-//  MXEXmlPath.h
+//  MXEErrorCode.h
 //  MantleXMLExtension
 //
 //  Created by Hinagiku Soranoba on 2017/01/17.

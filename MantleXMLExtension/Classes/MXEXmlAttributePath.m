@@ -10,10 +10,8 @@
 #import "MXEXmlNodePath.h"
 
 @interface MXEXmlAttributePath ()
-
 @property (nonatomic, nonnull, strong) MXEXmlNodePath* nodePath;
 @property (nonatomic, nonnull, copy) NSString* attributeKey;
-
 @end
 
 @implementation MXEXmlAttributePath
@@ -60,9 +58,10 @@
     if (foundNode) {
         foundNode.attributes[self.attributeKey] = value;
     } else {
-        MXEMutableXmlNode* xmlNodeToSet = [[MXEMutableXmlNode alloc] initWithElementName:@"dummy"
-                                                                              attributes:(value ? @{ self.attributeKey : value } : nil)
-                                                                                   value:nil];
+        MXEMutableXmlNode* xmlNodeToSet
+            = [[MXEMutableXmlNode alloc] initWithElementName:@"dummy"
+                                                  attributes:(value ? @{ self.attributeKey : value } : nil)
+                                                       value:nil];
         [self.nodePath setValue:xmlNodeToSet forXmlNode:rootXmlNode];
     }
 }

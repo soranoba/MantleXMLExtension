@@ -203,6 +203,11 @@ QuickSpecBegin(MXEXmlNodeTests)
             expect([[node mutableCopy] isEqual:node]).to(equal(YES));
             expect([node isEqual:[node mutableCopy]]).to(equal(YES));
         });
+
+        it(@"returns NO, if comparison object is not MXEXmlNode", ^{
+            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"object"];
+            expect([node isEqual:@1]).to(equal(NO));
+        });
     });
 
     describe(@"copying, mustablecopying", ^{

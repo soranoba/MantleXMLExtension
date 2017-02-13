@@ -9,10 +9,7 @@
 #import "MXEXmlNodePath.h"
 
 @interface MXEXmlNodePath ()
-
-/// An array of element name of node in order from the parent node.
 @property (nonatomic, nonnull, copy) NSArray<NSString*>* separatedPath;
-
 @end
 
 @implementation MXEXmlNodePath

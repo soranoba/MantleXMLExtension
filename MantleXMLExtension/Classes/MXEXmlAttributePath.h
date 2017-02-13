@@ -34,6 +34,7 @@
 
 /**
  * Create a attribute path.
+ *
  * @see initWithPathString:attributeKey:
  */
 + (instancetype _Nonnull)pathWithPathString:(id _Nonnull)nodePath

@@ -58,13 +58,13 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  * @see MXEXmlArrayPath
  * @see MXEXmlAttributePath
  * @see MXEXmlChildNodePath
- * @see MXEXmlPath
+ * @see MXEXmlValuePath
  *
  * In all cases, use `.` to specify a child element of an element.
  * This is the same format as MTLJSONSerializing.
  *
- * NSString is treated as a syntax suger which generates MXEXmlPath.
- * (e.g. `@"user.id"` means `[MXEXmlPath pathWithNodePath:@"user.id"]`)
+ * NSString is treated as a syntax suger which generates xml path.
+ * (e.g. `@"user.id"` means `MXEXmlValue(@"user.id")`)
  *
  * If you want to associate XML and @property that extracted some elements, use NSArray.
  * In the above example, summary is associated with the following XML.

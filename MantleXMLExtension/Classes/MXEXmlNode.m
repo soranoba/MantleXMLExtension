@@ -102,15 +102,13 @@
     return (self.attributes.count == 0 && !self.children && !self.value);
 }
 
-- (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)nodeName
+- (MXEXmlNode* _Nullable)lookupChild:(NSString* _Nonnull)elementName
 {
-    NSParameterAssert(nodeName != nil);
+    NSParameterAssert(elementName != nil);
 
-    if ([self.children isKindOfClass:NSArray.class]) {
-        for (MXEXmlNode* child in self.children) {
-            if ([child.elementName isEqualToString:nodeName]) {
-                return child;
-            }
+    for (MXEXmlNode* child in self.children) {
+        if ([child.elementName isEqualToString:elementName]) {
+            return child;
         }
     }
     return nil;
@@ -231,6 +229,7 @@
 
 - (void)setElementName:(NSString* _Nonnull)elementName
 {
+    NSParameterAssert(elementName != nil);
     _elementName = elementName;
 }
 
@@ -241,6 +240,7 @@
 
 - (void)setAttributes:(NSMutableDictionary<NSString*, NSString*>* _Nonnull)attributes
 {
+    NSParameterAssert(attributes != nil);
     _attributes = attributes;
 }
 
@@ -265,6 +265,8 @@
 
 - (void)addChild:(MXEXmlNode* _Nonnull)childNode
 {
+    NSParameterAssert(childNode != nil);
+
     MXEMutableXmlNode* mutableChildNode;
     if ([childNode isKindOfClass:MXEMutableXmlNode.class]) {
         mutableChildNode = (MXEMutableXmlNode*)childNode;

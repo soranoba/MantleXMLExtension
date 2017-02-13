@@ -17,7 +17,7 @@
  * e.g.
  *    <object><a>value</a></object>
  *
- *    If you specify value, use [MXEXmlPath pathWithNodePath:@"object.a"].
+ *    If you specify value, use `[MXEXmlValuePath pathWithPathString:@"object.a"]`.
  *
  * @param pathString  A path from root to the specified value.
  * @return instance
