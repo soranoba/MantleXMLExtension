@@ -104,11 +104,34 @@
                                        value:(NSString* _Nullable)value;
 
 /**
+ * Create an instance from dictionary.
+ *
+ * @see toDictionary
+ *
+ * @param elementName A XML element name.
+ * @param dictionary  A dictionary that converted all elements of xml.
+ * @return instance
+ */
+- (instancetype _Nonnull)initWithElementName:(NSString* _Nonnull)elementName
+                              fromDictionary:(NSDictionary<NSString*, id>* _Nonnull)dictionary;
+
+/**
  * Convert to NSString.
  *
  * @return XmlString. This string does NOT include XML declaration.
  */
 - (NSString* _Nonnull)toString;
+
+/**
+ * Convert to NSDictionary.
+ *
+ * - It ignore except for the beginnig child, If there are children with the same name.
+ * - It use prefix of `@` for attributes.
+ *   For example, it change to `@key` from key, when there exist attribute name is `key`.
+ *
+ * @return A dictionary that converted all elements of xml.
+ */
+- (NSDictionary* _Nonnull)toDictionary;
 
 /**
  * It returns whether it is an empty node.
