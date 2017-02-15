@@ -33,6 +33,16 @@
 
 @end
 
+@interface MXEXmlPath : NSObject
+
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
+    __attribute__((unavailable("Replaced by MXEXmlValuePath # initWithPathString:")));
+
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
+    __attribute__((unavailable("Replaced by MXEXmlValuePath # pathWithPathString:")));
+
+@end
+
 /**
  * Short syntax of MXEXmlValuePath initializer.
  *

@@ -176,11 +176,12 @@ You can use these transformer for MXEXmlSerializing object.
 
 - `MXEXmlAdapter # xmlNodeArrayTransformerWithModelClass:`
 - `MXEXmlAdapter # xmlNodeTransformerWithModelClass:`
+- `MXEXmlAdapter # mappingDictionaryTransformerWithKeyPath:valuePath:`
 
 You can use these transformer for primitive type.
 
-- `MXEXmlAdapter # numberStringTransformer`
-- `MXEXmlAdapter # boolStringTransformer`
+- `MXEXmlAdapter # numberTransformer`
+- `MXEXmlAdapter # boolTransformer`
 
 ### Other information
 

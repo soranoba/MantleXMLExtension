@@ -19,6 +19,16 @@
 
 @end
 
+@interface MXEXmlChildNodePath (Deprecated)
+
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
+    __attribute__((unavailable("Replaced by initWithPathString:")));
+
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
+    __attribute__((unavailable("Replaced by pathWithPathString:")));
+
+@end
+
 /**
  * Short syntax of MXEXmlChildNodePath initializer.
  *

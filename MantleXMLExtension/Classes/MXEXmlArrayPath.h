@@ -43,6 +43,18 @@
 
 @end
 
+@interface MXEXmlArrayPath (Deprecated)
+
+- (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
+                            collectRelativePath:(id _Nonnull)collectRelativePath
+    __attribute__((unavailable("Replaced by initWithParentPathString:collectRelativePath:")));
+
++ (instancetype _Nonnull)pathWithParentNodePath:(id _Nonnull)parentNodePath
+                            collectRelativePath:(id _Nonnull)collectRelativePath
+    __attribute__((unavailable("Replaced by pathWithParentPathString:collectRelativePath:")));
+
+@end
+
 /**
  * Short syntax of MXEXmlArrayPath initializer
  *

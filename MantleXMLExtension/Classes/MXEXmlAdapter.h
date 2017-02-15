@@ -158,11 +158,16 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
 
-#pragma mark - Transformer
+@end
+
+@interface MXEXmlAdapter (Transformers)
 
 /**
- * Return a transformer that specify when use MXEXmlArray.
+ * Return a transformer that convert between NSArray<MXEXmlNode> and NSArray<id<MXEXmlSerializing>>.
  *
+ * It can use when it specify MXEXmlArray.
+ *
+ * @param modelClass    A MXEXmlSerializing class
  * @return transformer
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
@@ -171,10 +176,35 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 /**
  * Return a transformer that used when nested child node is a MXEXmlSerializing object.
  *
+ * @param modelClass    A MXEXmlSerializing class
  * @return transformer
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
     xmlNodeTransformerWithModelClass:(Class _Nonnull)modelClass;
+
+/**
+ * Return a transformer that convert between MXEXmlNode and NSDictionary.
+ * This transformer create a dictionary with mapping of the keyPath and the valuePath.
+ *
+ * It specifies a path that will return MXEXmlNode at MXEXmlSerializing # xmlKeyPathsByPropertyKey.
+ * For example, it specify MXEXmlChildNodePath or NSArray.
+ *
+ * @param keyPath      A keyPath that specify target keys of dictionary.
+ * @param valuePath    A valuePath that specify target values of dictionary.
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
+    mappingDictionaryTransformerWithKeyPath:(id<MXEXmlAccessible> _Nonnull)keyPath
+                                  valuePath:(id<MXEXmlAccessible> _Nonnull)valuePath;
+
+/**
+ * Return a transformer that convert between MXEXmlNode and NSDictionary.
+ * This transformer create a dictionary from all elements of xml.
+ *
+ * @see MXEXmlNode # toDictionary
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)dictionaryTransformer;
 
 /**
  * Return a transformer that convert between number and string of number.
@@ -189,13 +219,23 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  *
  * @return transformer
  */
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer;
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberTransformer;
 
 /**
  * Return a transformer that convert between bool and string of boolean.
  *
  * @return transformer
  */
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolStringTransformer;
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolTransformer;
+
+@end
+
+@interface MXEXmlAdapter (Deprecated)
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer
+    __attribute__((unavailable("Replaced by numberTransformer")));
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolStringTransformer
+    __attribute__((unavailable("Replaced by boolTransformer")));
 
 @end

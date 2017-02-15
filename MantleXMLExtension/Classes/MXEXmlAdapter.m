@@ -40,17 +40,6 @@
 #import "MXEXmlNode.h"
 #import "NSError+MantleXMLExtension.h"
 
-static void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSString* _Nullable reason)
-{
-    if (error) {
-        if (reason) {
-            *error = [NSError mxe_errorWithMXEErrorCode:code reason:reason];
-        } else {
-            *error = [NSError mxe_errorWithMXEErrorCode:code];
-        }
-    }
-}
-
 NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
 @interface MXEXmlAdapter () <NSXMLParserDelegate>
@@ -164,7 +153,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
              @"Top level node MUST be specified element name (%@).",
              [self.modelClass xmlRootElementName]);
 
-    return [self modelFromMXEXmlNode:root error:error];
+    return [self modelFromXmlNode:root error:error];
 }
 
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
@@ -181,7 +170,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         return [self.class xmlDataFromModel:model error:error];
     }
 
-    MXEXmlNode* root = [self MXEXmlNodeFromModel:model error:error];
+    MXEXmlNode* root = [self xmlNodeFromModel:model error:error];
     if (!root) {
         NSAssert(!error || *error, @"It is expected that there stored details of Error, but it is nil.");
         return nil;
@@ -200,7 +189,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - Transformer
 
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberTransformer
 {
     return [MTLValueTransformer
         transformerUsingForwardBlock:
@@ -258,7 +247,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             }];
 }
 
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolStringTransformer
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolTransformer
 {
     return [MTLValueTransformer
         transformerUsingForwardBlock:
@@ -379,7 +368,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                 }
 
                 adapter = adapter ?: [[self alloc] initWithModelClass:modelClass];
-                id model = [adapter modelFromMXEXmlNode:xmlNode error:error];
+                id model = [adapter modelFromXmlNode:xmlNode error:error];
                 *success = model != nil;
                 return model;
 
@@ -400,7 +389,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                 }
 
                 adapter = adapter ?: [[self alloc] initWithModelClass:modelClass];
-                MXEXmlNode* result = [adapter MXEXmlNodeFromModel:model error:error];
+                MXEXmlNode* result = [adapter xmlNodeFromModel:model error:error];
                 *success = result != nil;
                 return result;
             }];
@@ -507,8 +496,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - License Github
 
-- (id<MXEXmlSerializing> _Nullable)modelFromMXEXmlNode:(MXEXmlNode* _Nonnull)topXmlNode
-                                                 error:(NSError* _Nullable* _Nullable)error
+- (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)topXmlNode
+                                              error:(NSError* _Nullable* _Nullable)error
 {
     NSMutableDictionary* dictionaryValue = [NSMutableDictionary dictionary];
 
@@ -568,8 +557,8 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     return [model validate:error] ? model : nil;
 }
 
-- (MXEXmlNode* _Nullable)MXEXmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
-                                       error:(NSError* _Nullable* _Nullable)error
+- (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
+                                    error:(NSError* _Nullable* _Nullable)error
 {
     NSParameterAssert(model != nil);
     NSParameterAssert([model isKindOfClass:self.modelClass]);
@@ -748,10 +737,10 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         || strcmp(objCType, @encode(NSNumber)) == 0
         || strcmp(objCType, @encode(float)) == 0
         || strcmp(objCType, @encode(double)) == 0) {
-        return [self.class numberStringTransformer];
+        return [self.class numberTransformer];
     }
     if (strcmp(objCType, @encode(BOOL)) == 0) {
-        return [self.class boolStringTransformer];
+        return [self.class boolTransformer];
     }
 
     return nil;

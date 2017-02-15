@@ -29,3 +29,14 @@
 + (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
 
 @end
+
+static inline void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSString* _Nullable reason)
+{
+    if (error) {
+        if (reason) {
+            *error = [NSError mxe_errorWithMXEErrorCode:code reason:reason];
+        } else {
+            *error = [NSError mxe_errorWithMXEErrorCode:code];
+        }
+    }
+}

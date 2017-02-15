@@ -42,6 +42,18 @@
 
 @end
 
+@interface MXEXmlAttributePath (Deprecated)
+
+- (instancetype _Nonnull)initWithNodePath:(id _Nonnull)nodePath
+                             attributeKey:(NSString* _Nonnull)attributeKey
+    __attribute__((unavailable("Replaced by initWithPathString:attributeKey:")));
+
++ (instancetype _Nonnull)pathWithNodePath:(id _Nonnull)nodePath
+                             attributeKey:(NSString* _Nonnull)attributeKey
+    __attribute__((unavailable("Replaced by pathWithPathString:attributeKey:")));
+
+@end
+
 /**
  * Short syntax of MXEXmlAttributePath initializer
  *
