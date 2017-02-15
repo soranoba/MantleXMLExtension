@@ -158,6 +158,12 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
 
+- (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
+                                    error:(NSError* _Nullable* _Nullable)error;
+
+- (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)topXmlNode
+                                              error:(NSError* _Nullable* _Nullable)error;
+
 @end
 
 @interface MXEXmlAdapter (Transformers)
