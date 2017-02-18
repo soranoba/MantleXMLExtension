@@ -325,5 +325,59 @@ QuickSpecBegin(MXEXmlNodeTests)
             expect(dstNode).to(equal(srcNode));
         });
     });
+
+    describe(@"toDictionary, initWithElementName:fromDictionary:", ^{
+        it(@"can convert between dictionary and MXEXmlNode", ^{
+            MXEXmlNode* a = [[MXEXmlNode alloc] initWithElementName:@"a" attributes:nil value:nil];
+            MXEXmlNode* b = [[MXEXmlNode alloc] initWithElementName:@"b" attributes:nil value:@"b1_v"];
+            MXEXmlNode* cChild = [[MXEXmlNode alloc] initWithElementName:@"@c1" attributes:nil value:@"c1_v"];
+            MXEXmlNode* c = [[MXEXmlNode alloc] initWithElementName:@"c"
+                                                         attributes:@{ @"c1" : @"c1_attr" }
+                                                           children:@[ cChild ]];
+            MXEXmlNode* d = [[MXEXmlNode alloc] initWithElementName:@"d"
+                                                         attributes:@{ @"d1" : @"d1_attr" }
+                                                           children:nil];
+            MXEXmlNode* e = [[MXEXmlNode alloc] initWithElementName:@"e"
+                                                         attributes:@{ @"e1" : @"e1_attr" }
+                                                              value:@"e1_v"];
+            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"root"
+                                                            attributes:@{ @"a" : @"a1",
+                                                                          @"b" : @"b1" }
+                                                              children:@[ a, b, c, d, e ]];
+
+            expect([node toDictionary])
+                .to(equal(@{ @"@a" : @"a1",
+                             @"@b" : @"b1",
+                             @"a" : NSNull.null,
+                             @"b" : @"b1_v",
+                             @"c" : @{ @"@c1" : @"c1_attr" },
+                             @"d" : @{ @"@d1" : @"d1_attr" },
+                             @"e" : @{ @"@e1" : @"e1_attr", @"" : @"e1_v" } }));
+            expect([[MXEXmlNode alloc] initWithElementName:node.elementName fromDictionary:node.toDictionary].toDictionary)
+                .to(equal(node.toDictionary));
+        });
+
+        it(@"can convert between dictionary and MXEXmlNode, if root node have a value", ^{
+            MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"root" attributes:nil value:@"root_v"];
+            expect([node toDictionary]).to(equal(@{ @"" : @"root_v" }));
+            expect([[MXEXmlNode alloc] initWithElementName:@"root" fromDictionary:[node toDictionary]])
+                .to(equal(node));
+        });
+
+        it(@"throw exception, if attributes contains no string", ^{
+            __block MXEXmlNode* node;
+            expectAction(^{
+                node = [[MXEXmlNode alloc] initWithElementName:@"root"
+                                                fromDictionary:@{ @"@a" : @{ @"a" : @"a_v" } }];
+            }).to(raiseException());
+        });
+
+        it(@"throw exception, if dictionary contains value that is not supported", ^{
+            __block MXEXmlNode* node;
+            expectAction(^{
+                node = [[MXEXmlNode alloc] initWithElementName:@"root" fromDictionary:@{ @"a" : @1 }];
+            }).to(raiseException());
+        });
+    });
 }
 QuickSpecEnd

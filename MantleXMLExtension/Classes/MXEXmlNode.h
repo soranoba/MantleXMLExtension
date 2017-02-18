@@ -128,6 +128,7 @@
  * - It ignore except for the beginnig child, If there are children with the same name.
  * - It use prefix of `@` for attributes.
  *   For example, it change to `@key` from key, when there exist attribute name is `key`.
+ * - It use an empty string for the key of value when the root node has value or the node has both attributes and value.
  *
  * @return A dictionary that converted all elements of xml.
  */

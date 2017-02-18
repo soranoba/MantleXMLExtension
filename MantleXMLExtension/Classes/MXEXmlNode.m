@@ -59,6 +59,7 @@
 
     NSMutableDictionary<NSString*, NSString*>* attributes = [NSMutableDictionary dictionary];
     NSMutableArray<MXEXmlNode*>* children = [NSMutableArray array];
+    BOOL hasValue = dictionary[@""] != nil;
 
     for (NSString* key in dictionary) {
         id value = dictionary[key];
@@ -69,16 +70,26 @@
                 continue;
             }
             attributes[[key substringFromIndex:1]] = value;
+        } else if (hasValue) {
+            NSAssert([key isEqualToString:@""], @"%@ can not have both children and value", self.class);
+            continue;
         } else if ([value isKindOfClass:NSString.class]) {
             [children addObject:[[MXEXmlNode alloc] initWithElementName:key attributes:nil value:value]];
         } else if ([value isKindOfClass:NSDictionary.class]) {
             [children addObject:[[MXEXmlNode alloc] initWithElementName:key fromDictionary:value]];
+        } else if ([value isEqual:NSNull.null]) {
+            [children addObject:[[MXEXmlNode alloc] initWithElementName:key]];
         } else {
-            NSAssert(NO, @"value of dictionary only support NSDictionary or NSString. but got %@", [value class]);
+            NSAssert(NO, @"value of dictionary only support NSDictionary or NSString, NSNull. but got %@", [value class]);
             continue;
         }
     }
-    return [self initWithElementName:@"dummy" attributes:attributes children:children];
+
+    if (hasValue) {
+        return [self initWithElementName:elementName attributes:attributes value:dictionary[@""]];
+    } else {
+        return [self initWithElementName:elementName attributes:attributes children:children];
+    }
 }
 
 #pragma mark - Custom Accessor
@@ -138,17 +149,20 @@
             continue;
         }
 
-        if (child.hasChildren) {
-            NSDictionary* value = [child toDictionary];
-            if (value.count) {
-                dict[child.elementName] = [child toDictionary];
-            }
+        NSDictionary* childDict = [child toDictionary];
+        if (childDict.count == 1 && childDict[@""] != nil) {
+            dict[child.elementName] = childDict[@""];
+        } else if (childDict.count == 0) {
+            dict[child.elementName] = NSNull.null;
         } else {
-            if (child.value) {
-                dict[child.elementName] = child.value;
-            }
+            dict[child.elementName] = childDict;
         }
     }
+
+    if (self.value) {
+        dict[@""] = self.value;
+    }
+
     return dict;
 }
 
