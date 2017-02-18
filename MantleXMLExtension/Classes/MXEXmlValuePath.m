@@ -10,12 +10,21 @@
 #import "MXEXmlNodePath.h"
 
 @interface MXEXmlValuePath ()
+
+/// A path of node that have this value.
 @property (nonatomic, nonnull, strong) MXEXmlNodePath* nodePath;
+
 @end
 
 @implementation MXEXmlValuePath
 
 #pragma mark - Lifecycle
+
+- (instancetype _Nullable)init
+{
+    NSAssert(NO, @"%@ MUST need to use the designed initializer.", self.class);
+    return nil;
+}
 
 - (instancetype _Nonnull)initWithPathString:(NSString* _Nonnull)pathString
 {

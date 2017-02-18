@@ -126,7 +126,7 @@
     }
 }
 
-- (NSDictionary<NSString*,id>* _Nonnull)toDictionary
+- (NSDictionary<NSString*, id>* _Nonnull)toDictionary
 {
     NSMutableDictionary<NSString*, id>* dict = [NSMutableDictionary dictionary];
 
@@ -227,7 +227,7 @@
     return [NSString stringWithFormat:@"%@ # %@", self.class, self.toString];
 }
 
-- (BOOL)isEqual:(id)object
+- (BOOL)isEqual:(id _Nullable)object
 {
     if (![object isKindOfClass:MXEXmlNode.class]) {
         return NO;

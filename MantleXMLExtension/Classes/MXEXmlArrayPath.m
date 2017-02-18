@@ -12,13 +12,23 @@
 #import "MXEXmlValuePath.h"
 
 @interface MXEXmlArrayPath ()
+
+/// A Path from the root to the parent of the child nodes.
 @property (nonatomic, nonnull, strong) MXEXmlNodePath* parentNodePath;
+/// A relative path from the parent to the child node.
 @property (nonatomic, nonnull, strong) id<MXEXmlAccessible> collectRelativePath;
+
 @end
 
 @implementation MXEXmlArrayPath
 
 #pragma mark - Lifecycle
+
+- (instancetype _Nullable)init
+{
+    NSAssert(NO, @"%@ MUST need to use the designed initializer.", self.class);
+    return nil;
+}
 
 - (instancetype _Nonnull)initWithParentPathString:(NSString* _Nonnull)parentPathString
                               collectRelativePath:(id _Nonnull)collectRelativePath

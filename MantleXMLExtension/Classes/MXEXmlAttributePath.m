@@ -10,11 +10,21 @@
 #import "MXEXmlNodePath.h"
 
 @interface MXEXmlAttributePath ()
+
+/// A path of node that have this attribute.
 @property (nonatomic, nonnull, strong) MXEXmlNodePath* nodePath;
+/// A specified attribute key.
 @property (nonatomic, nonnull, copy) NSString* attributeKey;
+
 @end
 
 @implementation MXEXmlAttributePath
+
+- (instancetype _Nullable)init
+{
+    NSAssert(NO, @"%@ MUST need to use the designed initializer.", self.class);
+    return nil;
+}
 
 - (instancetype _Nonnull)initWithPathString:(NSString* _Nonnull)pathString
                                attributeKey:(NSString* _Nonnull)attributeKey

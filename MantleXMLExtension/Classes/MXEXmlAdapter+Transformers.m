@@ -7,9 +7,9 @@
 //
 
 #import "MXEXmlAdapter.h"
+#import "NSError+MantleXMLExtension.h"
 #import <Mantle/MTLValueTransformer.h>
 #import <Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.h>
-#import "NSError+MantleXMLExtension.h"
 
 @implementation MXEXmlAdapter (Transformers)
 
@@ -30,7 +30,7 @@
     __block MXEXmlAdapter* adapter;
 
     return [MTLValueTransformer
-            transformerUsingForwardBlock:
+        transformerUsingForwardBlock:
             ^id _Nullable(id _Nullable xmlNode, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
 
                 if (!xmlNode) {
@@ -40,7 +40,7 @@
                 if (![xmlNode isKindOfClass:MXEXmlNode.class]) {
                     setError(error, MXEErrorInvalidInputData,
                              [NSString stringWithFormat:@"Input data expected %@, but got %@.",
-                              MXEXmlNode.class, [xmlNode class]]);
+                                                        MXEXmlNode.class, [xmlNode class]]);
                     *success = NO;
                     return nil;
                 }
@@ -51,7 +51,7 @@
                 return model;
 
             }
-            reverseBlock:
+        reverseBlock:
             ^MXEXmlNode* _Nullable(id _Nullable model, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 if (!model) {
                     return nil;
@@ -61,7 +61,7 @@
                       && [model conformsToProtocol:@protocol(MXEXmlSerializing)])) {
                     setError(error, MXEErrorInvalidInputData,
                              [NSString stringWithFormat:@"Input data expected MXEXmlSerializing object, but got %@.",
-                              [model class]]);
+                                                        [model class]]);
                     *success = NO;
                     return nil;
                 }
@@ -80,8 +80,8 @@
     NSParameterAssert(keyPath != nil && valuePath != nil);
 
     return [MTLValueTransformer
-            transformerUsingForwardBlock:
-            ^NSDictionary* _Nullable(MXEXmlNode* _Nullable node, BOOL* _Nonnull success, NSError *_Nullable *_Nullable error) {
+        transformerUsingForwardBlock:
+            ^NSDictionary* _Nullable(MXEXmlNode* _Nullable node, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 if (!node) {
                     return nil;
                 }
@@ -96,11 +96,11 @@
                     if (child == [child.children firstObject]) {
                         dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:node.elementName
                                                                         attributes:node.attributes
-                                                                          children:@[child]];
+                                                                          children:@[ child ]];
                     } else {
                         dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:node.elementName
                                                                         attributes:nil
-                                                                          children:@[child]];
+                                                                          children:@[ child ]];
                     }
 
                     id key = [dummyNode getForXmlPath:keyPath];
@@ -112,8 +112,8 @@
                 *success = YES;
                 return transformedDictionary;
             }
-            reverseBlock:
-            ^MXEXmlNode* _Nullable(NSDictionary* _Nullable dict, BOOL* _Nonnull success, NSError *_Nullable *_Nullable error) {
+        reverseBlock:
+            ^MXEXmlNode* _Nullable(NSDictionary* _Nullable dict, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 if (!dict) {
                     return nil;
                 }
@@ -146,8 +146,8 @@
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)dictionaryTransformer
 {
     return [MTLValueTransformer
-            transformerUsingForwardBlock:
-            ^NSDictionary* _Nullable(MXEXmlNode* _Nullable value, BOOL* _Nonnull success, NSError *_Nullable *_Nullable error) {
+        transformerUsingForwardBlock:
+            ^NSDictionary* _Nullable(MXEXmlNode* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 if (!value) {
                     return nil;
                 }
@@ -157,8 +157,8 @@
                 }
                 return [value toDictionary];
             }
-            reverseBlock:
-            ^MXEXmlNode* _Nullable(NSDictionary* _Nullable value, BOOL* _Nonnull success, NSError *_Nullable *_Nullable error) {
+        reverseBlock:
+            ^MXEXmlNode* _Nullable(NSDictionary* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 if (!value) {
                     return nil;
                 }
@@ -173,7 +173,7 @@
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberTransformer
 {
     return [MTLValueTransformer
-            transformerUsingForwardBlock:
+        transformerUsingForwardBlock:
             ^NSNumber* _Nullable(id _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
 
                 if (!str) {
@@ -182,7 +182,7 @@
                 if (![str isKindOfClass:NSString.class]) {
                     setError(error, MXEErrorInvalidInputData,
                              [NSString stringWithFormat:@"Input data expected a numeric string, but got %@.",
-                              [str class]]);
+                                                        [str class]]);
                     *success = NO;
                     return nil;
                 }
@@ -212,7 +212,7 @@
                     return nil;
                 }
             }
-            reverseBlock:
+        reverseBlock:
             ^NSString* _Nullable(id _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 if (!value) {
                     return nil;
@@ -231,7 +231,7 @@
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolTransformer
 {
     return [MTLValueTransformer
-            transformerUsingForwardBlock:
+        transformerUsingForwardBlock:
             ^NSNumber* _Nullable(id _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
 
                 if (!str) {
@@ -240,7 +240,7 @@
                 if (![str isKindOfClass:NSString.class]) {
                     setError(error, MXEErrorInvalidInputData,
                              [NSString stringWithFormat:@"Input data expected a numeric string, but got %@.",
-                              [str class]]);
+                                                        [str class]]);
                     *success = NO;
                     return nil;
                 }
@@ -248,7 +248,7 @@
                 *success = YES;
                 return [NSNumber numberWithBool:[str boolValue]];
             }
-            reverseBlock:
+        reverseBlock:
             ^NSString* _Nullable(id _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 if (!value) {
                     return nil;

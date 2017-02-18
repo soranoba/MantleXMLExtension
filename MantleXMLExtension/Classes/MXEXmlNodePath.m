@@ -9,12 +9,22 @@
 #import "MXEXmlNodePath.h"
 
 @interface MXEXmlNodePath ()
+
+/// An array of element names from root to specified node.
+/// (It does not include the element name of root node, but contains the element name of specified node.)
 @property (nonatomic, nonnull, copy) NSArray<NSString*>* separatedPath;
+
 @end
 
 @implementation MXEXmlNodePath
 
 #pragma mark - Lifecycle
+
+- (instancetype _Nullable)init
+{
+    NSAssert(NO, @"%@ MUST need to use the designed initializer.", self.class);
+    return nil;
+}
 
 - (instancetype _Nonnull)initWithPathString:(NSString* _Nonnull)pathString
 {
