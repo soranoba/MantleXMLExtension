@@ -211,6 +211,24 @@ QuickSpecBegin(MXEXmlArrayPathTests)
                                                                                 value:@"overwrite4"]));
         });
 
+        it(@"add some nodes, if parent node is not found", ^{
+            MXEXmlArrayPath* path = MXEXmlArray(@"c", MXEXmlAttribute(@"a", @"attr"));
+            MXEMutableXmlNode* node = [root mutableCopy];
+            [path setValue:@[ @"value1", @"value2" ] forXmlNode:node];
+            expect([path getValueFromXmlNode:node]).to(equal(@[ @"value1", @"value2" ]));
+
+            MXEXmlNode* expectedGrandChild1 = [[MXEXmlNode alloc] initWithElementName:@"a"
+                                                                           attributes:@{ @"attr" : @"value1" }
+                                                                                value:nil];
+            MXEXmlNode* expectedGrandChild2 = [[MXEXmlNode alloc] initWithElementName:@"a"
+                                                                           attributes:@{ @"attr" : @"value2" }
+                                                                                value:nil];
+            expect([node lookupChild:@"c"])
+                .to(equal([[MXEXmlNode alloc] initWithElementName:@"c"
+                                                       attributes:nil
+                                                         children:@[ expectedGrandChild1, expectedGrandChild2 ]]));
+        });
+
         it(@"can update attributes", ^{
             MXEXmlArrayPath* path = MXEXmlArray(@"a", MXEXmlAttribute(@"b", @"c"));
             MXEMutableXmlNode* node = [root mutableCopy];
@@ -225,6 +243,16 @@ QuickSpecBegin(MXEXmlArrayPathTests)
             expect([path getValueFromXmlNode:node]).to(equal(@[ @"1", @"2", @"3" ]));
         });
 
+        it(@"update parent node, if collect relative path specify self", ^{
+            MXEXmlArrayPath* path = MXEXmlArray(@"a", MXEXmlAttribute(@"", @"attr"));
+            MXEMutableXmlNode* node = [root mutableCopy];
+
+            /// Since all the target are the same, only the first is used.
+            [path setValue:@[ @"1", @"2", @"3" ] forXmlNode:node];
+            expect([node lookupChild:@"a"].attributes).to(equal(@{ @"a_1" : @"a1",
+                                                                   @"a_2" : @"a1",
+                                                                   @"attr" : @"1" }));
+        });
     });
 }
 QuickSpecEnd

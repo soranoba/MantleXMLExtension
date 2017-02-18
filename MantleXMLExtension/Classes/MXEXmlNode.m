@@ -46,9 +46,7 @@
 {
     NSParameterAssert(elementName != nil);
 
-    if (self = [super init]) {
-        _elementName = [elementName copy];
-        _attributes = attributes ? [attributes copy] : [NSDictionary dictionary];
+    if (self = [self initWithElementName:elementName attributes:attributes children:nil]) {
         _value = [value copy];
     }
     return self;
@@ -262,7 +260,11 @@
 
     if (self = [super init]) {
         _elementName = [elementName copy];
-        _attributes = attributes ? [attributes mutableCopy] : [NSMutableDictionary dictionary];
+        if ([attributes isKindOfClass:NSMutableDictionary.class]) {
+            _attributes = attributes;
+        } else {
+            _attributes = attributes ? [attributes mutableCopy] : [NSMutableDictionary dictionary];
+        }
         _children = [children mutableCopy];
     }
     return self;
@@ -274,9 +276,7 @@
 {
     NSParameterAssert(elementName != nil);
 
-    if (self = [super init]) {
-        _elementName = [elementName copy];
-        _attributes = attributes ? [attributes mutableCopy] : [NSMutableDictionary dictionary];
+    if (self = [self initWithElementName:elementName attributes:attributes children:nil]) {
         _value = [value copy];
     }
     return self;

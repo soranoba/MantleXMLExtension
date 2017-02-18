@@ -111,7 +111,7 @@
         }
 
         // NOTE: It should have attribute for the first time only, so it use original attributes.
-        NSDictionary* attributes = (child == [foundNode.children firstObject] ? foundNode.attributes : nil);
+        NSMutableDictionary* attributes = (child == [foundNode.children firstObject] ? foundNode.attributes : nil);
         MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:foundNode.elementName
                                                                            attributes:attributes
                                                                              children:@[ child ]];
