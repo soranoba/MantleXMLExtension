@@ -72,7 +72,7 @@ Just add some to [MTLModel](https://github.com/Mantle/Mantle#mtlmodel) for MXEXm
 
 MXEXmlAdapter support 5 types of paths.
 
-**MXEXmlPath**
+**MXEXmlValuePath**
 
 For example:
 
