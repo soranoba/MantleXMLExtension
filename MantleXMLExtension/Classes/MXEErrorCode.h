@@ -17,3 +17,5 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
 
 /// The domain for errors originating from MantleXMLExtension
 extern NSString* _Nonnull const MXEErrorDomain;
+/// A key that stores the input data that caused the error
+extern NSString* _Nonnull const MXEErrorInputDataKey;

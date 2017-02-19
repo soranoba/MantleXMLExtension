@@ -107,7 +107,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                        error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
-        setError(error, MXEErrorNil, nil);
+        setError(error, MXEErrorNil, nil, nil);
         return nil;
     }
     MXEXmlAdapter* adapter = [[self alloc] initWithModelClass:modelClass];
@@ -118,7 +118,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                                 error:(NSError* _Nullable* _Nullable)error
 {
     if (!model) {
-        setError(error, MXEErrorNil, nil);
+        setError(error, MXEErrorNil, nil, nil);
         return nil;
     }
     MXEXmlAdapter* adapter = [[self alloc] initWithModelClass:model.class];
@@ -129,7 +129,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                            error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
-        setError(error, MXEErrorNil, nil);
+        setError(error, MXEErrorNil, nil, nil);
         return nil;
     }
 
@@ -162,7 +162,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     NSParameterAssert(model == nil || [model isKindOfClass:self.modelClass]);
 
     if (!model) {
-        setError(error, MXEErrorNil, nil);
+        setError(error, MXEErrorNil, nil, nil);
         return nil;
     }
 

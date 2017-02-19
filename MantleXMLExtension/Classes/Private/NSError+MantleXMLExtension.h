@@ -28,13 +28,25 @@
  */
 + (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
 
+/**
+ * Create NSError with error code and reason, additional informations.
+ *
+ * @param code            Error code
+ * @param reason          Error reason
+ * @param additionalInfo  Additional informations to include in userInfo.
+ * @return instance
+ */
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code
+                                            reason:(NSString* _Nonnull)reason
+                                    additionalInfo:(NSDictionary* _Nullable)additionalInfo;
 @end
 
-static inline void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSString* _Nullable reason)
+static inline void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSString* _Nullable reason,
+                            NSDictionary* _Nullable additionalInfo)
 {
     if (error) {
         if (reason) {
-            *error = [NSError mxe_errorWithMXEErrorCode:code reason:reason];
+            *error = [NSError mxe_errorWithMXEErrorCode:code reason:reason additionalInfo:additionalInfo];
         } else {
             *error = [NSError mxe_errorWithMXEErrorCode:code];
         }

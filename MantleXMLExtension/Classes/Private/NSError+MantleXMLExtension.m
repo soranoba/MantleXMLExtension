@@ -9,6 +9,7 @@
 #import "NSError+MantleXMLExtension.h"
 
 NSString* _Nonnull const MXEErrorDomain = @"MXEErrorDomain";
+NSString* _Nonnull const MXEErrorInputDataKey = @"MXEErrorInputDataKey";
 
 @implementation NSError (MantleXMLExtension)
 
@@ -20,8 +21,20 @@ NSString* _Nonnull const MXEErrorDomain = @"MXEErrorDomain";
 
 + (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason
 {
+    return [self mxe_errorWithMXEErrorCode:code reason:reason additionalInfo:nil];
+}
+
++ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code
+                                            reason:(NSString* _Nonnull)reason
+                                    additionalInfo:(NSDictionary* _Nullable)additionalInfo
+{
     NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self mxe_description:code],
                                 NSLocalizedFailureReasonErrorKey : reason };
+    if (additionalInfo) {
+        NSMutableDictionary* mutableUserInfo = [userInfo mutableCopy];
+        [mutableUserInfo addEntriesFromDictionary:additionalInfo];
+        userInfo = mutableUserInfo;
+    }
     return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
 }
 
@@ -41,7 +54,7 @@ NSString* _Nonnull const MXEErrorDomain = @"MXEErrorDomain";
         case MXEErrorInvalidRootNode:
             return @"Root node has different name from defined in model";
         case MXEErrorInvalidInputData:
-            return @"Input data is invalid";
+            return @"Conversion failed, because input data is invalid";
         default:
             return @"Unknown error";
     }

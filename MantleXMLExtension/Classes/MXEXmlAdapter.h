@@ -200,8 +200,8 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  * @return transformer
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
-    mappingDictionaryTransformerWithKeyPath:(id<MXEXmlAccessible> _Nonnull)keyPath
-                                  valuePath:(id<MXEXmlAccessible> _Nonnull)valuePath;
+    mappingDictionaryTransformerWithKeyPath:(id _Nonnull)keyPath
+                                  valuePath:(id _Nonnull)valuePath;
 
 /**
  * Return a transformer that convert between MXEXmlNode and NSDictionary.

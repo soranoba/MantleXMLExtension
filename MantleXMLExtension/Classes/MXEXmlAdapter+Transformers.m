@@ -17,6 +17,8 @@
     xmlNodeArrayTransformerWithModelClass:(Class _Nonnull)modelClass
 {
     NSParameterAssert(modelClass != nil);
+    NSParameterAssert([modelClass conformsToProtocol:@protocol(MTLModel)]);
+    NSParameterAssert([modelClass conformsToProtocol:@protocol(MXEXmlSerializing)]);
 
     return [NSValueTransformer mtl_arrayMappingTransformerWithTransformer:[self xmlNodeTransformerWithModelClass:modelClass]];
 }
@@ -31,7 +33,8 @@
 
     return [MTLValueTransformer
         transformerUsingForwardBlock:
-            ^id _Nullable(id _Nullable xmlNode, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+            ^id<MXEXmlSerializing> _Nullable(MXEXmlNode* _Nullable xmlNode, BOOL* _Nonnull success,
+                                             NSError* _Nullable* _Nullable error) {
 
                 if (!xmlNode) {
                     return nil;
@@ -39,8 +42,8 @@
 
                 if (![xmlNode isKindOfClass:MXEXmlNode.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Input data expected %@, but got %@.",
-                                                        MXEXmlNode.class, [xmlNode class]]);
+                             [NSString stringWithFormat:@"Expected a %@, but got %@", MXEXmlNode.class, [xmlNode class]],
+                             @{ MXEErrorInputDataKey : xmlNode });
                     *success = NO;
                     return nil;
                 }
@@ -49,10 +52,10 @@
                 id model = [adapter modelFromXmlNode:xmlNode error:error];
                 *success = model != nil;
                 return model;
-
             }
         reverseBlock:
-            ^MXEXmlNode* _Nullable(id _Nullable model, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+            ^MXEXmlNode* _Nullable(id<MXEXmlSerializing> _Nullable model, BOOL* _Nonnull success,
+                                   NSError* _Nullable* _Nullable error) {
                 if (!model) {
                     return nil;
                 }
@@ -60,8 +63,8 @@
                 if (!([model conformsToProtocol:@protocol(MTLModel)]
                       && [model conformsToProtocol:@protocol(MXEXmlSerializing)])) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Input data expected MXEXmlSerializing object, but got %@.",
-                                                        [model class]]);
+                             [NSString stringWithFormat:@"Expected a MXEXmlSerializing object, but got %@.", [model class]],
+                             @{ MXEErrorInputDataKey : model });
                     *success = NO;
                     return nil;
                 }
@@ -74,50 +77,67 @@
 }
 
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
-    mappingDictionaryTransformerWithKeyPath:(id<MXEXmlAccessible> _Nonnull)keyPath
-                                  valuePath:(id<MXEXmlAccessible> _Nonnull)valuePath
+    mappingDictionaryTransformerWithKeyPath:(id _Nonnull)keyPath
+                                  valuePath:(id _Nonnull)valuePath
 {
     NSParameterAssert(keyPath != nil && valuePath != nil);
+
+    id accessibleKeyPath, accessibleValuePath;
+    if ([keyPath isKindOfClass:NSString.class]) {
+        accessibleKeyPath = MXEXmlValue(keyPath);
+    } else {
+        NSAssert([keyPath conformsToProtocol:@protocol(MXEXmlAccessible)],
+                 @"The keyPath MUST be either NSString or MXEXmlAccessible");
+        accessibleKeyPath = keyPath;
+    }
+
+    if ([valuePath isKindOfClass:NSString.class]) {
+        accessibleValuePath = MXEXmlValue(valuePath);
+    } else {
+        NSAssert([valuePath conformsToProtocol:@protocol(MXEXmlAccessible)],
+                 @"The valuePath MUST be either NSString or MXEXmlAccessible");
+        accessibleValuePath = valuePath;
+    }
 
     return [MTLValueTransformer
         transformerUsingForwardBlock:
             ^NSDictionary* _Nullable(MXEXmlNode* _Nullable node, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
                 if (!node) {
                     return nil;
                 }
                 if (![node isKindOfClass:MXEXmlNode.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Expected a %@, but got %@.", MXEXmlNode.class, node.class],
+                             @{ MXEErrorInputDataKey : node });
                     *success = NO;
                     return nil;
                 }
 
                 NSMutableDictionary* transformedDictionary = [NSMutableDictionary dictionary];
                 for (MXEXmlNode* child in node.children) {
-                    MXEMutableXmlNode* dummyNode;
-                    if (child == [child.children firstObject]) {
-                        dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:node.elementName
-                                                                        attributes:node.attributes
-                                                                          children:@[ child ]];
-                    } else {
-                        dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:node.elementName
-                                                                        attributes:nil
-                                                                          children:@[ child ]];
-                    }
+                    MXEMutableXmlNode* dummyNode = [[MXEMutableXmlNode alloc] initWithElementName:node.elementName
+                                                                                       attributes:node.attributes
+                                                                                         children:@[ child ]];
 
-                    id key = [dummyNode getForXmlPath:keyPath];
-                    id value = [dummyNode getForXmlPath:valuePath];
+                    id key = [dummyNode getForXmlPath:accessibleKeyPath];
+                    id value = [dummyNode getForXmlPath:accessibleValuePath];
                     if (key && !transformedDictionary[key]) {
                         transformedDictionary[key] = value ?: NSNull.null;
                     }
                 }
-                *success = YES;
                 return transformedDictionary;
             }
         reverseBlock:
             ^MXEXmlNode* _Nullable(NSDictionary* _Nullable dict, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
                 if (!dict) {
                     return nil;
                 }
                 if (![dict isKindOfClass:NSDictionary.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSDictionary.class, dict.class],
+                             @{ MXEErrorInputDataKey : dict });
                     *success = NO;
                     return nil;
                 }
@@ -130,8 +150,8 @@
                     }
 
                     MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:@"dummy"];
-                    [node setValue:key forXmlPath:keyPath];
-                    [node setValue:value forXmlPath:valuePath];
+                    [node setValue:key forXmlPath:accessibleKeyPath];
+                    [node setValue:value forXmlPath:accessibleValuePath];
                     if (node.attributes) {
                         root.attributes = node.attributes;
                     }
@@ -147,26 +167,35 @@
 {
     return [MTLValueTransformer
         transformerUsingForwardBlock:
-            ^NSDictionary* _Nullable(MXEXmlNode* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
-                if (!value) {
+            ^NSDictionary* _Nullable(MXEXmlNode* _Nullable node, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
+                if (!node) {
                     return nil;
                 }
-                if (![value isKindOfClass:MXEXmlNode.class]) {
+                if (![node isKindOfClass:MXEXmlNode.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Expected a %@, but got %@.", MXEXmlNode.class, node.class],
+                             @{ MXEErrorInputDataKey : node });
                     *success = NO;
                     return nil;
                 }
-                return [value toDictionary];
+                return [node toDictionary];
             }
         reverseBlock:
-            ^MXEXmlNode* _Nullable(NSDictionary* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
-                if (!value) {
+            ^MXEXmlNode* _Nullable(NSDictionary* _Nullable dict, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
+                if (!dict) {
                     return nil;
                 }
-                if (![value isKindOfClass:NSDictionary.class]) {
+                if (![dict isKindOfClass:NSDictionary.class]) {
+
+                    setError(error, MXEErrorInvalidInputData,
+                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSDictionary.class, dict.class],
+                             @{ MXEErrorInputDataKey : dict });
                     *success = NO;
                     return nil;
                 }
-                return [[MXEXmlNode alloc] initWithElementName:@"dummy" fromDictionary:value];
+                return [[MXEXmlNode alloc] initWithElementName:@"dummy" fromDictionary:dict];
             }];
 }
 
@@ -174,15 +203,15 @@
 {
     return [MTLValueTransformer
         transformerUsingForwardBlock:
-            ^NSNumber* _Nullable(id _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
-
+            ^NSNumber* _Nullable(NSString* _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
                 if (!str) {
                     return nil;
                 }
                 if (![str isKindOfClass:NSString.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Input data expected a numeric string, but got %@.",
-                                                        [str class]]);
+                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSString.class, str.class],
+                             @{ MXEErrorInputDataKey : str });
                     *success = NO;
                     return nil;
                 }
@@ -194,37 +223,36 @@
                 NSTextCheckingResult* match = [regex firstMatchInString:str
                                                                 options:0
                                                                   range:NSMakeRange(0, [str length])];
-                NSAssert([match numberOfRanges] == 3, @"The number of elements of match MUST be 3");
 
-                if ([match rangeAtIndex:2].location != NSNotFound) {
-                    *success = YES;
-                    return [NSNumber numberWithFloat:[str floatValue]];
-                } else if ([match rangeAtIndex:1].location != NSNotFound) {
-                    *success = YES;
-                    return [NSNumber numberWithDouble:[str doubleValue]];
-                } else if ([match rangeAtIndex:0].location != NSNotFound) {
-                    *success = YES;
-                    return [NSNumber numberWithInteger:[str integerValue]];
-                } else {
-                    setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Could not convert String to Number. Got %@", str]);
-                    *success = NO;
-                    return nil;
+                if (match) {
+                    if ([match rangeAtIndex:2].location != NSNotFound) {
+                        return [NSNumber numberWithFloat:[str floatValue]];
+                    } else if ([match rangeAtIndex:1].location != NSNotFound) {
+                        return [NSNumber numberWithDouble:[str doubleValue]];
+                    } else if ([match rangeAtIndex:0].location != NSNotFound) {
+                        return [NSNumber numberWithInteger:[str integerValue]];
+                    }
                 }
+
+                setError(error, MXEErrorInvalidInputData, @"Could not convert String to Number",
+                         @{ MXEErrorInputDataKey : str });
+                *success = NO;
+                return nil;
             }
         reverseBlock:
-            ^NSString* _Nullable(id _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+            ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
                 if (!value) {
                     return nil;
                 }
                 if (![value isKindOfClass:NSNumber.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Input data expected NSNumber, but got %@", [value class]]);
+                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSNumber.class, value.class],
+                             @{ MXEErrorInputDataKey : value });
                     *success = NO;
                     return nil;
                 }
-                *success = YES;
-                return [(NSNumber*)value stringValue];
+                return [value stringValue];
             }];
 }
 
@@ -232,35 +260,34 @@
 {
     return [MTLValueTransformer
         transformerUsingForwardBlock:
-            ^NSNumber* _Nullable(id _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
-
+            ^NSNumber* _Nullable(NSString* _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
                 if (!str) {
                     return nil;
                 }
                 if (![str isKindOfClass:NSString.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Input data expected a numeric string, but got %@.",
-                                                        [str class]]);
+                             [NSString stringWithFormat:@"Expected a numeric string, but got %@", str.class],
+                             @{ MXEErrorInputDataKey : str });
                     *success = NO;
                     return nil;
                 }
-
-                *success = YES;
                 return [NSNumber numberWithBool:[str boolValue]];
             }
         reverseBlock:
-            ^NSString* _Nullable(id _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+            ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
                 if (!value) {
                     return nil;
                 }
                 if (![value isKindOfClass:NSNumber.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Input data expected NSNumber, but got %@", [value class]]);
+                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSNumber.class, value.class],
+                             @{ MXEErrorInputDataKey : value });
                     *success = NO;
                     return nil;
                 }
-                *success = YES;
-                return [(NSNumber*)value integerValue] ? @"true" : @"false";
+                return [value integerValue] ? @"true" : @"false";
             }];
 }
 
