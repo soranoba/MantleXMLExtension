@@ -14,6 +14,7 @@
 #import "MXEXmlArrayPath.h"
 #import "MXEXmlAttributePath.h"
 #import "MXEXmlChildNodePath.h"
+#import "MXEXmlNode.h"
 #import "MXEXmlValuePath.h"
 
 extern NSString* _Nonnull const MXEXmlDeclarationDefault;
@@ -158,10 +159,12 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
 
+#pragma mark - Conversion between XML and MXEXmlNode
+
 - (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
                                     error:(NSError* _Nullable* _Nullable)error;
 
-- (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)topXmlNode
+- (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)rootXmlNode
                                               error:(NSError* _Nullable* _Nullable)error;
 
 @end

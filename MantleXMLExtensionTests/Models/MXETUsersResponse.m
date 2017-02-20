@@ -37,6 +37,11 @@
     return [MXEXmlAdapter xmlNodeArrayTransformerWithModelClass:MXETUser.class];
 }
 
++ (NSValueTransformer* _Nullable)xmlTransformerForKey:(NSString* _Nonnull)key;
+{
+    return nil;
+}
+
 #pragma mark - MTLModel (Override)
 
 - (BOOL)validate:(NSError* _Nullable* _Nullable)error

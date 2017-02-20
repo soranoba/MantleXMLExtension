@@ -11,11 +11,17 @@
 #import "MXETTypeModel.h"
 #import "MXETUsersResponse.h"
 #import "MXEXmlNode.h"
+#import <Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.h>
 
 @interface MXEXmlAdapter () <NSXMLParserDelegate>
 @property (nonatomic, nonnull, strong) NSMutableArray<MXEMutableXmlNode*>* xmlParseStack;
 @property (nonatomic, nullable, strong) NSError* parseError;
 + (NSStringEncoding)xmlDeclarationToEncoding:(NSString*)xmlDeclaration;
++ (NSDictionary<NSString*, NSValueTransformer*>* _Nonnull)valueTransformersForModelClass:(Class _Nonnull)modelClass;
+@end
+
+@interface MXETUsersResponse ()
++ (NSValueTransformer* _Nonnull)usersXmlTransformer;
 @end
 
 QuickSpecBegin(MXEXmlAdapterTests)
@@ -53,6 +59,77 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
 
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{ @"a" : @[ MXEXmlArray(@"hoge", @"fugo"), @"hoge.fugo" ] }));
+        });
+    });
+
+    describe(@"valueTransformersForModelClass:", ^{
+        __block id mock;
+
+        afterEach(^{
+            [mock stopMocking];
+        });
+
+        it(@"use the result, if xmlTransformerForKey: is defined", ^{
+            mock = OCMClassMock(MXETUsersResponse.class);
+
+            OCMStub([mock xmlTransformerForKey:
+                              [OCMArg checkWithBlock:^BOOL(NSString* _Nonnull key) {
+                                  return [key isEqualToString:@"userCount"];
+                              }]])
+                .andReturn([NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{ @"1" : @"!!mock!!" }]);
+
+            NSDictionary* transformers = [MXEXmlAdapter valueTransformersForModelClass:MXETUsersResponse.class];
+            expect([transformers[@"userCount"] transformedValue:@"1"]).to(equal(@"!!mock!!"));
+        });
+
+        it(@"use the transformer, if <key>XmlTransformer is defined", ^{
+            mock = OCMClassMock(MXETUsersResponse.class);
+
+            OCMStub([mock usersXmlTransformer])
+                .andReturn([NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{ @"2" : @"!!mock!!" }]);
+
+            NSDictionary* transformers = [MXEXmlAdapter valueTransformersForModelClass:MXETUsersResponse.class];
+            expect([transformers[@"users"] transformedValue:@"2"]).to(equal(@"!!mock!!"));
+        });
+
+        it(@"choose <key>XmlTransformer in preference to xmlTransformerForKey:", ^{
+            mock = OCMClassMock(MXETUsersResponse.class);
+
+            OCMStub([mock usersXmlTransformer])
+                .andReturn([NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{ @"3" : @"usersXmlTransformer" }]);
+
+            OCMStub([mock xmlTransformerForKey:
+                              [OCMArg checkWithBlock:^BOOL(NSString* _Nonnull key) {
+                                  return [key isEqualToString:@"users"];
+                              }]])
+                .andReturn([NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{ @"3" : @"xmlTransformerForKey:" }]);
+
+            NSDictionary* transformers = [MXEXmlAdapter valueTransformersForModelClass:MXETUsersResponse.class];
+            expect([transformers[@"users"] transformedValue:@"3"]).to(equal(@"usersXmlTransformer"));
+        });
+
+        it(@"does not choose xmlTransformerForKey:, if <key>XmlTransformer returns nil", ^{
+            mock = OCMClassMock(MXETUsersResponse.class);
+
+            OCMStub([mock usersXmlTransformer]).andReturn(nil);
+
+            OCMStub([mock xmlTransformerForKey:
+                              [OCMArg checkWithBlock:^BOOL(NSString* _Nonnull key) {
+                                  return [key isEqualToString:@"users"];
+                              }]])
+                .andReturn([NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{ @"4" : @"xmlTransformerForKey:" }]);
+
+            NSDictionary* transformers = [MXEXmlAdapter valueTransformersForModelClass:MXETUsersResponse.class];
+            expect([transformers[@"users"] transformedValue:@"4"]).to(beNil());
+        });
+
+        it(@"choose defaultTransformer, if <key>XmlTransformer is not defined and xmlTransformerForKey: returns nil", ^{
+            expect([MXETUsersResponse respondsToSelector:NSSelectorFromString(@"userCountXmlTransformer")]).to(equal(NO));
+            expect([MXETUsersResponse respondsToSelector:@selector(xmlTransformerForKey:)]).to(equal(YES));
+            expect([MXETUsersResponse xmlTransformerForKey:@"userCount"]).to(beNil());
+
+            NSDictionary* transformers = [MXEXmlAdapter valueTransformersForModelClass:MXETUsersResponse.class];
+            expect([transformers[@"userCount"] transformedValue:@"5"]).to(equal(@5));
         });
     });
 

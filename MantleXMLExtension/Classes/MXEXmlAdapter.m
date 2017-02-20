@@ -30,14 +30,10 @@
 #import <Mantle/EXTRuntimeExtensions.h>
 #import <Mantle/EXTScope.h>
 #import <Mantle/MTLReflection.h>
-#import <Mantle/MTLValueTransformer.h>
 #import <Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.h>
 #import <objc/runtime.h>
 
 #import "MXEXmlAdapter.h"
-#import "MXEXmlArrayPath.h"
-#import "MXEXmlAttributePath.h"
-#import "MXEXmlNode.h"
 #import "NSError+MantleXMLExtension.h"
 
 NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -79,7 +75,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         self.xmlKeyPathsByPropertyKey = [modelClass xmlKeyPathsByPropertyKey];
         self.xmlParseStack = [NSMutableArray array];
         self.propertyKeys = [self.modelClass propertyKeys];
+        self.valueTransformersByPropertyKey = [self.class valueTransformersForModelClass:modelClass];
 
+#if !defined(NS_BLOCK_ASSERTIONS)
         for (NSString* key in self.xmlKeyPathsByPropertyKey) {
             NSAssert([self.propertyKeys containsObject:key], @"%@ is NOT a property of %@.", key, modelClass);
 
@@ -95,7 +93,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                 }
             }
         }
-        self.valueTransformersByPropertyKey = [self.class valueTransformersForModelClass:modelClass];
+#endif
     }
     return self;
 }
@@ -288,7 +286,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - License Github
 
-- (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)topXmlNode
+- (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)rootXmlNode
                                               error:(NSError* _Nullable* _Nullable)error
 {
     NSMutableDictionary* dictionaryValue = [NSMutableDictionary dictionary];
@@ -302,12 +300,12 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
         id value = nil;
         if ([xmlKeyPaths isKindOfClass:NSArray.class]) {
-            MXEMutableXmlNode* currentXmlNode = [[MXEMutableXmlNode alloc] initWithElementName:topXmlNode.elementName];
+            MXEMutableXmlNode* currentXmlNode = [[MXEMutableXmlNode alloc] initWithElementName:rootXmlNode.elementName];
             for (id __strong singleXmlKeyPath in xmlKeyPaths) {
                 if ([singleXmlKeyPath isKindOfClass:NSString.class]) {
                     singleXmlKeyPath = MXEXmlValue(singleXmlKeyPath);
                 }
-                id v = [topXmlNode getForXmlPath:singleXmlKeyPath];
+                id v = [rootXmlNode getForXmlPath:singleXmlKeyPath];
                 if (v) {
                     [currentXmlNode setValue:v forXmlPath:singleXmlKeyPath];
                 }
@@ -320,7 +318,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             if ([xmlKeyPaths isKindOfClass:NSString.class]) {
                 xmlKeyPaths = MXEXmlValue(xmlKeyPaths);
             }
-            value = [topXmlNode getForXmlPath:xmlKeyPaths];
+            value = [rootXmlNode getForXmlPath:xmlKeyPaths];
             if (!value) {
                 continue;
             }
@@ -437,7 +435,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     }
 }
 
-+ (NSDictionary*)valueTransformersForModelClass:(Class)modelClass
++ (NSDictionary<NSString*, NSValueTransformer*>* _Nonnull)valueTransformersForModelClass:(Class _Nonnull)modelClass
 {
     NSParameterAssert(modelClass != nil);
     NSParameterAssert([modelClass conformsToProtocol:@protocol(MXEXmlSerializing)]);
@@ -451,9 +449,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             NSValueTransformer* (*function)(id, SEL) = (__typeof__(function))imp;
             NSValueTransformer* transformer = function(modelClass, selector);
 
-            if (transformer != nil)
+            if (transformer != nil) {
                 result[key] = transformer;
-
+            }
             continue;
         }
 
