@@ -544,6 +544,61 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect(parser.parserError.code).to(equal(NSXMLParserDelegateAbortedParseError));
             expect(adapter.parseError).notTo(equal(nil));
         });
+
+        it(@"can parse correctly, even if parser:foundCharacters: is called more than once", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response status=\"OK\">  Hello, \"World\"!!  </response>";
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[str dataUsingEncoding:NSUTF8StringEncoding]];
+            MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
+            parser.delegate = adapter;
+
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"];
+            expectedObj.attributes = @{ @"status" : @"OK" };
+            expectedObj.children = @"Hello, \"World\"!!";
+
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj));
+        });
+
+        it(@"remove leading and trailing spaces", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response status=\"OK\">\n"
+                            @"    aaa bbb ccc \n"
+                            @"    ddd eee fff \n"
+                            @"</response>";
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[str dataUsingEncoding:NSUTF8StringEncoding]];
+            MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
+            parser.delegate = adapter;
+
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"];
+            expectedObj.attributes = @{ @"status" : @"OK" };
+            expectedObj.children = @"aaa bbb ccc \n    ddd eee fff";
+
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj));
+        });
+
+        it(@"can parse CDATA. Even in that case, it remove leading and trailing spaces", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response status=\"OK\">\n"
+                            @"    <![CDATA[    <aaa bbb ccc \n"
+                            @"    ddd eee fff>  \n"
+                            @"    ]]>\n"
+                            @"</response>";
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[str dataUsingEncoding:NSUTF8StringEncoding]];
+            MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
+            parser.delegate = adapter;
+
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"];
+            expectedObj.attributes = @{ @"status" : @"OK" };
+            expectedObj.children = @"<aaa bbb ccc \n    ddd eee fff>";
+
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj));
+        });
     });
 }
 QuickSpecEnd
