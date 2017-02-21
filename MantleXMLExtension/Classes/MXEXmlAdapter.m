@@ -486,9 +486,13 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     MXEXmlNode* node = [self.xmlParseStack lastObject];
 
     // NOTE: Ignore character string when child node and character string are mixed.
-    if (!node.children) {
-        node.children = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([node.children isKindOfClass:NSArray.class]) {
+        return;
     }
+    if (!node.children) {
+        node.children = @"";
+    }
+    node.children = [((NSString*)node.children) stringByAppendingString:string];
 }
 
 - (void)parser:(NSXMLParser*)parser
@@ -496,8 +500,12 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
      namespaceURI:(NSString* _Nullable)namespaceURI
     qualifiedName:(NSString* _Nullable)qName
 {
+    MXEXmlNode* node = [self.xmlParseStack lastObject];
+    if ([node.children isKindOfClass:NSString.class]) {
+        node.children = [node.children stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    }
+
     if (self.xmlParseStack.count > 1) {
-        MXEXmlNode* node = [self.xmlParseStack lastObject];
         [self.xmlParseStack removeLastObject];
 
         MXEXmlNode* parentNode = [self.xmlParseStack lastObject];
