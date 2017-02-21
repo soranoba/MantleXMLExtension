@@ -267,61 +267,158 @@ QuickSpecBegin(MXEXmlAdapterTests)
     });
 
     describe(@"XMLParser", ^{
-        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                           @"<response status=\"OK\">"
-                           @"  <user>  <id>"
-                           @"                1"
-                           @"  </id>      </user>"
-                           @"  <user>  <id>2</id>  </user>"
-                           @"</response>";
         __block id mock = nil;
+        MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
 
         beforeEach(^{
             mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock xmlRootElementName]).andReturn(@"response");
         });
 
         afterEach(^{
             [mock stopMocking];
         });
 
-        it(@"Ignore character string when child node and character string are mixed", ^{
-            OCMStub([mock xmlRootElementName]).andReturn(@"response");
+        it(@"can parse value, child nodes and attributes", ^{
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                               @"<response status=\"OK\">\n"
+                               @"  <user>\n"
+                               @"    <id>1</id>\n"
+                               @"  </user>\n"
+                               @"  <user>\n"
+                               @"    <id>2</id>\n"
+                               @"  </user>\n"
+                               @"</response>";
 
             NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[xmlStr dataUsingEncoding:NSUTF8StringEncoding]];
-            MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
             parser.delegate = adapter;
-            MXEMutableXmlNode* expectedObj = [[MXEMutableXmlNode alloc] initWithElementName:@"response"
-                                                                                 attributes:@{ @"status" : @"OK" }
-                                                                                   children:nil];
 
-            MXEMutableXmlNode* user1 = [[MXEMutableXmlNode alloc] initWithElementName:@"user"];
-            MXEMutableXmlNode* user2 = [[MXEMutableXmlNode alloc] initWithElementName:@"user"];
-            MXEMutableXmlNode* userId1 = [[MXEMutableXmlNode alloc] initWithElementName:@"id"];
-            MXEMutableXmlNode* userId2 = [[MXEMutableXmlNode alloc] initWithElementName:@"id"];
-            userId1.value = @"1";
-            [user1 addChild:userId1];
+            MXEXmlNode* userId1 = [[MXEXmlNode alloc] initWithElementName:@"id"
+                                                               attributes:nil
+                                                                    value:@"1"];
+            MXEXmlNode* userId2 = [[MXEXmlNode alloc] initWithElementName:@"id"
+                                                               attributes:nil
+                                                                    value:@"2"];
+            MXEXmlNode* user1 = [[MXEXmlNode alloc] initWithElementName:@"user"
+                                                             attributes:nil
+                                                               children:@[ userId1 ]];
+            MXEXmlNode* user2 = [[MXEXmlNode alloc] initWithElementName:@"user"
+                                                             attributes:nil
+                                                               children:@[ userId2 ]];
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                   attributes:@{ @"status" : @"OK" }
+                                                                     children:@[ user1, user2 ]];
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj));
+        });
 
-            userId2.value = @"2";
-            [user2 addChild:userId2];
+        it(@"returns error, if root element name is different", ^{
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                               @"<other_node>\n"
+                               @"</other_node>";
 
-            [expectedObj addChild:user1];
-            [expectedObj addChild:user2];
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[xmlStr dataUsingEncoding:NSUTF8StringEncoding]];
+            parser.delegate = adapter;
+
+            expect([parser parse]).to(equal(NO));
+            expect(parser.parserError.code).to(equal(NSXMLParserDelegateAbortedParseError));
+            expect(adapter.parseError).notTo(equal(nil));
+        });
+
+        it(@"ignore text, when the node have mixed child nodes and text", ^{
+            NSString* xmlStr1 = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                                @"<response>\n"
+                                @"  <child>value</child>\n"
+                                @"  Hello world!!\n"
+                                @"  <child>value</child>\n"
+                                @"</response>";
+
+            NSString* xmlStr2 = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                                @"<response>\n"
+                                @"  Hello world!!\n"
+                                @"  <child>value</child>\n"
+                                @"  Hello world!!\n"
+                                @"</response>";
+
+            MXEXmlNode* childNode = [[MXEXmlNode alloc] initWithElementName:@"child"
+                                                                 attributes:nil
+                                                                      value:@"value"];
+            MXEXmlNode* expectedObj1 = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                    attributes:nil
+                                                                      children:@[ childNode, childNode ]];
+            MXEXmlNode* expectedObj2 = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                    attributes:nil
+                                                                      children:@[ childNode ]];
+
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[xmlStr1 dataUsingEncoding:NSUTF8StringEncoding]];
+            parser.delegate = adapter;
+
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj1));
+
+            parser = [[NSXMLParser alloc] initWithData:[xmlStr2 dataUsingEncoding:NSUTF8StringEncoding]];
+            parser.delegate = adapter;
+
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj2));
+        });
+
+        it(@"can parse correctly, even if parser:foundCharacters: is called more than once", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response status=\"OK\">  Hello, \"World\"!!  </response>";
+
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[str dataUsingEncoding:NSUTF8StringEncoding]];
+            parser.delegate = adapter;
+
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                   attributes:@{ @"status" : @"OK" }
+                                                                        value:@"Hello, \"World\"!!"];
 
             expect([parser parse]).to(equal(YES));
             expect(adapter.xmlParseStack.count).to(equal(1));
             expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj));
         });
 
-        it(@"root element is different", ^{
-            OCMStub([mock xmlRootElementName]).andReturn(@"object");
+        it(@"remove leading and trailing spaces", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response status=\"OK\">\n"
+                            @"    aaa bbb ccc \n"
+                            @"    ddd eee fff \n"
+                            @"</response>";
 
-            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[xmlStr dataUsingEncoding:NSUTF8StringEncoding]];
-            MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[str dataUsingEncoding:NSUTF8StringEncoding]];
             parser.delegate = adapter;
 
-            expect([parser parse]).to(equal(NO));
-            expect(parser.parserError.code).to(equal(NSXMLParserDelegateAbortedParseError));
-            expect(adapter.parseError).notTo(equal(nil));
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                   attributes:@{ @"status" : @"OK" }
+                                                                        value:@"aaa bbb ccc \n    ddd eee fff"];
+
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj));
+        });
+
+        it(@"can parse CDATA. Even in that case, it remove leading and trailing spaces", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response status=\"OK\">\n"
+                            @"    <![CDATA[    <aaa bbb ccc \n"
+                            @"    ddd eee fff>  \n"
+                            @"    ]]>\n"
+                            @"</response>";
+
+            NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[str dataUsingEncoding:NSUTF8StringEncoding]];
+            parser.delegate = adapter;
+
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                   attributes:@{ @"status" : @"OK" }
+                                                                        value:@"<aaa bbb ccc \n    ddd eee fff>"];
+
+            expect([parser parse]).to(equal(YES));
+            expect(adapter.xmlParseStack.count).to(equal(1));
+            expect([adapter.xmlParseStack lastObject]).to(equal(expectedObj));
         });
     });
 }

@@ -239,11 +239,17 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
 #pragma mark - NSXMLParserDelegate
 
-- (void)parser:(NSXMLParser*)parser
-    didStartElement:(NSString*)elementName
+- (void)parserDidStartDocument:(NSXMLParser* _Nonnull)parser
+{
+    [self.xmlParseStack removeAllObjects];
+    self.parseError = nil;
+}
+
+- (void)parser:(NSXMLParser* _Nonnull)parser
+    didStartElement:(NSString* _Nonnull)elementName
        namespaceURI:(NSString* _Nullable)namespaceURI
       qualifiedName:(NSString* _Nullable)qName
-         attributes:(NSDictionary<NSString*, NSString*>*)attributeDict
+         attributes:(NSDictionary<NSString*, NSString*>* _Nonnull)attributeDict
 {
     if (self.xmlParseStack.count == 0) {
         if (![[self.modelClass xmlRootElementName] isEqualToString:elementName]) {
@@ -260,23 +266,27 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     [self.xmlParseStack addObject:node];
 }
 
-- (void)parser:(NSXMLParser*)parser foundCharacters:(NSString*)string
+- (void)parser:(NSXMLParser* _Nonnull)parser foundCharacters:(NSString* _Nonnull)string
 {
     MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
 
     // NOTE: Ignore character string when child node and character string are mixed.
     if (!node.hasChildren) {
-        node.value = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        node.value = node.value ? [node.value stringByAppendingString:string] : string;
     }
 }
 
-- (void)parser:(NSXMLParser*)parser
-    didEndElement:(NSString*)elementName
+- (void)parser:(NSXMLParser* _Nonnull)parser
+    didEndElement:(NSString* _Nonnull)elementName
      namespaceURI:(NSString* _Nullable)namespaceURI
     qualifiedName:(NSString* _Nullable)qName
 {
+    MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
+    if (!node.hasChildren) {
+        node.value = [node.value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    }
+
     if (self.xmlParseStack.count > 1) {
-        MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
         [self.xmlParseStack removeLastObject];
 
         MXEMutableXmlNode* parentNode = [self.xmlParseStack lastObject];
