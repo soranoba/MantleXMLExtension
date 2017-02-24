@@ -10,8 +10,11 @@
 
 typedef NS_ENUM(NSUInteger, MXEErrorCode) {
     MXEErrorUnknown = 0,
-    MXEErrorNil,
-    MXEErrorInvalidRootNode,
+    /// Could not conversion, because nil was inputted.
+    MXEErrorNilInputData,
+    /// The element name of the XML Node is different from defined one in the model class
+    MXEErrorElementNameDoesNotMatch,
+    /// There was an input data that is different from the expected type.
     MXEErrorInvalidInputData,
 };
 

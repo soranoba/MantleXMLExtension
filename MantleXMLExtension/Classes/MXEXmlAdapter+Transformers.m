@@ -42,14 +42,21 @@
 
                 if (![xmlNode isKindOfClass:MXEXmlNode.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@", MXEXmlNode.class, [xmlNode class]],
-                             @{ MXEErrorInputDataKey : xmlNode });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@", MXEXmlNode.class, xmlNode.class),
+                                MXEErrorInputDataKey : xmlNode });
                     *success = NO;
                     return nil;
                 }
 
+                // NOTE: It does not need to have specified elementName.
+                //       Because, it becomes to the fetters when using the model into several models,
+                //       if it must have same elementName.
+                MXEMutableXmlNode* copyNode = [xmlNode mutableCopy];
+                copyNode.elementName = [modelClass xmlRootElementName];
+
                 adapter = adapter ?: [[self alloc] initWithModelClass:modelClass];
-                id model = [adapter modelFromXmlNode:xmlNode error:error];
+                id model = [adapter modelFromXmlNode:copyNode error:error];
                 *success = model != nil;
                 return model;
             }
@@ -63,8 +70,9 @@
                 if (!([model conformsToProtocol:@protocol(MTLModel)]
                       && [model conformsToProtocol:@protocol(MXEXmlSerializing)])) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a MXEXmlSerializing object, but got %@.", [model class]],
-                             @{ MXEErrorInputDataKey : model });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a MXEXmlSerializing object, but got %@.", [model class]),
+                                MXEErrorInputDataKey : model });
                     *success = NO;
                     return nil;
                 }
@@ -108,8 +116,9 @@
                 }
                 if (![node isKindOfClass:MXEXmlNode.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@.", MXEXmlNode.class, node.class],
-                             @{ MXEErrorInputDataKey : node });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", MXEXmlNode.class, node.class),
+                                MXEErrorInputDataKey : node });
                     *success = NO;
                     return nil;
                 }
@@ -136,8 +145,9 @@
                 }
                 if (![dict isKindOfClass:NSDictionary.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSDictionary.class, dict.class],
-                             @{ MXEErrorInputDataKey : dict });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSDictionary.class, dict.class),
+                                MXEErrorInputDataKey : dict });
                     *success = NO;
                     return nil;
                 }
@@ -174,8 +184,9 @@
                 }
                 if (![node isKindOfClass:MXEXmlNode.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@.", MXEXmlNode.class, node.class],
-                             @{ MXEErrorInputDataKey : node });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", MXEXmlNode.class, node.class),
+                                MXEErrorInputDataKey : node });
                     *success = NO;
                     return nil;
                 }
@@ -190,8 +201,9 @@
                 if (![dict isKindOfClass:NSDictionary.class]) {
 
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSDictionary.class, dict.class],
-                             @{ MXEErrorInputDataKey : dict });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSDictionary.class, dict.class),
+                                MXEErrorInputDataKey : dict });
                     *success = NO;
                     return nil;
                 }
@@ -210,8 +222,9 @@
                 }
                 if (![str isKindOfClass:NSString.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSString.class, str.class],
-                             @{ MXEErrorInputDataKey : str });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSString.class, str.class),
+                                MXEErrorInputDataKey : str });
                     *success = NO;
                     return nil;
                 }
@@ -234,8 +247,9 @@
                     }
                 }
 
-                setError(error, MXEErrorInvalidInputData, @"Could not convert String to Number",
-                         @{ MXEErrorInputDataKey : str });
+                setError(error, MXEErrorInvalidInputData,
+                         @{ NSLocalizedFailureReasonErrorKey : @"Could not convert String to Number",
+                            MXEErrorInputDataKey : str });
                 *success = NO;
                 return nil;
             }
@@ -247,8 +261,9 @@
                 }
                 if (![value isKindOfClass:NSNumber.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSNumber.class, value.class],
-                             @{ MXEErrorInputDataKey : value });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSNumber.class, value.class),
+                                MXEErrorInputDataKey : value });
                     *success = NO;
                     return nil;
                 }
@@ -267,8 +282,9 @@
                 }
                 if (![str isKindOfClass:NSString.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a numeric string, but got %@", str.class],
-                             @{ MXEErrorInputDataKey : str });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a numeric string, but got %@", str.class),
+                                MXEErrorInputDataKey : str });
                     *success = NO;
                     return nil;
                 }
@@ -282,8 +298,9 @@
                 }
                 if (![value isKindOfClass:NSNumber.class]) {
                     setError(error, MXEErrorInvalidInputData,
-                             [NSString stringWithFormat:@"Expected a %@, but got %@.", NSNumber.class, value.class],
-                             @{ MXEErrorInputDataKey : value });
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSNumber.class, value.class),
+                                MXEErrorInputDataKey : value });
                     *success = NO;
                     return nil;
                 }

@@ -105,7 +105,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                        error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
-        setError(error, MXEErrorNil, nil, nil);
+        setError(error, MXEErrorNilInputData, nil);
         return nil;
     }
     MXEXmlAdapter* adapter = [[self alloc] initWithModelClass:modelClass];
@@ -116,7 +116,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                                 error:(NSError* _Nullable* _Nullable)error
 {
     if (!model) {
-        setError(error, MXEErrorNil, nil, nil);
+        setError(error, MXEErrorNilInputData, nil);
         return nil;
     }
     MXEXmlAdapter* adapter = [[self alloc] initWithModelClass:model.class];
@@ -127,7 +127,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                            error:(NSError* _Nullable* _Nullable)error
 {
     if (!xmlData) {
-        setError(error, MXEErrorNil, nil, nil);
+        setError(error, MXEErrorNilInputData, nil);
         return nil;
     }
 
@@ -160,7 +160,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     NSParameterAssert(model == nil || [model isKindOfClass:self.modelClass]);
 
     if (!model) {
-        setError(error, MXEErrorNil, nil, nil);
+        setError(error, MXEErrorNilInputData, nil);
         return nil;
     }
 
@@ -253,10 +253,10 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 {
     if (self.xmlParseStack.count == 0) {
         if (![[self.modelClass xmlRootElementName] isEqualToString:elementName]) {
-            NSString* reason = [NSString stringWithFormat:@"Root node expect %@, but got %@",
-                                                          [self.modelClass xmlRootElementName], elementName];
-            self.parseError = [NSError mxe_errorWithMXEErrorCode:MXEErrorInvalidRootNode
-                                                          reason:reason];
+            NSString* reason = format(@"Element name of root node expected %@, but got %@",
+                                      [self.modelClass xmlRootElementName], elementName);
+            self.parseError = [NSError mxe_errorWithMXEErrorCode:MXEErrorElementNameDoesNotMatch
+                                                        userInfo:@{ NSLocalizedFailureReasonErrorKey : reason }];
             [parser abortParsing];
         }
     }
@@ -299,8 +299,17 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 - (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)rootXmlNode
                                               error:(NSError* _Nullable* _Nullable)error
 {
-    NSMutableDictionary* dictionaryValue = [NSMutableDictionary dictionary];
+    NSParameterAssert(rootXmlNode != nil);
 
+    if (![[self.modelClass xmlRootElementName] isEqualToString:rootXmlNode.elementName]) {
+        setError(error, MXEErrorElementNameDoesNotMatch,
+                 @{ NSLocalizedFailureReasonErrorKey :
+                        format(@"%@ expected elementName to be %@, but got %@",
+                               self.modelClass, [self.modelClass xmlRootElementName], rootXmlNode.elementName) });
+        return nil;
+    }
+
+    NSMutableDictionary* dictionaryValue = [NSMutableDictionary dictionary];
     for (NSString* propertyKey in [self.modelClass propertyKeys]) {
         id xmlKeyPaths = self.xmlKeyPathsByPropertyKey[propertyKey];
 
@@ -412,9 +421,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         if ([xmlKeyPaths isKindOfClass:NSArray.class]) {
             if (![value isKindOfClass:MXEXmlNode.class]) {
                 success = NO;
-                tmpError = [NSError mxe_errorWithMXEErrorCode:MXEErrorInvalidInputData
-                                                       reason:[NSString stringWithFormat:@"input data expected MXEXmlNode, but got %@",
-                                                                                         [value class]]];
+                setError(error, MXEErrorInvalidInputData,
+                         @{ NSLocalizedFailureReasonErrorKey :
+                                format(@"input data expected MXEXmlNode, but got %@", [value class]) });
                 break;
             }
 
@@ -476,8 +485,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 
         objc_property_t property = class_getProperty(modelClass, key.UTF8String);
 
-        if (property == NULL)
+        if (property == NULL) {
             continue;
+        }
 
         mtl_propertyAttributes* attributes = mtl_copyPropertyAttributes(property);
         @onExit
@@ -506,20 +516,22 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             transformer = [self transformerForModelPropertiesOfObjCType:attributes->type] ?: [NSValueTransformer mtl_validatingTransformerForClass:NSValue.class];
         }
 
-        if (transformer != nil)
+        if (transformer != nil) {
             result[key] = transformer;
+        }
     }
 
     return result;
 }
 
-+ (NSValueTransformer*)transformerForModelPropertiesOfClass:(Class)modelClass
++ (NSValueTransformer* _Nullable)transformerForModelPropertiesOfClass:(Class _Nonnull)modelClass
 {
     NSParameterAssert(modelClass != nil);
 
     SEL selector = MTLSelectorWithKeyPattern(NSStringFromClass(modelClass), "XmlTransformer");
-    if (![self respondsToSelector:selector])
+    if (![self respondsToSelector:selector]) {
         return nil;
+    }
 
     IMP imp = [self methodForSelector:selector];
     NSValueTransformer* (*function)(id, SEL) = (__typeof__(function))imp;
@@ -528,7 +540,7 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     return result;
 }
 
-+ (NSValueTransformer*)transformerForModelPropertiesOfObjCType:(const char*)objCType
++ (NSValueTransformer* _Nullable)transformerForModelPropertiesOfObjCType:(const char* _Nonnull)objCType
 {
     NSParameterAssert(objCType != NULL);
 

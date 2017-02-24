@@ -158,10 +158,11 @@ QuickSpecBegin(MXEXmlAdapterTests)
                                @"</user>"
                                @"</response>";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+            NSError* error = nil;
 
             MXETUsersResponse* response = [MXEXmlAdapter modelOfClass:MXETUsersResponse.class
                                                           fromXmlData:xmlData
-                                                                error:nil];
+                                                                error:&error];
             expect(response.status).to(equal(@"ok"));
             expect(response.userCount).to(equal(2));
             expect(response.users.count).to(equal(2));
@@ -193,29 +194,10 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect(response.users[1].child.sex == MXETWoman).to(equal(YES));
             expect(response.users[1].child.parent).to(beNil());
             expect(response.users[1].child.child).to(beNil());
+            expect(error).to(beNil());
 
             NSData* gotXmlData = [MXEXmlAdapter xmlDataFromModel:response error:nil];
             expect(gotXmlData).to(equal(xmlData));
-        });
-
-        it(@"sample (2) : Take multiple elements of an xml element", ^{
-            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<root attribute=\"aaa\">"
-                               @"<data><user>Alice</user></data>"
-                               @"</root>";
-            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
-
-            __block MXETFilterModel* model;
-            __block NSError* error = nil;
-            expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
-            expect(model.node.attribute).to(equal(@"aaa"));
-            expect(model.node.userName).to(equal(@"Alice"));
-            expect(error).to(beNil());
-
-            __block NSData* gotData;
-            expect(gotData = [MXEXmlAdapter xmlDataFromModel:model error:&error]).notTo(beNil());
-            expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
-            expect(error).to(beNil());
         });
 
         it(@"returns model that does not have node, if the specified elements does not exist", ^{
@@ -233,6 +215,37 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect(gotData = [MXEXmlAdapter xmlDataFromModel:model error:&error]).notTo(beNil());
             expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
             expect(error).to(beNil());
+        });
+    });
+
+    describe(@"speciry array in xmlKeyPath", ^{
+        NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           @"<root attribute=\"aaa\">"
+                           @"<data><user>Alice</user></data>"
+                           @"</root>";
+        NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+        it(@"can specify array in xmlKeyPath", ^{
+            __block MXETFilterModel* model;
+            __block NSError* error = nil;
+            expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
+            expect(model.node.attribute).to(equal(@"aaa"));
+            expect(model.node.userName).to(equal(@"Alice"));
+            expect(error).to(beNil());
+
+            __block NSData* gotData;
+            expect(gotData = [MXEXmlAdapter xmlDataFromModel:model error:&error]).notTo(beNil());
+            expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
+            expect(error).to(beNil());
+        });
+
+        it(@"does not need to be the same xmlRootElementName as parent", ^{
+            id mock = OCMClassMock(MXETFilterChildModel.class);
+            OCMStub([mock xmlRootElementName]).andReturn(@"otherElementName");
+
+            __block MXETFilterModel* model;
+            __block NSError* error = nil;
+            expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
         });
     });
 
@@ -385,7 +398,7 @@ QuickSpecBegin(MXEXmlAdapterTests)
         it(@"remove leading and trailing spaces", ^{
             NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                             @"<response status=\"OK\">\n"
-                            @"    aaa bbb ccc \n"
+                            @"    aaa bbb ccc \r\n"
                             @"    ddd eee fff \n"
                             @"</response>";
 

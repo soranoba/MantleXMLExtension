@@ -157,6 +157,11 @@ QuickSpecBegin(MXEXmlAdapter_TransformersTests)
             expect([transformer reverseTransformedValue:model1]).to(equal(node1));
         });
 
+        it(@"can convert to model from MXEXmlNode, regardless of whether root element name matches", ^{
+            OCMStub([mock xmlRootElementName]).andReturn(@"otherElementName");
+            expect([transformer transformedValue:node1]).to(equal(model1));
+        });
+
         it(@"sets YES to success, when the conversion is successful", ^{
             __block BOOL success = NO;
             __block NSError* error = nil;

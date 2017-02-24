@@ -19,20 +19,12 @@ NSString* _Nonnull const MXEErrorInputDataKey = @"MXEErrorInputDataKey";
     return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
 }
 
-+ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason
-{
-    return [self mxe_errorWithMXEErrorCode:code reason:reason additionalInfo:nil];
-}
-
 + (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code
-                                            reason:(NSString* _Nonnull)reason
-                                    additionalInfo:(NSDictionary* _Nullable)additionalInfo
+                                          userInfo:(NSDictionary* _Nullable)userInfo
 {
-    NSDictionary* userInfo = @{ NSLocalizedDescriptionKey : [self mxe_description:code],
-                                NSLocalizedFailureReasonErrorKey : reason };
-    if (additionalInfo) {
+    if (userInfo) {
         NSMutableDictionary* mutableUserInfo = [userInfo mutableCopy];
-        [mutableUserInfo addEntriesFromDictionary:additionalInfo];
+        mutableUserInfo[NSLocalizedDescriptionKey] = [self mxe_description:code];
         userInfo = mutableUserInfo;
     }
     return [NSError errorWithDomain:MXEErrorDomain code:code userInfo:userInfo];
@@ -49,12 +41,12 @@ NSString* _Nonnull const MXEErrorInputDataKey = @"MXEErrorInputDataKey";
 + (NSString* _Nonnull)mxe_description:(MXEErrorCode)code
 {
     switch (code) {
-        case MXEErrorNil:
-            return @"Model doesn't allow nil but nil had be passed";
-        case MXEErrorInvalidRootNode:
-            return @"Root node has different name from defined in model";
+        case MXEErrorNilInputData:
+            return @"Could not conversion, because nil was inputted";
+        case MXEErrorElementNameDoesNotMatch:
+            return @"The element name of the XML Node is different from defined one in the model class";
         case MXEErrorInvalidInputData:
-            return @"Conversion failed, because input data is invalid";
+            return @"Transformation failed, because input data is invalid";
         default:
             return @"Unknown error";
     }

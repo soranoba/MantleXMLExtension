@@ -9,6 +9,8 @@
 #import "MXEErrorCode.h"
 #import <Foundation/Foundation.h>
 
+#define format(...) ([NSString stringWithFormat:__VA_ARGS__])
+
 @interface NSError (MantleXMLExtension)
 
 /**
@@ -20,35 +22,19 @@
 + (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code;
 
 /**
- * Create NSError with error code and reason
+ * Create NSError with error code and userInfo.
  *
- * @param code   Error code
- * @param reason Error reason
- * @return instance
- */
-+ (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code reason:(NSString* _Nonnull)reason;
-
-/**
- * Create NSError with error code and reason, additional informations.
- *
- * @param code            Error code
- * @param reason          Error reason
- * @param additionalInfo  Additional informations to include in userInfo.
+ * @param code        Error code
+ * @param userInfo    An userInfo excluding LocalizedDescription. LocalizedDescription will be added automatically.
  * @return instance
  */
 + (instancetype _Nonnull)mxe_errorWithMXEErrorCode:(MXEErrorCode)code
-                                            reason:(NSString* _Nonnull)reason
-                                    additionalInfo:(NSDictionary* _Nullable)additionalInfo;
+                                          userInfo:(NSDictionary* _Nullable)userInfo;
 @end
 
-static inline void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSString* _Nullable reason,
-                            NSDictionary* _Nullable additionalInfo)
+static inline void setError(NSError* _Nullable* _Nullable error, MXEErrorCode code, NSDictionary* _Nullable userInfo)
 {
     if (error) {
-        if (reason) {
-            *error = [NSError mxe_errorWithMXEErrorCode:code reason:reason additionalInfo:additionalInfo];
-        } else {
-            *error = [NSError mxe_errorWithMXEErrorCode:code];
-        }
+        *error = [NSError mxe_errorWithMXEErrorCode:code userInfo:userInfo];
     }
 }

@@ -8,14 +8,13 @@
 
 #import "MXETFilterModel.h"
 
-@implementation MXETFilterChildModel
+@implementation MXETFilterModel
 
 #pragma mark - MXEXmlSerializing
 
 + (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey
 {
-    return @{ @"userName" : @"data.user",
-              @"attribute" : MXEXmlAttribute(@"", @"attribute") };
+    return @{ @"node" : [MXETFilterChildModel.class xmlKeyPathsByPropertyKey].allValues };
 }
 
 + (NSString* _Nonnull)xmlRootElementName
@@ -25,14 +24,14 @@
 
 @end
 
-@implementation MXETFilterModel
+@implementation MXETFilterChildModel
 
 #pragma mark - MXEXmlSerializing
 
 + (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey
 {
-    return @{ @"node" : @[ MXEXmlAttribute(@"", @"attribute"),
-                           @"data.user" ] };
+    return @{ @"userName" : @"data.user",
+              @"attribute" : MXEXmlAttribute(@"", @"attribute") };
 }
 
 + (NSString* _Nonnull)xmlRootElementName
