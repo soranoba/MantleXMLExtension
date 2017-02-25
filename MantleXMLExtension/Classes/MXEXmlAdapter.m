@@ -34,11 +34,10 @@
 #import <objc/runtime.h>
 
 #import "MXEXmlAdapter.h"
+#import "MXEXmlParser.h"
 #import "NSError+MantleXMLExtension.h"
 
-NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-
-@interface MXEXmlAdapter () <NSXMLParserDelegate>
+@interface MXEXmlAdapter ()
 
 @property (nonatomic, nonnull, strong) Class<MXEXmlSerializing> modelClass;
 /// A cached copy of the return value of +XmlKeyPathsByPropertyKey
@@ -47,12 +46,6 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
 @property (nonatomic, nonnull, copy) NSSet<NSString*>* propertyKeys;
 /// A cached copy of the return value of -valueTransforersForModelClass:
 @property (nonatomic, nonnull, copy) NSDictionary* valueTransformersByPropertyKey;
-
-/// A stack of MXEXmlNode to use when parsing XML.
-/// First object is a top level node.
-@property (nonatomic, nonnull, strong) NSMutableArray<MXEMutableXmlNode*>* xmlParseStack;
-/// It is user error that occurred during parse XML.
-@property (nonatomic, nullable, strong) NSError* parseError;
 
 @end
 
@@ -73,7 +66,6 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
     if (self = [super init]) {
         self.modelClass = modelClass;
         self.xmlKeyPathsByPropertyKey = [modelClass xmlKeyPathsByPropertyKey];
-        self.xmlParseStack = [NSMutableArray array];
         self.propertyKeys = [self.modelClass propertyKeys];
         self.valueTransformersByPropertyKey = [self.class valueTransformersForModelClass:modelClass];
 
@@ -131,27 +123,11 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         return nil;
     }
 
-    NSXMLParser* parser = [[NSXMLParser alloc] initWithData:xmlData];
-    parser.delegate = self;
-    if (![parser parse]) {
-        if (error) {
-            if (parser.parserError.code == NSXMLParserDelegateAbortedParseError) {
-                *error = self.parseError;
-            } else {
-                *error = parser.parserError;
-            }
-        }
+    MXEXmlNode* rootNode = [MXEXmlParser xmlNodeWithData:xmlData error:error];
+    if (!rootNode) {
         return nil;
     }
-
-    NSAssert(self.xmlParseStack.count == 1, @"The number of elements of xmlParseStack MUST be 1");
-
-    MXEXmlNode* root = [self.xmlParseStack lastObject];
-    NSAssert([root.elementName isEqualToString:[self.modelClass xmlRootElementName]],
-             @"Top level node MUST be specified element name (%@).",
-             [self.modelClass xmlRootElementName]);
-
-    return [self modelFromXmlNode:root error:error];
+    return [self modelFromXmlNode:rootNode error:error];
 }
 
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
@@ -174,15 +150,12 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
         return nil;
     }
 
-    NSString* xmlDeclaration = nil;
     if ([model.class respondsToSelector:@selector(xmlDeclaration)]) {
-        xmlDeclaration = [model.class xmlDeclaration];
+        NSString* xmlDeclaration = [model.class xmlDeclaration];
+        return [MXEXmlParser dataWithXmlNode:root declaration:xmlDeclaration error:error];
     } else {
-        xmlDeclaration = MXEXmlDeclarationDefault;
+        return [MXEXmlParser dataWithXmlNode:root error:error];
     }
-
-    NSString* responseStr = [xmlDeclaration stringByAppendingString:[root toString]];
-    return [responseStr dataUsingEncoding:[self.class xmlDeclarationToEncoding:xmlDeclaration]];
 }
 
 #pragma mark - Utility
@@ -206,92 +179,6 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
             return NSOrderedDescending;
         }
     }];
-}
-
-/**
- * Get NSStringEncoding from xmlDeclaration.
- *
- * @param xmlDeclaration string of XML declaration
- * @return Encoding setting written in XML declaration
- */
-+ (NSStringEncoding)xmlDeclarationToEncoding:(NSString*)xmlDeclaration
-{
-    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"encoding=[\"'](.*)[\"']"
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:nil];
-    NSTextCheckingResult* match = [regex firstMatchInString:xmlDeclaration
-                                                    options:0
-                                                      range:NSMakeRange(0, xmlDeclaration.length)];
-
-    NSRange range = [match rangeAtIndex:1];
-    NSString* encoding = [[xmlDeclaration substringWithRange:range] lowercaseString];
-
-    if ([encoding isEqualToString:@"shift_jis"]) {
-        return NSShiftJISStringEncoding;
-    } else if ([encoding isEqualToString:@"euc-jp"]) {
-        return NSJapaneseEUCStringEncoding;
-    } else if ([encoding isEqualToString:@"utf-16"]) {
-        return NSUTF16StringEncoding;
-    } else {
-        return NSUTF8StringEncoding; // default.
-    }
-}
-
-#pragma mark - NSXMLParserDelegate
-
-- (void)parserDidStartDocument:(NSXMLParser* _Nonnull)parser
-{
-    [self.xmlParseStack removeAllObjects];
-    self.parseError = nil;
-}
-
-- (void)parser:(NSXMLParser* _Nonnull)parser
-    didStartElement:(NSString* _Nonnull)elementName
-       namespaceURI:(NSString* _Nullable)namespaceURI
-      qualifiedName:(NSString* _Nullable)qName
-         attributes:(NSDictionary<NSString*, NSString*>* _Nonnull)attributeDict
-{
-    if (self.xmlParseStack.count == 0) {
-        if (![[self.modelClass xmlRootElementName] isEqualToString:elementName]) {
-            NSString* reason = format(@"Element name of root node expected %@, but got %@",
-                                      [self.modelClass xmlRootElementName], elementName);
-            self.parseError = [NSError mxe_errorWithMXEErrorCode:MXEErrorElementNameDoesNotMatch
-                                                        userInfo:@{ NSLocalizedFailureReasonErrorKey : reason }];
-            [parser abortParsing];
-        }
-    }
-    MXEMutableXmlNode* node = [[MXEMutableXmlNode alloc] initWithElementName:elementName
-                                                                  attributes:attributeDict
-                                                                       value:nil];
-    [self.xmlParseStack addObject:node];
-}
-
-- (void)parser:(NSXMLParser* _Nonnull)parser foundCharacters:(NSString* _Nonnull)string
-{
-    MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
-
-    // NOTE: Ignore character string when child node and character string are mixed.
-    if (!node.hasChildren) {
-        node.value = node.value ? [node.value stringByAppendingString:string] : string;
-    }
-}
-
-- (void)parser:(NSXMLParser* _Nonnull)parser
-    didEndElement:(NSString* _Nonnull)elementName
-     namespaceURI:(NSString* _Nullable)namespaceURI
-    qualifiedName:(NSString* _Nullable)qName
-{
-    MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
-    if (!node.hasChildren) {
-        node.value = [node.value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    }
-
-    if (self.xmlParseStack.count > 1) {
-        [self.xmlParseStack removeLastObject];
-
-        MXEMutableXmlNode* parentNode = [self.xmlParseStack lastObject];
-        [parentNode addChild:node];
-    }
 }
 
 #pragma mark - License Github

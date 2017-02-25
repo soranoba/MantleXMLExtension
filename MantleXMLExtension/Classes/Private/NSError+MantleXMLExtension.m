@@ -47,6 +47,10 @@ NSString* _Nonnull const MXEErrorInputDataKey = @"MXEErrorInputDataKey";
             return @"The element name of the XML Node is different from defined one in the model class";
         case MXEErrorInvalidInputData:
             return @"Transformation failed, because input data is invalid";
+        case MXEErrorInvalidXmlDeclaration:
+            return @"Input a xml declaration is invalid format";
+        case MXEErrorNotSupportedEncoding:
+            return @"MantleXMLExtension does not support the encoding";
         default:
             return @"Unknown error";
     }

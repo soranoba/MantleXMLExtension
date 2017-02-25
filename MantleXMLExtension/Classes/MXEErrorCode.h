@@ -16,6 +16,10 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
     MXEErrorElementNameDoesNotMatch,
     /// There was an input data that is different from the expected type.
     MXEErrorInvalidInputData,
+    /// Input a xml declaration is invalid format.
+    MXEErrorInvalidXmlDeclaration,
+    /// MantleXMLExtension does not support the encoding.
+    MXEErrorNotSupportedEncoding,
 };
 
 /// The domain for errors originating from MantleXMLExtension
