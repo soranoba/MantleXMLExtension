@@ -27,6 +27,11 @@
     return @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 }
 
++ (Class _Nullable)classForParsingXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+{
+    return self.class;
+}
+
 #pragma mark - NSObject (Override)
 
 - (BOOL)isEqual:(id _Nullable)object

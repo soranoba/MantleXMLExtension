@@ -51,6 +51,8 @@ NSString* _Nonnull const MXEErrorInputDataKey = @"MXEErrorInputDataKey";
             return @"Input a xml declaration is invalid format";
         case MXEErrorNotSupportedEncoding:
             return @"MantleXMLExtension does not support the encoding";
+        case MXEErrorNoConversionTarget:
+            return @"There is no target to convert";
         default:
             return @"Unknown error";
     }

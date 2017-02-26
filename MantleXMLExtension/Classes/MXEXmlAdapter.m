@@ -39,7 +39,7 @@
 
 @interface MXEXmlAdapter ()
 
-@property (nonatomic, nonnull, strong) Class<MXEXmlSerializing> modelClass;
+@property (nonatomic, nonnull, strong) Class modelClass;
 /// A cached copy of the return value of +XmlKeyPathsByPropertyKey
 @property (nonatomic, nonnull, copy) NSDictionary* xmlKeyPathsByPropertyKey;
 /// A cached copy of the return value of +propertyKeys
@@ -227,6 +227,24 @@
                         format(@"%@ expected elementName to be %@, but got %@",
                                self.modelClass, [self.modelClass xmlRootElementName], rootXmlNode.elementName) });
         return nil;
+    }
+
+    if ([self.modelClass respondsToSelector:@selector(classForParsingXmlNode:)]) {
+        Class class = [self.modelClass classForParsingXmlNode:rootXmlNode];
+        if (class == nil) {
+            setError(error, MXEErrorNoConversionTarget,
+                     @{ NSLocalizedFailureReasonErrorKey :
+                            format(@"%@ # classForParsingXmlNode returns nil", self.modelClass) });
+            return nil;
+        }
+
+        if (class != self.modelClass) {
+            NSAssert([class conformsToProtocol:@protocol(MXEXmlSerializing)],
+                     (format(@"classForParsingXmlNode MUST return MAEArraySerializing MTLModel class. but got %@", class)));
+
+            MXEXmlAdapter* otherAdapter = [[self.class alloc] initWithModelClass:class];
+            return [otherAdapter modelFromXmlNode:rootXmlNode error:error];
+        }
     }
 
     NSMutableDictionary* dictionaryValue = [NSMutableDictionary dictionary];

@@ -350,5 +350,81 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect(error.code).to(equal(MXEErrorInvalidXmlDeclaration));
         });
     });
+
+    describe(@"classForParsingXmlNode:", ^{
+        it(@"returns the model specified by classForParsingXmlNode:", ^{
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock classForParsingXmlNode:OCMOCK_ANY]).andReturn(MXETUser.class);
+            OCMStub([mock xmlRootElementName]).andReturn(@"user");
+
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<user first_name=\"Asada\" last_name=\"Ai\">"
+                               @"  <age>20</age>"
+                               @"  <sex>Woman</sex>"
+                               @"</user>";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+            __block NSError* error = nil;
+            __block id model;
+            expect(model = [MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
+            expect(error).to(beNil());
+            expect([model isMemberOfClass:MXETUser.class]).to(equal(YES));
+
+            MXETUser* user = model;
+            expect(user.firstName).to(equal(@"Asada"));
+            expect(user.lastName).to(equal(@"Ai"));
+        });
+
+        it(@"returns nil, if own xmlRootElementName is different from that of the specified class", ^{
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock classForParsingXmlNode:OCMOCK_ANY]).andReturn(MXETUser.class);
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<user first_name=\"Asada\" last_name=\"Ai\">"
+                               @"  <age>20</age>"
+                               @"  <sex>Woman</sex>"
+                               @"</user>";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+            __block NSError* error = nil;
+            expect([MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlData:xmlData error:&error]).to(beNil());
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorElementNameDoesNotMatch));
+        });
+
+        it(@"can returns model, if classForParsingXmlNode: returns itself class", ^{
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock classForParsingXmlNode:OCMOCK_ANY]).andReturn(MXETSampleModel.class);
+
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<response />";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+            __block NSError* error = nil;
+            __block id model;
+            expect(model = [MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
+            expect(error).to(beNil());
+            expect([model isMemberOfClass:MXETSampleModel.class]).to(equal(YES));
+        });
+
+        it(@"returns nil, if classForParsingXmlNode: returns nil", ^{
+            __block id returnValue = nil;
+
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock classForParsingXmlNode:OCMOCK_ANY]).andDo(^(NSInvocation* invocation) {
+                [invocation setReturnValue:&returnValue];
+            });
+
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<response />";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+            __block NSError* error = nil;
+            expect([MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlData:xmlData error:&error]).to(beNil());
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorNoConversionTarget));
+        });
+    });
 }
 QuickSpecEnd

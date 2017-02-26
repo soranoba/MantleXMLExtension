@@ -107,6 +107,16 @@
  * default: MXEXmlDeclarationDefault
  */
 + (NSString* _Nonnull)xmlDeclaration;
+
+/**
+ * If you want to use different classes based on parse data, you can use this.
+ *
+ * @param xmlNode   A xml node.
+ * @return It returns itself or another MXEXmlSerializing class.
+ *         If it returns nil, convertion will be fail.
+ */
++ (Class _Nullable)classForParsingXmlNode:(MXEXmlNode* _Nonnull)xmlNode;
+
 @end
 
 @interface MXEXmlAdapter : NSObject
