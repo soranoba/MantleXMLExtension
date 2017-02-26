@@ -9,7 +9,7 @@
 #import "MXEXmlParser.h"
 #import "NSError+MantleXMLExtension.h"
 
-NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
 @interface MXEXmlParser () <NSXMLParserDelegate>
 
@@ -44,6 +44,9 @@ NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0\" enco
                               error:(NSError* _Nullable* _Nullable)error
 {
     NSStringEncoding encoding = [self xmlDeclarationToEncoding:xmlDeclaration error:error];
+    if (encoding == 0) {
+        return nil;
+    }
     NSString* xmlString = [xmlDeclaration stringByAppendingString:xmlNode.toString];
     return [xmlString dataUsingEncoding:encoding];
 }

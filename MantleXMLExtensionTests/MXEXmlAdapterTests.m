@@ -131,7 +131,7 @@ QuickSpecBegin(MXEXmlAdapterTests)
     });
 
     describe(@"serialize / deserialize", ^{
-        it(@"sample (1)", ^{
+        it(@"supported basic type with default transformers", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                                @"<response status=\"ok\">"
                                @"<summary>"
@@ -197,21 +197,69 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect(gotXmlData).to(equal(xmlData));
         });
 
-        it(@"returns model that does not have node, if the specified elements does not exist", ^{
-            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               @"<root />";
-            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
-
-            __block MXETFilterModel* model;
+        it(@"returns error, if input data is nil", ^{
             __block NSError* error = nil;
-            expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
-            expect(model.node).to(beNil());
+
+            void (^check)() = [^{
+                expect(error).notTo(beNil());
+                expect(error.domain).to(equal(MXEErrorDomain));
+                expect(error.code).to(equal(MXEErrorNilInputData));
+            } copy];
+
+            error = nil;
+            expect([MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlData:nil error:&error]).to(beNil());
+            check();
+
+            error = nil;
+            expect([MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlNode:nil error:&error]).to(beNil());
+            check();
+
+            error = nil;
+            expect([MXEXmlAdapter xmlDataFromModel:nil error:&error]).to(beNil());
+            check();
+
+            error = nil;
+            expect([MXEXmlAdapter xmlNodeFromModel:nil error:&error]).to(beNil());
+            check();
+
+            MXEXmlAdapter* adapter = [[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class];
+
+            error = nil;
+            expect([adapter modelFromXmlData:nil error:&error]).to(beNil());
+            check();
+
+            error = nil;
+            expect([adapter modelFromXmlNode:nil error:&error]).to(beNil());
+            check();
+
+            error = nil;
+            expect([adapter xmlDataFromModel:nil error:&error]).to(beNil());
+            check();
+
+            error = nil;
+            expect([adapter xmlNodeFromModel:nil error:&error]).to(beNil());
+            check();
+        });
+
+        it(@"returns error, if element name of root node is not match specified one", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<root />";
+            NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding];
+
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock xmlRootElementName]).andReturn(@"root");
+
+            __block NSError* error = nil;
+            expect([MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlData:data error:&error]).notTo(beNil());
             expect(error).to(beNil());
 
-            __block NSData* gotData;
-            expect(gotData = [MXEXmlAdapter xmlDataFromModel:model error:&error]).notTo(beNil());
-            expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
-            expect(error).to(beNil());
+            [mock stopMocking];
+
+            error = nil;
+            expect([MXEXmlAdapter modelOfClass:MXETSampleModel.class fromXmlData:data error:&error]).to(beNil());
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorElementNameDoesNotMatch));
         });
     });
 
@@ -243,6 +291,63 @@ QuickSpecBegin(MXEXmlAdapterTests)
             __block MXETFilterModel* model;
             __block NSError* error = nil;
             expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
+        });
+
+        it(@"returns model that does not have node, if the specified elements does not exist", ^{
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<root />";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+
+            __block MXETFilterModel* model;
+            __block NSError* error = nil;
+            expect(model = [MXEXmlAdapter modelOfClass:MXETFilterModel.class fromXmlData:xmlData error:&error]).notTo(beNil());
+            expect(model.node).to(beNil());
+            expect(error).to(beNil());
+
+            __block NSData* gotData;
+            expect(gotData = [MXEXmlAdapter xmlDataFromModel:model error:&error]).notTo(beNil());
+            expect([[NSString alloc] initWithData:gotData encoding:NSUTF8StringEncoding]).to(equal(xmlStr));
+            expect(error).to(beNil());
+        });
+    });
+
+    describe(@"xmlDeclaration", ^{
+        it(@"can specify a xml declaration", ^{
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock xmlDeclaration]).andReturn(@"<?xml version=\"1.0\" encoding=\"shift_jis\"?>");
+
+            NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"shift_jis\"?>"
+                                       @"<response />";
+
+            __block NSData* data;
+            __block NSError* error = nil;
+            expect(data = [MXEXmlAdapter xmlDataFromModel:[MXETSampleModel new] error:&error]).notTo(beNil());
+            expect([[NSString alloc] initWithData:data encoding:NSShiftJISStringEncoding]).to(equal(expectedXmlStr));
+        });
+
+        it(@"use default declaration, if xmlDeclaration is not defined", ^{
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock respondsToSelector:@selector(xmlDeclaration)]).andReturn(OCMOCK_VALUE(NO));
+
+            NSString* expectedXmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                       @"<response />";
+
+            __block NSData* data;
+            __block NSError* error = nil;
+            expect(data = [MXEXmlAdapter xmlDataFromModel:[MXETSampleModel new] error:&error]).notTo(beNil());
+            expect([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]).to(equal(expectedXmlStr));
+        });
+
+        it(@"returns error, if xmlDeclaration is invalid", ^{
+            id mock = OCMClassMock(MXETSampleModel.class);
+            OCMStub([mock xmlDeclaration]).andReturn(@"<?xml version=\"1.0\"");
+
+            __block NSData* data;
+            __block NSError* error = nil;
+            expect(data = [MXEXmlAdapter xmlDataFromModel:[MXETSampleModel new] error:&error]).to(beNil());
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidXmlDeclaration));
         });
     });
 }

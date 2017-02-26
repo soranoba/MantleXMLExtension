@@ -20,6 +20,9 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
     MXEErrorInvalidXmlDeclaration,
     /// MantleXMLExtension does not support the encoding.
     MXEErrorNotSupportedEncoding,
+
+    MXEErrorNil __attribute__((unavailable("Replaced by MXEErrorNilInputData"))),
+    MXEErrorInvalidRootNode __attribute((unavailable("Replaced by MXEErrorElementNameDoesNotMatch"))),
 };
 
 /// The domain for errors originating from MantleXMLExtension

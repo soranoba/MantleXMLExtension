@@ -22,6 +22,11 @@
     return @"response";
 }
 
++ (NSString* _Nonnull)xmlDeclaration
+{
+    return @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+}
+
 #pragma mark - NSObject (Override)
 
 - (BOOL)isEqual:(id _Nullable)object

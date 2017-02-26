@@ -17,8 +17,6 @@
 #import "MXEXmlNode.h"
 #import "MXEXmlValuePath.h"
 
-extern NSString* _Nonnull const MXEXmlDeclarationDefault;
-
 @protocol MXEXmlSerializing <MTLModel>
 @required
 
@@ -123,29 +121,51 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  */
 - (instancetype _Nullable)initWithModelClass:(Class _Nonnull)modelClass;
 
-#pragma mark - Conversion between XML and Model
+#pragma mark - Public Methods
 
 /**
  * Convert xml to model
  *
- * @param modelClass MXEXmlSerializing model class
- * @param xmlData    XML data
- * @param error      If it return nil, error information is saved here.
- * @return If conversion is success, return model object. Otherwise, return nil.
+ * @param modelClass   A MXEXmlSerializing model class
+ * @param xmlData      XML data
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns model object. Otherwise, it returns nil.
  */
 + (id _Nullable)modelOfClass:(Class _Nonnull)modelClass
                  fromXmlData:(NSData* _Nullable)xmlData
                        error:(NSError* _Nullable* _Nullable)error;
 
 /**
- * Convert model to xml
+ * Convert xmlNode to model
  *
- * @param model MXEXmlSerializing model object
- * @param error If it return nil, error information is saved here.
- * @return If conversion is success, return xml data. Otherwise, return nil.
+ * @param modelClass   A MXEXmlSerializing model class
+ * @param rootXmlNode  A xml node
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns model object. Otherwise, it returns nil.
+ */
++ (id _Nullable)modelOfClass:(Class _Nonnull)modelClass
+                 fromXmlNode:(MXEXmlNode* _Nullable)rootXmlNode
+                       error:(NSError* _Nullable* _Nullable)error;
+
+/**
+ * Convert model to xmlData
+ *
+ * @param model        A MXEXmlSerializing model object
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns xml data. Otherwise, it returns nil.
  */
 + (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
+
+/**
+ * Convert model to xmlNode
+ *
+ * @param model        A MXEXmlSerializing model object
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns xml node. Otherwise, it returns nil.
+ */
++ (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nullable)model
+                                    error:(NSError* _Nullable* _Nullable)error;
 
 /**
  * @see modelOfClass:fromXmlData:error:
@@ -154,18 +174,22 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
                            error:(NSError* _Nullable* _Nullable)error;
 
 /**
+ * @see modelOfClass:fromXmlNode:error:
+ */
+- (id _Nullable)modelFromXmlNode:(MXEXmlNode* _Nullable)xmlNode
+                           error:(NSError* _Nullable* _Nullable)error;
+
+/**
  * @see xmlDataFromModel:error:
  */
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
 
-#pragma mark - Conversion between XML and MXEXmlNode
-
-- (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nonnull)model
+/**
+ * @see xmlNodeFromModel:error:
+ */
+- (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nullable)model
                                     error:(NSError* _Nullable* _Nullable)error;
-
-- (id<MXEXmlSerializing> _Nullable)modelFromXmlNode:(MXEXmlNode* _Nonnull)rootXmlNode
-                                              error:(NSError* _Nullable* _Nullable)error;
 
 @end
 

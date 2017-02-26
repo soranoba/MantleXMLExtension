@@ -15,7 +15,7 @@
 
 QuickSpecBegin(MXEXmlParserTests)
 {
-    describe(@"XMLParser", ^{
+    describe(@"xmlNodeWithData:error:", ^{
         it(@"can parse value, child nodes and attributes", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                                @"<response status=\"OK\">\n"
@@ -88,6 +88,20 @@ QuickSpecBegin(MXEXmlParserTests)
             expect(error).to(beNil());
         });
 
+        it(@"can parse escaped characters", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response status=\"&amp;&quot;&lt;&gt;&apos;\">&amp;&quot;&lt;&gt;&apos;</response>";
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                   attributes:@{ @"status" : @"&\"<>'" }
+                                                                        value:@"&\"<>'"];
+
+            __block MXEXmlNode* node;
+            __block NSError* error = nil;
+            expect(node = [MXEXmlParser xmlNodeWithData:[str dataUsingEncoding:NSUTF8StringEncoding] error:&error])
+                .to(equal(expectedObj));
+            expect(error).to(beNil());
+        });
+
         it(@"can parse correctly, even if parser:foundCharacters: is called more than once", ^{
             NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                             @"<response status=\"OK\">  Hello, \"World\"!!  </response>";
@@ -150,6 +164,45 @@ QuickSpecBegin(MXEXmlParserTests)
                 .to(beNil());
             expect(error).notTo(beNil());
             expect(error.domain).to(equal(NSXMLParserErrorDomain));
+        });
+    });
+
+    describe(@"dataWithXmlNode:declaration:error:", ^{
+        MXEXmlNode* node = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                        attributes:@{ @"status" : @"OK" }
+                                                             value:@"Hello, \"World\"!!"];
+
+        it(@"returns nil, if xml declaration is invalid", ^{
+            __block NSError* error = nil;
+            expect([MXEXmlParser dataWithXmlNode:node declaration:@"<?xml version" error:&error]).to(beNil());
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidXmlDeclaration));
+        });
+
+        it(@"can returns NSData", ^{
+            NSString* expectedStr = @"<?xml version=\"1.0\" encoding=\"shift_jis\"?>"
+                                    @"<response status=\"OK\">Hello, &quot;World&quot;!!</response>";
+
+            __block NSData* data = nil;
+            __block NSError* error = nil;
+            expect(data = [MXEXmlParser dataWithXmlNode:node
+                                            declaration:@"<?xml version=\"1.0\" encoding=\"shift_jis\"?>"
+                                                  error:&error])
+                .notTo(beNil());
+            expect([[NSString alloc] initWithData:data encoding:NSShiftJISStringEncoding]).to(equal(expectedStr));
+            expect(error).to(beNil());
+        });
+
+        it(@"use default declaration, if it does not specify declaration", ^{
+            NSString* expectedStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                                    @"<response status=\"OK\">Hello, &quot;World&quot;!!</response>";
+
+            __block NSData* data = nil;
+            __block NSError* error = nil;
+            expect(data = [MXEXmlParser dataWithXmlNode:node error:&error]).notTo(beNil());
+            expect([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]).to(equal(expectedStr));
+            expect(error).to(beNil());
         });
     });
 
