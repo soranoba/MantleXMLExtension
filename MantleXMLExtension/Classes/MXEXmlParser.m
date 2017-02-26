@@ -75,8 +75,8 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 /**
  * Get NSStringEncoding from xmlDeclaration.
  *
- * @param xmlDeclaration string of XML declaration
- * @param error
+ * @param xmlDeclaration   A string of XML declaration
+ * @param error            If it return nil, error information is saved here.
  * @return If the xmlDeclaration is invalid, it returns 0.
  *         Otherwise, it returns encoding setting written in XML declaration
  */

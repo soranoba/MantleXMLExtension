@@ -1,6 +1,9 @@
 language: objective-c
 osx_image: xcode8.2
-script: "make ci"
+script: make ci
 notifications:
   email:
     - soranoba@gmail.com
+env:
+  matrix:
+    secure: qXs8Mt59+eHa2DpBK0kj3H9ZV8NEKYXy35bRGN67WMl0CYiDSdR7AYtPBRjh+ZUyIQLmuMbV+a4RD7o1tsnGRpw5JuTSkRCP18Z/LyAitDVzQ8IM8uTKI5fuHXWyj5Vu4gTtWTyBwVa3bwVfu8Tv9LB8NQBlKCjaK3cs3zCr79BDvTOg1jqSilt3B1BDolMo5BwQ/9V+tVuKj0shZe8JAXU5ZOrHCF3I72/99ecbuHagYQF0lQaOUPkHnq7jYzLWH9yhaHckhcRTf04+H9OPvNZPjBO8tTBaC6uACzWMPcLMiUtz6tyA9PUW1EinWleMMI787xUZzSrLJMvD9wm8bGy1K88skjlDRU7FlklKcIMjXftz3uovSjISvLOcz953ohhFbrIdlZtnpfUAv31N1jbCz0pUb9mO8Fh6l3DKcdNiCoGSsrcO1a6o7Z4WXKMw9AOFH8CePWCR/jU0+1+AauOFV1Crk0Uanus5JVxAXV6cVfLK4pfLwIAySkXUCAt+tX/lLe89zxX66/GN8saqkA6arbFHZrzlFIExlplUKo9/q9Vbyf3dvC+qStlJD60VKil9VOYNiyGPPJH3SAkdo+0ryQFvgzry5RhoqlShepkGK6x0dy1ko0NvjtPe7849ZnOvGBXiK4OKZagsSG/0EMBmFfudSFnVuRTi2HeH2kw=

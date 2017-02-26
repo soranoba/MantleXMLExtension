@@ -7,150 +7,291 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		826A9804BB27E5742444AC9E /* Pods_MantleXMLExtensionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */; };
-		A409DF131E58BBA700C136C4 /* MXEXmlAdapter+TransformeresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DF121E58BBA700C136C4 /* MXEXmlAdapter+TransformeresTests.m */; };
-		A409DF191E615D3300C136C4 /* MXEXmlParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DF181E615D3300C136C4 /* MXEXmlParserTests.m */; };
-		A41C79D51DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */; };
-		A41C79D71DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */; };
-		A456FC781E4B695D002EA7B0 /* MXETFilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */; };
-		A456FC7E1E50890D002EA7B0 /* MXEXmlNodePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A456FC7D1E50890D002EA7B0 /* MXEXmlNodePathTests.m */; };
-		A456FC801E50CED5002EA7B0 /* MXEXmlChildNodePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A456FC7F1E50CED5002EA7B0 /* MXEXmlChildNodePathTests.m */; };
-		A456FC861E51F7E9002EA7B0 /* MXEXmlValuePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A456FC851E51F7E9002EA7B0 /* MXEXmlValuePathTests.m */; };
-		A4BCF37E1DE0162F00EF672C /* MXETUsersResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */; };
-		A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */; };
-		A4BCF3931DE04F9B00EF672C /* MXETSampleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */; };
-		A4BCF3981DE0AD8200EF672C /* MXEXmlNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */; };
-		A84EC6D81DF59B9A0001FC73 /* MXETTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A84EC6D71DF59B9A0001FC73 /* MXETTypeModel.m */; };
+		A40610851E6350B80074F00D /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409DFFF1E63092300C136C4 /* Mantle.framework */; };
+		A40610861E64775F0074F00D /* Quick.framework in Resources */ = {isa = PBXBuildFile; fileRef = A409E0051E6322C500C136C4 /* Quick.framework */; };
+		A40610871E64775F0074F00D /* OCMock.framework in Resources */ = {isa = PBXBuildFile; fileRef = A409E0031E6322B700C136C4 /* OCMock.framework */; };
+		A40610881E64775F0074F00D /* Nimble.framework in Resources */ = {isa = PBXBuildFile; fileRef = A409E0011E6322AC00C136C4 /* Nimble.framework */; };
+		A40610891E64775F0074F00D /* Mantle.framework in Resources */ = {isa = PBXBuildFile; fileRef = A409DFFF1E63092300C136C4 /* Mantle.framework */; };
+		A409DFAD1E63007500C136C4 /* MantleXMLExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DF9F1E63007500C136C4 /* MantleXMLExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFBD1E6300B800C136C4 /* MXEXmlAdapter+TransformeresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFB41E6300B800C136C4 /* MXEXmlAdapter+TransformeresTests.m */; };
+		A409DFBE1E6300B800C136C4 /* MXEXmlAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFB51E6300B800C136C4 /* MXEXmlAdapterTests.m */; };
+		A409DFBF1E6300B800C136C4 /* MXEXmlArrayPathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFB61E6300B800C136C4 /* MXEXmlArrayPathTests.m */; };
+		A409DFC01E6300B800C136C4 /* MXEXmlAttributePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFB71E6300B800C136C4 /* MXEXmlAttributePathTests.m */; };
+		A409DFC11E6300B800C136C4 /* MXEXmlChildNodePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFB81E6300B800C136C4 /* MXEXmlChildNodePathTests.m */; };
+		A409DFC21E6300B800C136C4 /* MXEXmlNodePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFB91E6300B800C136C4 /* MXEXmlNodePathTests.m */; };
+		A409DFC31E6300B800C136C4 /* MXEXmlNodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFBA1E6300B800C136C4 /* MXEXmlNodeTests.m */; };
+		A409DFC41E6300B800C136C4 /* MXEXmlParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFBB1E6300B800C136C4 /* MXEXmlParserTests.m */; };
+		A409DFC51E6300B800C136C4 /* MXEXmlValuePathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFBC1E6300B800C136C4 /* MXEXmlValuePathTests.m */; };
+		A409DFD01E6300CB00C136C4 /* MXETFilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFC91E6300CB00C136C4 /* MXETFilterModel.m */; };
+		A409DFD11E6300CB00C136C4 /* MXETSampleModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFCB1E6300CB00C136C4 /* MXETSampleModel.m */; };
+		A409DFD21E6300CB00C136C4 /* MXETTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFCD1E6300CB00C136C4 /* MXETTypeModel.m */; };
+		A409DFD31E6300CB00C136C4 /* MXETUsersResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFCF1E6300CB00C136C4 /* MXETUsersResponse.m */; };
+		A409DFE61E6300D700C136C4 /* MXEErrorCode.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFD41E6300D700C136C4 /* MXEErrorCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFE71E6300D700C136C4 /* MXEXmlAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFD51E6300D700C136C4 /* MXEXmlAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFE81E6300D700C136C4 /* MXEXmlAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFD61E6300D700C136C4 /* MXEXmlAdapter.m */; };
+		A409DFE91E6300D700C136C4 /* MXEXmlAdapter+Transformers.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFD71E6300D700C136C4 /* MXEXmlAdapter+Transformers.m */; };
+		A409DFEA1E6300D700C136C4 /* MXEXmlArrayPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFD81E6300D700C136C4 /* MXEXmlArrayPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFEB1E6300D700C136C4 /* MXEXmlArrayPath.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFD91E6300D700C136C4 /* MXEXmlArrayPath.m */; };
+		A409DFEC1E6300D700C136C4 /* MXEXmlAttributePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFDA1E6300D700C136C4 /* MXEXmlAttributePath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFED1E6300D700C136C4 /* MXEXmlAttributePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFDB1E6300D700C136C4 /* MXEXmlAttributePath.m */; };
+		A409DFEE1E6300D700C136C4 /* MXEXmlChildNodePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFDC1E6300D700C136C4 /* MXEXmlChildNodePath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFEF1E6300D700C136C4 /* MXEXmlChildNodePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFDD1E6300D700C136C4 /* MXEXmlChildNodePath.m */; };
+		A409DFF01E6300D700C136C4 /* MXEXmlNode.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFDE1E6300D700C136C4 /* MXEXmlNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFF11E6300D700C136C4 /* MXEXmlNode.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFDF1E6300D700C136C4 /* MXEXmlNode.m */; };
+		A409DFF21E6300D700C136C4 /* MXEXmlNodePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFE01E6300D700C136C4 /* MXEXmlNodePath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFF31E6300D700C136C4 /* MXEXmlNodePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFE11E6300D700C136C4 /* MXEXmlNodePath.m */; };
+		A409DFF41E6300D700C136C4 /* MXEXmlParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFE21E6300D700C136C4 /* MXEXmlParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFF51E6300D700C136C4 /* MXEXmlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFE31E6300D700C136C4 /* MXEXmlParser.m */; };
+		A409DFF61E6300D700C136C4 /* MXEXmlValuePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFE41E6300D700C136C4 /* MXEXmlValuePath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A409DFF71E6300D700C136C4 /* MXEXmlValuePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFE51E6300D700C136C4 /* MXEXmlValuePath.m */; };
+		A409DFFB1E6300EC00C136C4 /* NSError+MantleXMLExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = A409DFF91E6300EC00C136C4 /* NSError+MantleXMLExtension.h */; };
+		A409DFFC1E6300EC00C136C4 /* NSError+MantleXMLExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A409DFFA1E6300EC00C136C4 /* NSError+MantleXMLExtension.m */; };
+		A409E0001E63092300C136C4 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409DFFF1E63092300C136C4 /* Mantle.framework */; };
+		A409E0021E6322AC00C136C4 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409E0011E6322AC00C136C4 /* Nimble.framework */; };
+		A409E0041E6322B700C136C4 /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409E0031E6322B700C136C4 /* OCMock.framework */; };
+		A409E0061E6322C500C136C4 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409E0051E6322C500C136C4 /* Quick.framework */; };
+		A409E0081E63315C00C136C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409E0071E63315C00C136C4 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A409DFA71E63007500C136C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A4BCF3301DDFDE2C00EF672C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A409DF9C1E63007500C136C4;
+			remoteInfo = MantleXMLExtension;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		A409DF121E58BBA700C136C4 /* MXEXmlAdapter+TransformeresTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MXEXmlAdapter+TransformeresTests.m"; sourceTree = "<group>"; };
-		A409DF181E615D3300C136C4 /* MXEXmlParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlParserTests.m; sourceTree = "<group>"; };
-		A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlAttributePathTests.m; sourceTree = "<group>"; };
-		A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlArrayPathTests.m; sourceTree = "<group>"; };
-		A456FC761E4B695D002EA7B0 /* MXETFilterModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXETFilterModel.h; sourceTree = "<group>"; };
-		A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETFilterModel.m; sourceTree = "<group>"; };
-		A456FC7D1E50890D002EA7B0 /* MXEXmlNodePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlNodePathTests.m; sourceTree = "<group>"; };
-		A456FC7F1E50CED5002EA7B0 /* MXEXmlChildNodePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlChildNodePathTests.m; sourceTree = "<group>"; };
-		A456FC851E51F7E9002EA7B0 /* MXEXmlValuePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlValuePathTests.m; sourceTree = "<group>"; };
-		A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantleXMLExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4BCF36F1DDFEC6600EF672C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETUsersResponse.m; sourceTree = "<group>"; };
-		A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MXETUsersResponse.h; sourceTree = "<group>"; };
-		A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlAdapterTests.m; sourceTree = "<group>"; };
-		A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MantleXMLExtensionTests-Prefix.pch"; sourceTree = "<group>"; };
-		A4BCF3911DE04F7B00EF672C /* MXETSampleModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MXETSampleModel.h; sourceTree = "<group>"; };
-		A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETSampleModel.m; sourceTree = "<group>"; };
-		A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlNodeTests.m; sourceTree = "<group>"; };
-		A84EC6D61DF59B9A0001FC73 /* MXETTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXETTypeModel.h; sourceTree = "<group>"; };
-		A84EC6D71DF59B9A0001FC73 /* MXETTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXETTypeModel.m; sourceTree = "<group>"; };
-		F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MantleXMLExtensionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA06D942273418DD7BA511A8 /* Pods-MantleXMLExtensionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantleXMLExtensionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests.release.xcconfig"; sourceTree = "<group>"; };
-		FBBF0BAB1849359EBCC4F772 /* Pods-MantleXMLExtensionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MantleXMLExtensionTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A409DF9D1E63007500C136C4 /* MantleXMLExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MantleXMLExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A409DF9F1E63007500C136C4 /* MantleXMLExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MantleXMLExtension.h; sourceTree = "<group>"; };
+		A409DFA01E63007500C136C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A409DFA51E63007500C136C4 /* MantleXMLExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MantleXMLExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A409DFAC1E63007500C136C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A409DFB41E6300B800C136C4 /* MXEXmlAdapter+TransformeresTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MXEXmlAdapter+TransformeresTests.m"; sourceTree = "<group>"; };
+		A409DFB51E6300B800C136C4 /* MXEXmlAdapterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlAdapterTests.m; sourceTree = "<group>"; };
+		A409DFB61E6300B800C136C4 /* MXEXmlArrayPathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlArrayPathTests.m; sourceTree = "<group>"; };
+		A409DFB71E6300B800C136C4 /* MXEXmlAttributePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlAttributePathTests.m; sourceTree = "<group>"; };
+		A409DFB81E6300B800C136C4 /* MXEXmlChildNodePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlChildNodePathTests.m; sourceTree = "<group>"; };
+		A409DFB91E6300B800C136C4 /* MXEXmlNodePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlNodePathTests.m; sourceTree = "<group>"; };
+		A409DFBA1E6300B800C136C4 /* MXEXmlNodeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlNodeTests.m; sourceTree = "<group>"; };
+		A409DFBB1E6300B800C136C4 /* MXEXmlParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlParserTests.m; sourceTree = "<group>"; };
+		A409DFBC1E6300B800C136C4 /* MXEXmlValuePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlValuePathTests.m; sourceTree = "<group>"; };
+		A409DFC61E6300BE00C136C4 /* MantleXMLExtensionTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MantleXMLExtensionTests-Prefix.pch"; sourceTree = "<group>"; };
+		A409DFC81E6300CB00C136C4 /* MXETFilterModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETFilterModel.h; path = Models/MXETFilterModel.h; sourceTree = "<group>"; };
+		A409DFC91E6300CB00C136C4 /* MXETFilterModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETFilterModel.m; path = Models/MXETFilterModel.m; sourceTree = "<group>"; };
+		A409DFCA1E6300CB00C136C4 /* MXETSampleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETSampleModel.h; path = Models/MXETSampleModel.h; sourceTree = "<group>"; };
+		A409DFCB1E6300CB00C136C4 /* MXETSampleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETSampleModel.m; path = Models/MXETSampleModel.m; sourceTree = "<group>"; };
+		A409DFCC1E6300CB00C136C4 /* MXETTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETTypeModel.h; path = Models/MXETTypeModel.h; sourceTree = "<group>"; };
+		A409DFCD1E6300CB00C136C4 /* MXETTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETTypeModel.m; path = Models/MXETTypeModel.m; sourceTree = "<group>"; };
+		A409DFCE1E6300CB00C136C4 /* MXETUsersResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETUsersResponse.h; path = Models/MXETUsersResponse.h; sourceTree = "<group>"; };
+		A409DFCF1E6300CB00C136C4 /* MXETUsersResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETUsersResponse.m; path = Models/MXETUsersResponse.m; sourceTree = "<group>"; };
+		A409DFD41E6300D700C136C4 /* MXEErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEErrorCode.h; path = Classes/MXEErrorCode.h; sourceTree = "<group>"; };
+		A409DFD51E6300D700C136C4 /* MXEXmlAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlAdapter.h; path = Classes/MXEXmlAdapter.h; sourceTree = "<group>"; };
+		A409DFD61E6300D700C136C4 /* MXEXmlAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlAdapter.m; path = Classes/MXEXmlAdapter.m; sourceTree = "<group>"; };
+		A409DFD71E6300D700C136C4 /* MXEXmlAdapter+Transformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MXEXmlAdapter+Transformers.m"; path = "Classes/MXEXmlAdapter+Transformers.m"; sourceTree = "<group>"; };
+		A409DFD81E6300D700C136C4 /* MXEXmlArrayPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlArrayPath.h; path = Classes/MXEXmlArrayPath.h; sourceTree = "<group>"; };
+		A409DFD91E6300D700C136C4 /* MXEXmlArrayPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlArrayPath.m; path = Classes/MXEXmlArrayPath.m; sourceTree = "<group>"; };
+		A409DFDA1E6300D700C136C4 /* MXEXmlAttributePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlAttributePath.h; path = Classes/MXEXmlAttributePath.h; sourceTree = "<group>"; };
+		A409DFDB1E6300D700C136C4 /* MXEXmlAttributePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlAttributePath.m; path = Classes/MXEXmlAttributePath.m; sourceTree = "<group>"; };
+		A409DFDC1E6300D700C136C4 /* MXEXmlChildNodePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlChildNodePath.h; path = Classes/MXEXmlChildNodePath.h; sourceTree = "<group>"; };
+		A409DFDD1E6300D700C136C4 /* MXEXmlChildNodePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlChildNodePath.m; path = Classes/MXEXmlChildNodePath.m; sourceTree = "<group>"; };
+		A409DFDE1E6300D700C136C4 /* MXEXmlNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlNode.h; path = Classes/MXEXmlNode.h; sourceTree = "<group>"; };
+		A409DFDF1E6300D700C136C4 /* MXEXmlNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlNode.m; path = Classes/MXEXmlNode.m; sourceTree = "<group>"; };
+		A409DFE01E6300D700C136C4 /* MXEXmlNodePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlNodePath.h; path = Classes/MXEXmlNodePath.h; sourceTree = "<group>"; };
+		A409DFE11E6300D700C136C4 /* MXEXmlNodePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlNodePath.m; path = Classes/MXEXmlNodePath.m; sourceTree = "<group>"; };
+		A409DFE21E6300D700C136C4 /* MXEXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlParser.h; path = Classes/MXEXmlParser.h; sourceTree = "<group>"; };
+		A409DFE31E6300D700C136C4 /* MXEXmlParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlParser.m; path = Classes/MXEXmlParser.m; sourceTree = "<group>"; };
+		A409DFE41E6300D700C136C4 /* MXEXmlValuePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlValuePath.h; path = Classes/MXEXmlValuePath.h; sourceTree = "<group>"; };
+		A409DFE51E6300D700C136C4 /* MXEXmlValuePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlValuePath.m; path = Classes/MXEXmlValuePath.m; sourceTree = "<group>"; };
+		A409DFF91E6300EC00C136C4 /* NSError+MantleXMLExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+MantleXMLExtension.h"; path = "Classes/Private/NSError+MantleXMLExtension.h"; sourceTree = "<group>"; };
+		A409DFFA1E6300EC00C136C4 /* NSError+MantleXMLExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+MantleXMLExtension.m"; path = "Classes/Private/NSError+MantleXMLExtension.m"; sourceTree = "<group>"; };
+		A409DFFF1E63092300C136C4 /* Mantle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mantle.framework; path = Carthage/Build/iOS/Mantle.framework; sourceTree = "<group>"; };
+		A409E0011E6322AC00C136C4 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
+		A409E0031E6322B700C136C4 /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCMock.framework; path = Carthage/Build/iOS/OCMock.framework; sourceTree = "<group>"; };
+		A409E0051E6322C500C136C4 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		A409E0071E63315C00C136C4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A4BCF3681DDFEC6600EF672C /* Frameworks */ = {
+		A409DF991E63007500C136C4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				826A9804BB27E5742444AC9E /* Pods_MantleXMLExtensionTests.framework in Frameworks */,
+				A409E0081E63315C00C136C4 /* Foundation.framework in Frameworks */,
+				A409E0001E63092300C136C4 /* Mantle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A409DFA21E63007500C136C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A40610851E6350B80074F00D /* Mantle.framework in Frameworks */,
+				A409E0061E6322C500C136C4 /* Quick.framework in Frameworks */,
+				A409E0041E6322B700C136C4 /* OCMock.framework in Frameworks */,
+				A409E0021E6322AC00C136C4 /* Nimble.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A4BCF32F1DDFDE2C00EF672C = {
+		2C719C86E1BC09F9F20C0F0E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EA9637E886BB15C86946631C /* Frameworks */,
-				A4BCF36C1DDFEC6600EF672C /* MantleXMLExtensionTests */,
-				AA1B2A2DFC10CA1729817594 /* Pods */,
-				A4BCF3391DDFDE2C00EF672C /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		A4BCF3391DDFDE2C00EF672C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A4BCF36C1DDFEC6600EF672C /* MantleXMLExtensionTests */ = {
-			isa = PBXGroup;
-			children = (
-				A4BCF3801DE0168F00EF672C /* Models */,
-				A4BCF36F1DDFEC6600EF672C /* Info.plist */,
-				A4BCF3841DE0330200EF672C /* MXEXmlAdapterTests.m */,
-				A41C79D61DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m */,
-				A41C79D41DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m */,
-				A456FC7F1E50CED5002EA7B0 /* MXEXmlChildNodePathTests.m */,
-				A456FC7D1E50890D002EA7B0 /* MXEXmlNodePathTests.m */,
-				A4BCF3971DE0AD8200EF672C /* MXEXmlNodeTests.m */,
-				A456FC851E51F7E9002EA7B0 /* MXEXmlValuePathTests.m */,
-				A4BCF3861DE0353A00EF672C /* MantleXMLExtensionTests-Prefix.pch */,
-				A409DF121E58BBA700C136C4 /* MXEXmlAdapter+TransformeresTests.m */,
-				A409DF181E615D3300C136C4 /* MXEXmlParserTests.m */,
-			);
-			path = MantleXMLExtensionTests;
-			sourceTree = "<group>";
-		};
-		A4BCF3801DE0168F00EF672C /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				A456FC761E4B695D002EA7B0 /* MXETFilterModel.h */,
-				A456FC771E4B695D002EA7B0 /* MXETFilterModel.m */,
-				A4BCF3911DE04F7B00EF672C /* MXETSampleModel.h */,
-				A4BCF3921DE04F9B00EF672C /* MXETSampleModel.m */,
-				A84EC6D61DF59B9A0001FC73 /* MXETTypeModel.h */,
-				A84EC6D71DF59B9A0001FC73 /* MXETTypeModel.m */,
-				A4BCF37F1DE0163C00EF672C /* MXETUsersResponse.h */,
-				A4BCF37D1DE0162F00EF672C /* MXETUsersResponse.m */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		AA1B2A2DFC10CA1729817594 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				FBBF0BAB1849359EBCC4F772 /* Pods-MantleXMLExtensionTests.debug.xcconfig */,
-				FA06D942273418DD7BA511A8 /* Pods-MantleXMLExtensionTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		EA9637E886BB15C86946631C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F42A16C7604CF78F2D58C24F /* Pods_MantleXMLExtensionTests.framework */,
+				A409E0071E63315C00C136C4 /* Foundation.framework */,
+				A409E0051E6322C500C136C4 /* Quick.framework */,
+				A409E0031E6322B700C136C4 /* OCMock.framework */,
+				A409E0011E6322AC00C136C4 /* Nimble.framework */,
+				A409DFFF1E63092300C136C4 /* Mantle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A409DF9E1E63007500C136C4 /* MantleXMLExtension */ = {
+			isa = PBXGroup;
+			children = (
+				A409DFD41E6300D700C136C4 /* MXEErrorCode.h */,
+				A409DFD51E6300D700C136C4 /* MXEXmlAdapter.h */,
+				A409DFD61E6300D700C136C4 /* MXEXmlAdapter.m */,
+				A409DFD71E6300D700C136C4 /* MXEXmlAdapter+Transformers.m */,
+				A409DFD81E6300D700C136C4 /* MXEXmlArrayPath.h */,
+				A409DFD91E6300D700C136C4 /* MXEXmlArrayPath.m */,
+				A409DFDA1E6300D700C136C4 /* MXEXmlAttributePath.h */,
+				A409DFDB1E6300D700C136C4 /* MXEXmlAttributePath.m */,
+				A409DFDC1E6300D700C136C4 /* MXEXmlChildNodePath.h */,
+				A409DFDD1E6300D700C136C4 /* MXEXmlChildNodePath.m */,
+				A409DFDE1E6300D700C136C4 /* MXEXmlNode.h */,
+				A409DFDF1E6300D700C136C4 /* MXEXmlNode.m */,
+				A409DFE01E6300D700C136C4 /* MXEXmlNodePath.h */,
+				A409DFE11E6300D700C136C4 /* MXEXmlNodePath.m */,
+				A409DFE21E6300D700C136C4 /* MXEXmlParser.h */,
+				A409DFE31E6300D700C136C4 /* MXEXmlParser.m */,
+				A409DFE41E6300D700C136C4 /* MXEXmlValuePath.h */,
+				A409DFE51E6300D700C136C4 /* MXEXmlValuePath.m */,
+				A409DF9F1E63007500C136C4 /* MantleXMLExtension.h */,
+				A409DFA01E63007500C136C4 /* Info.plist */,
+				A409DFF81E6300D900C136C4 /* Private */,
+			);
+			path = MantleXMLExtension;
+			sourceTree = "<group>";
+		};
+		A409DFA91E63007500C136C4 /* MantleXMLExtensionTests */ = {
+			isa = PBXGroup;
+			children = (
+				A409DFC71E6300C200C136C4 /* Models */,
+				A409DFC61E6300BE00C136C4 /* MantleXMLExtensionTests-Prefix.pch */,
+				A409DFB41E6300B800C136C4 /* MXEXmlAdapter+TransformeresTests.m */,
+				A409DFB51E6300B800C136C4 /* MXEXmlAdapterTests.m */,
+				A409DFB61E6300B800C136C4 /* MXEXmlArrayPathTests.m */,
+				A409DFB71E6300B800C136C4 /* MXEXmlAttributePathTests.m */,
+				A409DFB81E6300B800C136C4 /* MXEXmlChildNodePathTests.m */,
+				A409DFB91E6300B800C136C4 /* MXEXmlNodePathTests.m */,
+				A409DFBA1E6300B800C136C4 /* MXEXmlNodeTests.m */,
+				A409DFBB1E6300B800C136C4 /* MXEXmlParserTests.m */,
+				A409DFBC1E6300B800C136C4 /* MXEXmlValuePathTests.m */,
+				A409DFAC1E63007500C136C4 /* Info.plist */,
+			);
+			path = MantleXMLExtensionTests;
+			sourceTree = "<group>";
+		};
+		A409DFC71E6300C200C136C4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A409DFC81E6300CB00C136C4 /* MXETFilterModel.h */,
+				A409DFC91E6300CB00C136C4 /* MXETFilterModel.m */,
+				A409DFCA1E6300CB00C136C4 /* MXETSampleModel.h */,
+				A409DFCB1E6300CB00C136C4 /* MXETSampleModel.m */,
+				A409DFCC1E6300CB00C136C4 /* MXETTypeModel.h */,
+				A409DFCD1E6300CB00C136C4 /* MXETTypeModel.m */,
+				A409DFCE1E6300CB00C136C4 /* MXETUsersResponse.h */,
+				A409DFCF1E6300CB00C136C4 /* MXETUsersResponse.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		A409DFF81E6300D900C136C4 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				A409DFF91E6300EC00C136C4 /* NSError+MantleXMLExtension.h */,
+				A409DFFA1E6300EC00C136C4 /* NSError+MantleXMLExtension.m */,
+			);
+			name = Private;
+			sourceTree = "<group>";
+		};
+		A4BCF32F1DDFDE2C00EF672C = {
+			isa = PBXGroup;
+			children = (
+				A409DF9D1E63007500C136C4 /* MantleXMLExtension.framework */,
+				A409DF9E1E63007500C136C4 /* MantleXMLExtension */,
+				A409DFA51E63007500C136C4 /* MantleXMLExtensionTests.xctest */,
+				A409DFA91E63007500C136C4 /* MantleXMLExtensionTests */,
+				2C719C86E1BC09F9F20C0F0E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		A409DF9A1E63007500C136C4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A409DFE71E6300D700C136C4 /* MXEXmlAdapter.h in Headers */,
+				A409DFF61E6300D700C136C4 /* MXEXmlValuePath.h in Headers */,
+				A409DFF01E6300D700C136C4 /* MXEXmlNode.h in Headers */,
+				A409DFAD1E63007500C136C4 /* MantleXMLExtension.h in Headers */,
+				A409DFF21E6300D700C136C4 /* MXEXmlNodePath.h in Headers */,
+				A409DFEA1E6300D700C136C4 /* MXEXmlArrayPath.h in Headers */,
+				A409DFEE1E6300D700C136C4 /* MXEXmlChildNodePath.h in Headers */,
+				A409DFE61E6300D700C136C4 /* MXEErrorCode.h in Headers */,
+				A409DFEC1E6300D700C136C4 /* MXEXmlAttributePath.h in Headers */,
+				A409DFF41E6300D700C136C4 /* MXEXmlParser.h in Headers */,
+				A409DFFB1E6300EC00C136C4 /* NSError+MantleXMLExtension.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		A4BCF36A1DDFEC6600EF672C /* MantleXMLExtensionTests */ = {
+		A409DF9C1E63007500C136C4 /* MantleXMLExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A4BCF3701DDFEC6600EF672C /* Build configuration list for PBXNativeTarget "MantleXMLExtensionTests" */;
+			buildConfigurationList = A409DFAE1E63007500C136C4 /* Build configuration list for PBXNativeTarget "MantleXMLExtension" */;
 			buildPhases = (
-				597513063BB4F004186570F4 /* [CP] Check Pods Manifest.lock */,
-				A4BCF3671DDFEC6600EF672C /* Sources */,
-				A4BCF3681DDFEC6600EF672C /* Frameworks */,
-				A4BCF3691DDFEC6600EF672C /* Resources */,
-				43DBD1F172CE65A131D8AE1F /* [CP] Embed Pods Frameworks */,
-				6003DD3CE1369EF642C72108 /* [CP] Copy Pods Resources */,
+				A409DF981E63007500C136C4 /* Sources */,
+				A409DF991E63007500C136C4 /* Frameworks */,
+				A409DF9A1E63007500C136C4 /* Headers */,
+				A409DF9B1E63007500C136C4 /* Resources */,
+				A409DFFD1E63060000C136C4 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
+			name = MantleXMLExtension;
+			productName = MantleXMLExtension;
+			productReference = A409DF9D1E63007500C136C4 /* MantleXMLExtension.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A409DFA41E63007500C136C4 /* MantleXMLExtensionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A409DFB11E63007500C136C4 /* Build configuration list for PBXNativeTarget "MantleXMLExtensionTests" */;
+			buildPhases = (
+				A409DFA11E63007500C136C4 /* Sources */,
+				A409DFA21E63007500C136C4 /* Frameworks */,
+				A409DFA31E63007500C136C4 /* Resources */,
+				A409DFFE1E63060F00C136C4 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A409DFA81E63007500C136C4 /* PBXTargetDependency */,
+			);
 			name = MantleXMLExtensionTests;
 			productName = MantleXMLExtensionTests;
-			productReference = A4BCF36B1DDFEC6600EF672C /* MantleXMLExtensionTests.xctest */;
+			productReference = A409DFA51E63007500C136C4 /* MantleXMLExtensionTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -159,11 +300,16 @@
 		A4BCF3301DDFDE2C00EF672C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Hinagiku Soranoba";
 				TargetAttributes = {
-					A4BCF36A1DDFEC6600EF672C = {
-						CreatedOnToolsVersion = 8.1;
+					A409DF9C1E63007500C136C4 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = Q67BJ4H5A7;
+						ProvisioningStyle = Automatic;
+					};
+					A409DFA41E63007500C136C4 = {
+						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = Q67BJ4H5A7;
 						ProvisioningStyle = Automatic;
 					};
@@ -177,97 +323,218 @@
 				en,
 			);
 			mainGroup = A4BCF32F1DDFDE2C00EF672C;
-			productRefGroup = A4BCF3391DDFDE2C00EF672C /* Products */;
+			productRefGroup = A4BCF32F1DDFDE2C00EF672C;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A4BCF36A1DDFEC6600EF672C /* MantleXMLExtensionTests */,
+				A409DF9C1E63007500C136C4 /* MantleXMLExtension */,
+				A409DFA41E63007500C136C4 /* MantleXMLExtensionTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A4BCF3691DDFEC6600EF672C /* Resources */ = {
+		A409DF9B1E63007500C136C4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A409DFA31E63007500C136C4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A40610861E64775F0074F00D /* Quick.framework in Resources */,
+				A40610871E64775F0074F00D /* OCMock.framework in Resources */,
+				A40610881E64775F0074F00D /* Nimble.framework in Resources */,
+				A40610891E64775F0074F00D /* Mantle.framework in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		43DBD1F172CE65A131D8AE1F /* [CP] Embed Pods Frameworks */ = {
+		A409DFFD1E63060000C136C4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Mantle.framework",
 			);
-			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
-		597513063BB4F004186570F4 /* [CP] Check Pods Manifest.lock */ = {
+		A409DFFE1E63060F00C136C4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Quick.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/OCMock.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Mantle.framework",
 			);
-			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		6003DD3CE1369EF642C72108 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MantleXMLExtensionTests/Pods-MantleXMLExtensionTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A4BCF3671DDFEC6600EF672C /* Sources */ = {
+		A409DF981E63007500C136C4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A456FC801E50CED5002EA7B0 /* MXEXmlChildNodePathTests.m in Sources */,
-				A456FC781E4B695D002EA7B0 /* MXETFilterModel.m in Sources */,
-				A409DF131E58BBA700C136C4 /* MXEXmlAdapter+TransformeresTests.m in Sources */,
-				A4BCF3981DE0AD8200EF672C /* MXEXmlNodeTests.m in Sources */,
-				A84EC6D81DF59B9A0001FC73 /* MXETTypeModel.m in Sources */,
-				A4BCF3851DE0330200EF672C /* MXEXmlAdapterTests.m in Sources */,
-				A41C79D71DE9F2AE000F0A28 /* MXEXmlArrayPathTests.m in Sources */,
-				A456FC7E1E50890D002EA7B0 /* MXEXmlNodePathTests.m in Sources */,
-				A4BCF3931DE04F9B00EF672C /* MXETSampleModel.m in Sources */,
-				A4BCF37E1DE0162F00EF672C /* MXETUsersResponse.m in Sources */,
-				A41C79D51DE9EDB8000F0A28 /* MXEXmlAttributePathTests.m in Sources */,
-				A409DF191E615D3300C136C4 /* MXEXmlParserTests.m in Sources */,
-				A456FC861E51F7E9002EA7B0 /* MXEXmlValuePathTests.m in Sources */,
+				A409DFED1E6300D700C136C4 /* MXEXmlAttributePath.m in Sources */,
+				A409DFF51E6300D700C136C4 /* MXEXmlParser.m in Sources */,
+				A409DFFC1E6300EC00C136C4 /* NSError+MantleXMLExtension.m in Sources */,
+				A409DFEF1E6300D700C136C4 /* MXEXmlChildNodePath.m in Sources */,
+				A409DFE91E6300D700C136C4 /* MXEXmlAdapter+Transformers.m in Sources */,
+				A409DFE81E6300D700C136C4 /* MXEXmlAdapter.m in Sources */,
+				A409DFF11E6300D700C136C4 /* MXEXmlNode.m in Sources */,
+				A409DFF71E6300D700C136C4 /* MXEXmlValuePath.m in Sources */,
+				A409DFF31E6300D700C136C4 /* MXEXmlNodePath.m in Sources */,
+				A409DFEB1E6300D700C136C4 /* MXEXmlArrayPath.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A409DFA11E63007500C136C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A409DFC51E6300B800C136C4 /* MXEXmlValuePathTests.m in Sources */,
+				A409DFD01E6300CB00C136C4 /* MXETFilterModel.m in Sources */,
+				A409DFC11E6300B800C136C4 /* MXEXmlChildNodePathTests.m in Sources */,
+				A409DFC41E6300B800C136C4 /* MXEXmlParserTests.m in Sources */,
+				A409DFD11E6300CB00C136C4 /* MXETSampleModel.m in Sources */,
+				A409DFC01E6300B800C136C4 /* MXEXmlAttributePathTests.m in Sources */,
+				A409DFBE1E6300B800C136C4 /* MXEXmlAdapterTests.m in Sources */,
+				A409DFBF1E6300B800C136C4 /* MXEXmlArrayPathTests.m in Sources */,
+				A409DFBD1E6300B800C136C4 /* MXEXmlAdapter+TransformeresTests.m in Sources */,
+				A409DFC31E6300B800C136C4 /* MXEXmlNodeTests.m in Sources */,
+				A409DFD31E6300CB00C136C4 /* MXETUsersResponse.m in Sources */,
+				A409DFC21E6300B800C136C4 /* MXEXmlNodePathTests.m in Sources */,
+				A409DFD21E6300CB00C136C4 /* MXETTypeModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		A409DFA81E63007500C136C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A409DF9C1E63007500C136C4 /* MantleXMLExtension */;
+			targetProxy = A409DFA71E63007500C136C4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		A409DFAF1E63007500C136C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = Q67BJ4H5A7;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = MantleXMLExtension/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = mh_dylib;
+				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A409DFB01E63007500C136C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = Q67BJ4H5A7;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = MantleXMLExtension/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = mh_dylib;
+				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A409DFB21E63007500C136C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEVELOPMENT_TEAM = Q67BJ4H5A7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A409DFB31E63007500C136C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEVELOPMENT_TEAM = Q67BJ4H5A7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		A4BCF33F1DDFDE2C00EF672C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -286,6 +553,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -309,8 +577,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = MantleXMLExtension/Classes/Private;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				HEADER_SEARCH_PATHS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -335,6 +603,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -352,57 +621,40 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = MantleXMLExtension/Classes/Private;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				HEADER_SEARCH_PATHS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		A4BCF3711DDFEC6600EF672C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FBBF0BAB1849359EBCC4F772 /* Pods-MantleXMLExtensionTests.debug.xcconfig */;
-			buildSettings = {
-				DEVELOPMENT_TEAM = Q67BJ4H5A7;
-				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		A4BCF3721DDFEC6600EF672C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA06D942273418DD7BA511A8 /* Pods-MantleXMLExtensionTests.release.xcconfig */;
-			buildSettings = {
-				DEVELOPMENT_TEAM = Q67BJ4H5A7;
-				INFOPLIST_FILE = MantleXMLExtensionTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.soranoba.MantleXMLExtensionTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A409DFAE1E63007500C136C4 /* Build configuration list for PBXNativeTarget "MantleXMLExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A409DFAF1E63007500C136C4 /* Debug */,
+				A409DFB01E63007500C136C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A409DFB11E63007500C136C4 /* Build configuration list for PBXNativeTarget "MantleXMLExtensionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A409DFB21E63007500C136C4 /* Debug */,
+				A409DFB31E63007500C136C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A4BCF3331DDFDE2C00EF672C /* Build configuration list for PBXProject "MantleXMLExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A4BCF33F1DDFDE2C00EF672C /* Debug */,
 				A4BCF3401DDFDE2C00EF672C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A4BCF3701DDFEC6600EF672C /* Build configuration list for PBXNativeTarget "MantleXMLExtensionTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A4BCF3711DDFEC6600EF672C /* Debug */,
-				A4BCF3721DDFEC6600EF672C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

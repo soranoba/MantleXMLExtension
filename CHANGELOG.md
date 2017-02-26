@@ -15,6 +15,7 @@
   (See: `MXEXmlSerializing # classForParsingXmlNode:`)
 - It become possible to separate that conversion to `MXEXmlNode` and conversion to model.
   (See: [MXEXmlParser](MantleXMLExtension/Classes/MXEXmlParser.h) )
+- It support Carthage.
 
 ### Minor changes
 

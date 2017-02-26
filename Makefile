@@ -1,12 +1,13 @@
 NAME := MantleXMLExtension
 
-all: init synx format test podlint
+all: init synx format test podlint cartrelease
 
-ci: init test podlint
+ci: init test podlint cartrelease
 
 init:
 	bundle install --path vendor/bundle
-	bundle exec pod install
+	carthage update --no-use-binaries
+	ls Carthage/**/**
 
 open:
 	open ${NAME}.xcworkspace
@@ -21,6 +22,10 @@ test:
 
 podlint:
 	bundle exec pod lib lint --use-libraries
+
+cartrelease:
+	carthage build --no-skip-current
+	carthage archive ${NAME}
 
 synx:
 	bundle exec synx ${NAME}.xcodeproj

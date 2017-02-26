@@ -29,7 +29,6 @@
 
 #import <Mantle/EXTRuntimeExtensions.h>
 #import <Mantle/EXTScope.h>
-#import <Mantle/MTLReflection.h>
 #import <Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.h>
 #import <objc/runtime.h>
 
@@ -404,7 +403,7 @@
     NSMutableDictionary* result = [NSMutableDictionary dictionary];
 
     for (NSString* key in [modelClass propertyKeys]) {
-        SEL selector = MTLSelectorWithKeyPattern(key, "XmlTransformer");
+        SEL selector = NSSelectorFromString([key stringByAppendingString:@"XmlTransformer"]);
         if ([modelClass respondsToSelector:selector]) {
             IMP imp = [modelClass methodForSelector:selector];
             NSValueTransformer* (*function)(id, SEL) = (__typeof__(function))imp;
@@ -470,7 +469,7 @@
 {
     NSParameterAssert(modelClass != nil);
 
-    SEL selector = MTLSelectorWithKeyPattern(NSStringFromClass(modelClass), "XmlTransformer");
+    SEL selector = NSSelectorFromString([NSStringFromClass(modelClass) stringByAppendingString:@"XmlTransformer"]);
     if (![self respondsToSelector:selector]) {
         return nil;
     }

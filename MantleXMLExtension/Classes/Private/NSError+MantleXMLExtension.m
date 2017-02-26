@@ -36,8 +36,8 @@ NSString* _Nonnull const MXEErrorExceptionKey = @"MXEErrorExceptionKey";
 /**
  * Return a LocalizedDescription.
  *
- * @param code
- * @return description string
+ * @param code   An error code
+ * @return A string of description
  */
 + (NSString* _Nonnull)mxe_description:(MXEErrorCode)code
 {
