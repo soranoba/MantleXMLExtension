@@ -144,14 +144,14 @@ QuickSpecBegin(MXEXmlAdapterTests)
                                @"<user first_name=\"Ikuo\" last_name=\"Ikeda\">"
                                @"<age>32</age>"
                                @"<sex>Man</sex>"
-                               @"<parent first_name=\"Umeo\" last_name=\"Ueda\">"
+                               @"<parent_user first_name=\"Umeo\" last_name=\"Ueda\">"
                                @"<age>50</age>"
                                @"<sex>Man</sex>"
-                               @"</parent>"
-                               @"<child first_name=\"Eiko\" last_name=\"Endo\">"
+                               @"</parent_user>"
+                               @"<child_user first_name=\"Eiko\" last_name=\"Endo\">"
                                @"<age>10</age>"
                                @"<sex>Woman</sex>"
-                               @"</child>"
+                               @"</child_user>"
                                @"</user>"
                                @"</response>";
             NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
@@ -424,6 +424,69 @@ QuickSpecBegin(MXEXmlAdapterTests)
             expect(error).notTo(beNil());
             expect(error.domain).to(equal(MXEErrorDomain));
             expect(error.code).to(equal(MXEErrorNoConversionTarget));
+        });
+    });
+
+    describe(@"xmlChildNodeOrder", ^{
+        MXETUser* user = [MXETUser new];
+        MXETUser* parent = [MXETUser new];
+        MXETUser* child = [MXETUser new];
+
+        user.firstName = @"Asada";
+        user.lastName = @"Ai";
+        user.parent = parent;
+        user.child = child;
+        user.sex = MXETWoman;
+        user.age = 20;
+
+        parent.firstName = @"Ikeda";
+        parent.lastName = @"Ikuo";
+        child.firstName = @"Usami";
+        child.lastName = @"Umi";
+
+        it(@"returns node with child nodes order to specified by xmlChildNodeOrder", ^{
+            id mock = OCMClassMock(MXETUser.class);
+            OCMExpect([mock xmlChildNodeOrder]).andReturn((@[ @"age", @"sex", @"parent", @"child" ]));
+
+            __block NSError* error = nil;
+            __block MXEXmlNode* node;
+            expect(node = [MXEXmlAdapter xmlNodeFromModel:user error:&error]).notTo(beNil());
+            expect(error).to(beNil());
+
+            NSMutableArray* elementNames = [NSMutableArray array];
+            for (MXEXmlNode* child in node.children) {
+                [elementNames addObject:child.elementName];
+            }
+            expect(elementNames).to(equal(@[ @"age", @"sex", @"parent_user", @"child_user" ]));
+
+            OCMExpect([mock xmlChildNodeOrder]).andReturn((@[ @"parent", @"sex", @"age", @"child" ]));
+
+            error = nil;
+            node = nil;
+            expect(node = [MXEXmlAdapter xmlNodeFromModel:user error:&error]).notTo(beNil());
+            expect(error).to(beNil());
+
+            [elementNames removeAllObjects];
+            for (MXEXmlNode* child in node.children) {
+                [elementNames addObject:child.elementName];
+            }
+            expect(elementNames).to(equal(@[ @"parent_user", @"sex", @"age", @"child_user" ]));
+        });
+
+        it(@"puts unspecified properties first", ^{
+            id mock = OCMClassMock(MXETUser.class);
+            OCMExpect([mock xmlChildNodeOrder]).andReturn((@[ @"age", @"parent", @"child" ]));
+
+            __block NSError* error = nil;
+            __block MXEXmlNode* node;
+            expect(node = [MXEXmlAdapter xmlNodeFromModel:user error:&error]).notTo(beNil());
+            expect(error).to(beNil());
+
+            NSMutableArray* elementNames = [NSMutableArray array];
+            for (MXEXmlNode* child in node.children) {
+                [elementNames addObject:child.elementName];
+            }
+            expect(elementNames).to(equal(@[ @"sex", @"age", @"parent_user", @"child_user" ]));
         });
     });
 }

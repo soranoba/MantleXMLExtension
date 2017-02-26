@@ -62,8 +62,8 @@
               @"lastName" : MXEXmlAttribute(@"", @"last_name"),
               @"age" : @"age",
               @"sex" : @"sex",
-              @"parent" : MXEXmlChildNode(@"parent"),
-              @"child" : MXEXmlChildNode(@"child") };
+              @"parent" : MXEXmlChildNode(@"parent_user"),
+              @"child" : MXEXmlChildNode(@"child_user") };
 }
 
 + (NSString* _Nonnull)xmlRootElementName

@@ -22,6 +22,8 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
     MXEErrorNotSupportedEncoding,
     /// classForParsingXmlNode: returns nil.
     MXEErrorNoConversionTarget,
+    /// Exception thrown in transform
+    MXEErrorExceptionThrown,
 
     MXEErrorNil __attribute__((unavailable("Replaced by MXEErrorNilInputData"))),
     MXEErrorInvalidRootNode __attribute((unavailable("Replaced by MXEErrorElementNameDoesNotMatch"))),
@@ -31,3 +33,5 @@ typedef NS_ENUM(NSUInteger, MXEErrorCode) {
 extern NSString* _Nonnull const MXEErrorDomain;
 /// A key that stores the input data that caused the error
 extern NSString* _Nonnull const MXEErrorInputDataKey;
+/// A key that stores the caught exception
+extern NSString* _Nonnull const MXEErrorExceptionKey;

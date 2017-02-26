@@ -298,6 +298,15 @@
             }
             dictionaryValue[propertyKey] = value;
         } @catch (NSException* ex) {
+#if DEBUG
+            @throw ex;
+#else
+            setError(error, MXEErrorExceptionThrown,
+                     @{ NSLocalizedRecoverySuggestionErrorKey : ex.description,
+                        NSLocalizedFailureReasonErrorKey : ex.reason ?: NSNull.null,
+                        MXEErrorExceptionKey : ex });
+#endif
+            return nil;
         }
     }
     id model = [self.modelClass modelWithDictionary:dictionaryValue error:error];
@@ -362,7 +371,8 @@
                 success = NO;
                 setError(error, MXEErrorInvalidInputData,
                          @{ NSLocalizedFailureReasonErrorKey :
-                                format(@"input data expected MXEXmlNode, but got %@", [value class]) });
+                                format(@"input data expected MXEXmlNode, but got %@", [value class]),
+                            MXEErrorInputDataKey : value });
                 return nil;
             }
 

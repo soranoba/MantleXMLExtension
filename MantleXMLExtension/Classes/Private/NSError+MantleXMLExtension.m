@@ -10,6 +10,7 @@
 
 NSString* _Nonnull const MXEErrorDomain = @"MXEErrorDomain";
 NSString* _Nonnull const MXEErrorInputDataKey = @"MXEErrorInputDataKey";
+NSString* _Nonnull const MXEErrorExceptionKey = @"MXEErrorExceptionKey";
 
 @implementation NSError (MantleXMLExtension)
 
@@ -53,6 +54,8 @@ NSString* _Nonnull const MXEErrorInputDataKey = @"MXEErrorInputDataKey";
             return @"MantleXMLExtension does not support the encoding";
         case MXEErrorNoConversionTarget:
             return @"There is no target to convert";
+        case MXEErrorExceptionThrown:
+            return @"Caught an exception during transform";
         default:
             return @"Unknown error";
     }
