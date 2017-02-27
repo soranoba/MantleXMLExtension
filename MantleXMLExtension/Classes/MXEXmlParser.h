@@ -24,8 +24,8 @@
  * @param error     If it return nil, error information is saved here.
  * @return If conversion is success, it returns converted data. Otherwise, return nil.
  */
-+ (NSData* _Nonnull)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
-                              error:(NSError* _Nullable* _Nullable)error;
++ (NSData* _Nullable)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+                               error:(NSError* _Nullable* _Nullable)error;
 
 /**
  * Convert MXEXmlNode to NSData using the xmlDeclaration.
@@ -35,9 +35,9 @@
  * @param error            If it return nil, error information is saved here.
  * @return If conversion is success, it returns converted data. Otherwise, return nil.
  */
-+ (NSData* _Nonnull)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
-                        declaration:(NSString* _Nonnull)xmlDeclaration
-                              error:(NSError* _Nullable* _Nullable)error;
++ (NSData* _Nullable)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+                         declaration:(NSString* _Nonnull)xmlDeclaration
+                               error:(NSError* _Nullable* _Nullable)error;
 
 /**
  * Convert NSData to MXEXmlNode.

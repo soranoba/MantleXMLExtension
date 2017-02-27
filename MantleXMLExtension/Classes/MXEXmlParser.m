@@ -33,15 +33,15 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 
 #pragma mark - Public Methods
 
-+ (NSData* _Nonnull)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
-                              error:(NSError* _Nullable* _Nullable)error
++ (NSData* _Nullable)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+                               error:(NSError* _Nullable* _Nullable)error
 {
     return [self dataWithXmlNode:xmlNode declaration:MXEXmlDeclarationDefault error:error];
 }
 
-+ (NSData* _Nonnull)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
-                        declaration:(NSString* _Nonnull)xmlDeclaration
-                              error:(NSError* _Nullable* _Nullable)error
++ (NSData* _Nullable)dataWithXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+                         declaration:(NSString* _Nonnull)xmlDeclaration
+                               error:(NSError* _Nullable* _Nullable)error
 {
     NSStringEncoding encoding = [self xmlDeclarationToEncoding:xmlDeclaration error:error];
     if (encoding == 0) {

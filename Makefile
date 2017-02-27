@@ -6,8 +6,7 @@ ci: init test podlint cartrelease
 
 init:
 	bundle install --path vendor/bundle
-	carthage update --no-use-binaries
-	ls Carthage/**/**
+	carthage update
 
 open:
 	open ${NAME}.xcworkspace
