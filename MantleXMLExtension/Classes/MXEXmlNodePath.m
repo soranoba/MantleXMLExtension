@@ -22,7 +22,7 @@
 
 - (instancetype _Nullable)init
 {
-    NSAssert(NO, @"%@ MUST need to use the designed initializer.", self.class);
+    NSAssert(NO, @"%@ MUST need to use the designated initializer.", self.class);
     return nil;
 }
 

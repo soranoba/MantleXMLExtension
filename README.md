@@ -195,7 +195,7 @@ You can use these transformer for primitive type.
 
 ### Other information
 
-Please refer to documentation, [unit tests](MantleXMLExtensionTests) and [Mantle](https://github.com/Mantle/Mantle).
+Please refer to [documentation](http://cocoadocs.org/docsets/MantleXMLExtension), [unit tests](MantleXMLExtensionTests) and [Mantle](https://github.com/Mantle/Mantle).
 
 ## Contribute
 
