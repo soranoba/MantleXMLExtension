@@ -26,3 +26,7 @@ DerivedData
 # cocoapods
 Pods/
 Podfile.lock
+
+# carthage
+Carthage/
+*.framework.zip

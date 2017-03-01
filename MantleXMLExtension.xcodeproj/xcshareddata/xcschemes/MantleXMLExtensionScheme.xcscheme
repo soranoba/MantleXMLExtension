@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0810"
+   LastUpgradeVersion = "0820"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,21 +14,21 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B9825881E9A3B9272338BAA4BB774BA1"
+               BlueprintIdentifier = "A409DF9C1E63007500C136C4"
                BuildableName = "MantleXMLExtension.framework"
                BlueprintName = "MantleXMLExtension"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+               ReferencedContainer = "container:MantleXMLExtension.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
+            buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A4BCF36A1DDFEC6600EF672C"
+               BlueprintIdentifier = "A409DFA41E63007500C136C4"
                BuildableName = "MantleXMLExtensionTests.xctest"
                BlueprintName = "MantleXMLExtensionTests"
                ReferencedContainer = "container:MantleXMLExtension.xcodeproj">
@@ -40,13 +40,14 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A4BCF36A1DDFEC6600EF672C"
+               BlueprintIdentifier = "A409DFA41E63007500C136C4"
                BuildableName = "MantleXMLExtensionTests.xctest"
                BlueprintName = "MantleXMLExtensionTests"
                ReferencedContainer = "container:MantleXMLExtension.xcodeproj">
@@ -60,10 +61,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B9825881E9A3B9272338BAA4BB774BA1"
-            BuildableName = "MantleXMLExtension.framework"
-            BlueprintName = "MantleXMLExtension"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            BlueprintIdentifier = "A409DFA41E63007500C136C4"
+            BuildableName = "MantleXMLExtensionTests.xctest"
+            BlueprintName = "MantleXMLExtensionTests"
+            ReferencedContainer = "container:MantleXMLExtension.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -82,10 +83,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B9825881E9A3B9272338BAA4BB774BA1"
+            BlueprintIdentifier = "A409DF9C1E63007500C136C4"
             BuildableName = "MantleXMLExtension.framework"
             BlueprintName = "MantleXMLExtension"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            ReferencedContainer = "container:MantleXMLExtension.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -100,10 +101,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B9825881E9A3B9272338BAA4BB774BA1"
+            BlueprintIdentifier = "A409DF9C1E63007500C136C4"
             BuildableName = "MantleXMLExtension.framework"
             BlueprintName = "MantleXMLExtension"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            ReferencedContainer = "container:MantleXMLExtension.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -14,8 +14,8 @@
 #import "MXEXmlArrayPath.h"
 #import "MXEXmlAttributePath.h"
 #import "MXEXmlChildNodePath.h"
-
-extern NSString* _Nonnull const MXEXmlDeclarationDefault;
+#import "MXEXmlNode.h"
+#import "MXEXmlValuePath.h"
 
 @protocol MXEXmlSerializing <MTLModel>
 @required
@@ -57,13 +57,13 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  * @see MXEXmlArrayPath
  * @see MXEXmlAttributePath
  * @see MXEXmlChildNodePath
- * @see MXEXmlPath
+ * @see MXEXmlValuePath
  *
  * In all cases, use `.` to specify a child element of an element.
  * This is the same format as MTLJSONSerializing.
  *
- * NSString is treated as a syntax suger which generates MXEXmlPath.
- * (e.g. `@"user.id"` means `[MXEXmlPath pathWithNodePath:@"user.id"]`)
+ * NSString is treated as a syntax suger which generates xml path.
+ * (e.g. `@"user.id"` means `MXEXmlValue(@"user.id")`)
  *
  * If you want to associate XML and @property that extracted some elements, use NSArray.
  * In the above example, summary is associated with the following XML.
@@ -107,6 +107,16 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  * default: MXEXmlDeclarationDefault
  */
 + (NSString* _Nonnull)xmlDeclaration;
+
+/**
+ * If you want to use different classes based on parse data, you can use this.
+ *
+ * @param xmlNode   A xml node.
+ * @return It returns itself or another MXEXmlSerializing class.
+ *         If it returns nil, convertion will be fail.
+ */
++ (Class _Nullable)classForParsingXmlNode:(MXEXmlNode* _Nonnull)xmlNode;
+
 @end
 
 @interface MXEXmlAdapter : NSObject
@@ -121,29 +131,51 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  */
 - (instancetype _Nullable)initWithModelClass:(Class _Nonnull)modelClass;
 
-#pragma mark - Conversion between XML and Model
+#pragma mark - Public Methods
 
 /**
  * Convert xml to model
  *
- * @param modelClass MXEXmlSerializing model class
- * @param xmlData    XML data
- * @param error      If it return nil, error information is saved here.
- * @return If conversion is success, return model object. Otherwise, return nil.
+ * @param modelClass   A MXEXmlSerializing model class
+ * @param xmlData      XML data
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns model object. Otherwise, it returns nil.
  */
 + (id _Nullable)modelOfClass:(Class _Nonnull)modelClass
                  fromXmlData:(NSData* _Nullable)xmlData
                        error:(NSError* _Nullable* _Nullable)error;
 
 /**
- * Convert model to xml
+ * Convert xmlNode to model
  *
- * @param model MXEXmlSerializing model object
- * @param error If it return nil, error information is saved here.
- * @return If conversion is success, return xml data. Otherwise, return nil.
+ * @param modelClass   A MXEXmlSerializing model class
+ * @param rootXmlNode  A xml node
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns model object. Otherwise, it returns nil.
+ */
++ (id _Nullable)modelOfClass:(Class _Nonnull)modelClass
+                 fromXmlNode:(MXEXmlNode* _Nullable)rootXmlNode
+                       error:(NSError* _Nullable* _Nullable)error;
+
+/**
+ * Convert model to xmlData
+ *
+ * @param model        A MXEXmlSerializing model object
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns xml data. Otherwise, it returns nil.
  */
 + (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
+
+/**
+ * Convert model to xmlNode
+ *
+ * @param model        A MXEXmlSerializing model object
+ * @param error        If it return nil, error information is saved here.
+ * @return If conversion is success, it returns xml node. Otherwise, it returns nil.
+ */
++ (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nullable)model
+                                    error:(NSError* _Nullable* _Nullable)error;
 
 /**
  * @see modelOfClass:fromXmlData:error:
@@ -152,16 +184,33 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
                            error:(NSError* _Nullable* _Nullable)error;
 
 /**
+ * @see modelOfClass:fromXmlNode:error:
+ */
+- (id _Nullable)modelFromXmlNode:(MXEXmlNode* _Nullable)xmlNode
+                           error:(NSError* _Nullable* _Nullable)error;
+
+/**
  * @see xmlDataFromModel:error:
  */
 - (NSData* _Nullable)xmlDataFromModel:(id<MXEXmlSerializing> _Nullable)model
                                 error:(NSError* _Nullable* _Nullable)error;
 
-#pragma mark - Transformer
+/**
+ * @see xmlNodeFromModel:error:
+ */
+- (MXEXmlNode* _Nullable)xmlNodeFromModel:(id<MXEXmlSerializing> _Nullable)model
+                                    error:(NSError* _Nullable* _Nullable)error;
+
+@end
+
+@interface MXEXmlAdapter (Transformers)
 
 /**
- * Return a transformer that specify when use MXEXmlArray.
+ * Return a transformer that convert between NSArray<MXEXmlNode> and NSArray<id<MXEXmlSerializing>>.
  *
+ * It can use when it specify MXEXmlArray.
+ *
+ * @param modelClass    A MXEXmlSerializing class
  * @return transformer
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
@@ -170,10 +219,35 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
 /**
  * Return a transformer that used when nested child node is a MXEXmlSerializing object.
  *
+ * @param modelClass    A MXEXmlSerializing class
  * @return transformer
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
     xmlNodeTransformerWithModelClass:(Class _Nonnull)modelClass;
+
+/**
+ * Return a transformer that convert between MXEXmlNode and NSDictionary.
+ * This transformer create a dictionary with mapping of the keyPath and the valuePath.
+ *
+ * It specifies a path that will return MXEXmlNode at MXEXmlSerializing # xmlKeyPathsByPropertyKey.
+ * For example, it specify MXEXmlChildNodePath or NSArray.
+ *
+ * @param keyPath      A keyPath that specify target keys of dictionary.
+ * @param valuePath    A valuePath that specify target values of dictionary.
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
+    mappingDictionaryTransformerWithKeyPath:(id _Nonnull)keyPath
+                                  valuePath:(id _Nonnull)valuePath;
+
+/**
+ * Return a transformer that convert between MXEXmlNode and NSDictionary.
+ * This transformer create a dictionary from all elements of xml.
+ *
+ * @see MXEXmlNode # toDictionary
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)dictionaryTransformer;
 
 /**
  * Return a transformer that convert between number and string of number.
@@ -188,13 +262,23 @@ extern NSString* _Nonnull const MXEXmlDeclarationDefault;
  *
  * @return transformer
  */
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer;
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberTransformer;
 
 /**
  * Return a transformer that convert between bool and string of boolean.
  *
  * @return transformer
  */
-+ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolStringTransformer;
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolTransformer;
+
+@end
+
+@interface MXEXmlAdapter (Deprecated)
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberStringTransformer
+    __attribute__((unavailable("Replaced by numberTransformer")));
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolStringTransformer
+    __attribute__((unavailable("Replaced by boolTransformer")));
 
 @end

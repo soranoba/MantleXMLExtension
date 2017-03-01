@@ -1,6 +1,7 @@
 MantleXMLExtension
 =======
-[![CI Status](http://img.shields.io/travis/soranoba/MantleXMLExtension.svg?style=flat)](https://travis-ci.org/soranoba/MantleXMLExtension)
+[![Build Status](https://travis-ci.org/soranoba/MantleXMLExtension.svg?branch=master)](https://travis-ci.org/soranoba/MantleXMLExtension)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
 [![License](https://img.shields.io/cocoapods/l/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
 [![Platform](https://img.shields.io/cocoapods/p/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
@@ -27,11 +28,20 @@ Model framework for Cocoa and Cocoa Touch
 
 ## Installation
 
-MantleXMLExtension is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+### CocoaPods
+
+To install it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'MantleXMLExtension'
+```
+
+### Carthage
+
+To install it, simply add the following line to your Cartfile:
+
+```ruby
+github "soranoba/MantleXMLExtension"
 ```
 
 ## How to use functions of MantleXMLExtension
@@ -72,7 +82,7 @@ Just add some to [MTLModel](https://github.com/Mantle/Mantle#mtlmodel) for MXEXm
 
 MXEXmlAdapter support 5 types of paths.
 
-**MXEXmlPath**
+**MXEXmlValuePath**
 
 For example:
 
@@ -176,15 +186,16 @@ You can use these transformer for MXEXmlSerializing object.
 
 - `MXEXmlAdapter # xmlNodeArrayTransformerWithModelClass:`
 - `MXEXmlAdapter # xmlNodeTransformerWithModelClass:`
+- `MXEXmlAdapter # mappingDictionaryTransformerWithKeyPath:valuePath:`
 
 You can use these transformer for primitive type.
 
-- `MXEXmlAdapter # numberStringTransformer`
-- `MXEXmlAdapter # boolStringTransformer`
+- `MXEXmlAdapter # numberTransformer`
+- `MXEXmlAdapter # boolTransformer`
 
 ### Other information
 
-Please refer to documentation, [unit tests](MantleXMLExtensionTests) and [Mantle](https://github.com/Mantle/Mantle).
+Please refer to [documentation](http://cocoadocs.org/docsets/MantleXMLExtension), [unit tests](MantleXMLExtensionTests) and [Mantle](https://github.com/Mantle/Mantle).
 
 ## Contribute
 

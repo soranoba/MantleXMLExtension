@@ -1,0 +1,3 @@
+github "Quick/Quick" ~> 0.10.0
+github "Quick/Nimble" ~> 5.1.1
+github "erikdoe/OCMock" ~> 3.3.1

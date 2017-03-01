@@ -37,6 +37,11 @@
     return [MXEXmlAdapter xmlNodeArrayTransformerWithModelClass:MXETUser.class];
 }
 
++ (NSValueTransformer* _Nullable)xmlTransformerForKey:(NSString* _Nonnull)key;
+{
+    return nil;
+}
+
 #pragma mark - MTLModel (Override)
 
 - (BOOL)validate:(NSError* _Nullable* _Nullable)error
@@ -57,8 +62,8 @@
               @"lastName" : MXEXmlAttribute(@"", @"last_name"),
               @"age" : @"age",
               @"sex" : @"sex",
-              @"parent" : MXEXmlChildNode(@"parent"),
-              @"child" : MXEXmlChildNode(@"child") };
+              @"parent" : MXEXmlChildNode(@"parent_user"),
+              @"child" : MXEXmlChildNode(@"child_user") };
 }
 
 + (NSString* _Nonnull)xmlRootElementName

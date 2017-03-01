@@ -9,11 +9,13 @@
 #import "MXEXmlAdapter.h"
 #import <Foundation/Foundation.h>
 
-@interface MXETFilterChildModel : MTLModel <MXEXmlSerializing>
-@property (nonatomic, nullable, copy) NSString* attribute;
-@property (nonatomic, nullable, copy) NSString* userName;
-@end
+@class MXETFilterChildModel;
 
 @interface MXETFilterModel : MTLModel <MXEXmlSerializing>
 @property (nonatomic, nullable, strong) MXETFilterChildModel* node;
+@end
+
+@interface MXETFilterChildModel : MTLModel <MXEXmlSerializing>
+@property (nonatomic, nullable, copy) NSString* attribute;
+@property (nonatomic, nullable, copy) NSString* userName;
 @end

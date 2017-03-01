@@ -6,7 +6,7 @@
 //  Copyright © 2016年 Hinagiku Soranoba. All rights reserved.
 //
 
-#import "MXEXmlPath.h"
+#import "MXEXmlNode.h"
 #import <Foundation/Foundation.h>
 
 /**
@@ -14,7 +14,7 @@
  *
  * @see MXEXmlSerializing # xmlKeyPathsByPropertyKey:
  */
-@interface MXEXmlArrayPath : MXEXmlPath
+@interface MXEXmlArrayPath : NSObject <MXEXmlAccessible>
 
 /**
  * Create a children path.
@@ -23,31 +23,44 @@
  *    <object><user>Alice</user><user>Bob</user><user>Carol</user></object>
  *
  *    If you specify all user's value, 
- *    use [MXEXmlArrayPath pathWithParentNodePath:@"object" collectRelativePath:@"user"].
+ *    use `[MXEXmlArrayPath pathWithParentPathString:@"object" collectRelativePath:@"user"]`.
  *
- * @param parentNodePath       NSString* or NSArray<NSString*>*
- *                             Path from the root to the parent of the child nodes.
- * @param collectRelativePath  NSString* or NSArray<NSString*>* or MXEXmlPath*
+ * @param parentPathString     A Path from the root to the parent of the child nodes.
+ * @param collectRelativePath  NSString* or id<MXEAccessible>
  *                             Relative path from the parent to the child node.
+ * @return instance
  */
-- (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
-                            collectRelativePath:(id _Nonnull)collectRelativePath;
+- (instancetype _Nonnull)initWithParentPathString:(NSString* _Nonnull)parentPathString
+                              collectRelativePath:(id _Nonnull)collectRelativePath;
 
 /**
  * Create a children path.
- * @see initWithParentNodePath:collectRelativePath:
+ *
+ * @see initWithParentPathString:collectRelativePath:
  */
++ (instancetype _Nonnull)pathWithParentPathString:(NSString* _Nonnull)parentNodePath
+                              collectRelativePath:(id _Nonnull)collectRelativePath;
+
+@end
+
+@interface MXEXmlArrayPath (Deprecated)
+
+- (instancetype _Nonnull)initWithParentNodePath:(id _Nonnull)parentNodePath
+                            collectRelativePath:(id _Nonnull)collectRelativePath
+    __attribute__((unavailable("Replaced by initWithParentPathString:collectRelativePath:")));
+
 + (instancetype _Nonnull)pathWithParentNodePath:(id _Nonnull)parentNodePath
-                            collectRelativePath:(id _Nonnull)collectRelativePath;
+                            collectRelativePath:(id _Nonnull)collectRelativePath
+    __attribute__((unavailable("Replaced by pathWithParentPathString:collectRelativePath:")));
 
 @end
 
 /**
  * Short syntax of MXEXmlArrayPath initializer
  *
- * @see MXEXmlArrayPath # initWithParentNodePath:collectRelativePath:
+ * @see MXEXmlArrayPath # initWithParentPathString:collectRelativePath:
  */
-static inline MXEXmlArrayPath* _Nonnull MXEXmlArray(id _Nonnull parentNodePath, id _Nonnull collectRelativePath)
+static inline MXEXmlArrayPath* _Nonnull MXEXmlArray(NSString* _Nonnull parentNodePath, id _Nonnull collectRelativePath)
 {
-    return [MXEXmlArrayPath pathWithParentNodePath:parentNodePath collectRelativePath:collectRelativePath];
+    return [MXEXmlArrayPath pathWithParentPathString:parentNodePath collectRelativePath:collectRelativePath];
 }

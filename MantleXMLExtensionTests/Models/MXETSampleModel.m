@@ -22,4 +22,26 @@
     return @"response";
 }
 
++ (NSString* _Nonnull)xmlDeclaration
+{
+    return @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+}
+
++ (Class _Nullable)classForParsingXmlNode:(MXEXmlNode* _Nonnull)xmlNode
+{
+    return self.class;
+}
+
+#pragma mark - NSObject (Override)
+
+- (BOOL)isEqual:(id _Nullable)object
+{
+    if (![object isKindOfClass:self.class]) {
+        return NO;
+    }
+
+    typeof(self) other = object;
+    return [self.a isEqual:other.a] && [self.b isEqual:other.b] && [self.c isEqual:other.c];
+}
+
 @end
