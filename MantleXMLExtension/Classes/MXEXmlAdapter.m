@@ -445,9 +445,13 @@
                 transformer = [self transformerForModelPropertiesOfClass:propertyClass];
             }
 
-            // For user-defined MTLModel, try parse it with xmlNodeTransformer.
-            if (!transformer && [propertyClass conformsToProtocol:@protocol(MXEXmlSerializing)]) {
-                transformer = [self xmlNodeTransformerWithModelClass:propertyClass];
+            if (!transformer) {
+                // For user-defined MTLModel, try parse it with xmlNodeTransformer.
+                if ([propertyClass conformsToProtocol:@protocol(MXEXmlSerializing)]) {
+                    transformer = [self xmlNodeTransformerWithModelClass:propertyClass];
+                } else if ([propertyClass isSubclassOfClass:NSNumber.class]) {
+                    transformer = [self numberTransformer];
+                }
             }
 
             if (transformer == nil) {
@@ -485,9 +489,13 @@
 {
     NSParameterAssert(objCType != NULL);
 
-    if (strcmp(objCType, @encode(NSInteger)) == 0
-        || strcmp(objCType, @encode(NSUInteger)) == 0
-        || strcmp(objCType, @encode(NSNumber)) == 0
+    if (strcmp(objCType, @encode(int)) == 0
+        || strcmp(objCType, @encode(short)) == 0
+        || strcmp(objCType, @encode(long)) == 0
+        || strcmp(objCType, @encode(long long)) == 0
+        || strcmp(objCType, @encode(unsigned short)) == 0
+        || strcmp(objCType, @encode(unsigned long)) == 0
+        || strcmp(objCType, @encode(unsigned long long)) == 0
         || strcmp(objCType, @encode(float)) == 0
         || strcmp(objCType, @encode(double)) == 0) {
         return [self.class numberTransformer];

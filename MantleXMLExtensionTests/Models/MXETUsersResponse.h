@@ -27,9 +27,9 @@
  */
 @interface MXETUsersResponse : MTLModel <MXEXmlSerializing>
 
-@property (nonatomic, nonnull, strong) NSString* status;
-@property (nonatomic, nonnull, strong) NSArray<MXETUser*>* users;
-@property (nonatomic, assign) NSInteger userCount;
+@property (nonatomic, nullable, strong) NSString* status;
+@property (nonatomic, nullable, strong) NSArray<MXETUser*>* users;
+@property (nonatomic, nullable, strong) NSNumber* userCount;
 
 @end
 

@@ -16,6 +16,7 @@
 - It become possible to separate that conversion to `MXEXmlNode` and conversion to model.
   (See: [MXEXmlParser](MantleXMLExtension/Classes/MXEXmlParser.h) )
 - It support Carthage.
+- Support some primitive types and NSNumber with default transformer.
 
 ### Minor changes
 
