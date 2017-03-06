@@ -1,3 +1,9 @@
+## 1.0.1
+
+### Bug fixes
+
+- Fix to become warning when import MXEXmlNode.h on MRC.
+
 ## 1.0.0
 
 ### Major changes
