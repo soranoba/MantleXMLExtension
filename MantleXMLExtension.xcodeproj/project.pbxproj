@@ -79,34 +79,34 @@
 		A409DFBB1E6300B800C136C4 /* MXEXmlParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlParserTests.m; sourceTree = "<group>"; };
 		A409DFBC1E6300B800C136C4 /* MXEXmlValuePathTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlValuePathTests.m; sourceTree = "<group>"; };
 		A409DFC61E6300BE00C136C4 /* MantleXMLExtensionTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MantleXMLExtensionTests-Prefix.pch"; sourceTree = "<group>"; };
-		A409DFC81E6300CB00C136C4 /* MXETFilterModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETFilterModel.h; path = Models/MXETFilterModel.h; sourceTree = "<group>"; };
-		A409DFC91E6300CB00C136C4 /* MXETFilterModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETFilterModel.m; path = Models/MXETFilterModel.m; sourceTree = "<group>"; };
-		A409DFCA1E6300CB00C136C4 /* MXETSampleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETSampleModel.h; path = Models/MXETSampleModel.h; sourceTree = "<group>"; };
-		A409DFCB1E6300CB00C136C4 /* MXETSampleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETSampleModel.m; path = Models/MXETSampleModel.m; sourceTree = "<group>"; };
-		A409DFCC1E6300CB00C136C4 /* MXETTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETTypeModel.h; path = Models/MXETTypeModel.h; sourceTree = "<group>"; };
-		A409DFCD1E6300CB00C136C4 /* MXETTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETTypeModel.m; path = Models/MXETTypeModel.m; sourceTree = "<group>"; };
-		A409DFCE1E6300CB00C136C4 /* MXETUsersResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETUsersResponse.h; path = Models/MXETUsersResponse.h; sourceTree = "<group>"; };
-		A409DFCF1E6300CB00C136C4 /* MXETUsersResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETUsersResponse.m; path = Models/MXETUsersResponse.m; sourceTree = "<group>"; };
-		A409DFD41E6300D700C136C4 /* MXEErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEErrorCode.h; path = Classes/MXEErrorCode.h; sourceTree = "<group>"; };
-		A409DFD51E6300D700C136C4 /* MXEXmlAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlAdapter.h; path = Classes/MXEXmlAdapter.h; sourceTree = "<group>"; };
-		A409DFD61E6300D700C136C4 /* MXEXmlAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlAdapter.m; path = Classes/MXEXmlAdapter.m; sourceTree = "<group>"; };
-		A409DFD71E6300D700C136C4 /* MXEXmlAdapter+Transformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MXEXmlAdapter+Transformers.m"; path = "Classes/MXEXmlAdapter+Transformers.m"; sourceTree = "<group>"; };
-		A409DFD81E6300D700C136C4 /* MXEXmlArrayPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlArrayPath.h; path = Classes/MXEXmlArrayPath.h; sourceTree = "<group>"; };
-		A409DFD91E6300D700C136C4 /* MXEXmlArrayPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlArrayPath.m; path = Classes/MXEXmlArrayPath.m; sourceTree = "<group>"; };
-		A409DFDA1E6300D700C136C4 /* MXEXmlAttributePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlAttributePath.h; path = Classes/MXEXmlAttributePath.h; sourceTree = "<group>"; };
-		A409DFDB1E6300D700C136C4 /* MXEXmlAttributePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlAttributePath.m; path = Classes/MXEXmlAttributePath.m; sourceTree = "<group>"; };
-		A409DFDC1E6300D700C136C4 /* MXEXmlChildNodePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlChildNodePath.h; path = Classes/MXEXmlChildNodePath.h; sourceTree = "<group>"; };
-		A409DFDD1E6300D700C136C4 /* MXEXmlChildNodePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlChildNodePath.m; path = Classes/MXEXmlChildNodePath.m; sourceTree = "<group>"; };
-		A409DFDE1E6300D700C136C4 /* MXEXmlNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlNode.h; path = Classes/MXEXmlNode.h; sourceTree = "<group>"; };
-		A409DFDF1E6300D700C136C4 /* MXEXmlNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlNode.m; path = Classes/MXEXmlNode.m; sourceTree = "<group>"; };
-		A409DFE01E6300D700C136C4 /* MXEXmlNodePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlNodePath.h; path = Classes/MXEXmlNodePath.h; sourceTree = "<group>"; };
-		A409DFE11E6300D700C136C4 /* MXEXmlNodePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlNodePath.m; path = Classes/MXEXmlNodePath.m; sourceTree = "<group>"; };
-		A409DFE21E6300D700C136C4 /* MXEXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlParser.h; path = Classes/MXEXmlParser.h; sourceTree = "<group>"; };
-		A409DFE31E6300D700C136C4 /* MXEXmlParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlParser.m; path = Classes/MXEXmlParser.m; sourceTree = "<group>"; };
-		A409DFE41E6300D700C136C4 /* MXEXmlValuePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlValuePath.h; path = Classes/MXEXmlValuePath.h; sourceTree = "<group>"; };
-		A409DFE51E6300D700C136C4 /* MXEXmlValuePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlValuePath.m; path = Classes/MXEXmlValuePath.m; sourceTree = "<group>"; };
-		A409DFF91E6300EC00C136C4 /* NSError+MantleXMLExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+MantleXMLExtension.h"; path = "Classes/Private/NSError+MantleXMLExtension.h"; sourceTree = "<group>"; };
-		A409DFFA1E6300EC00C136C4 /* NSError+MantleXMLExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+MantleXMLExtension.m"; path = "Classes/Private/NSError+MantleXMLExtension.m"; sourceTree = "<group>"; };
+		A409DFC81E6300CB00C136C4 /* MXETFilterModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETFilterModel.h; path = MXETFilterModel.h; sourceTree = "<group>"; };
+		A409DFC91E6300CB00C136C4 /* MXETFilterModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETFilterModel.m; path = MXETFilterModel.m; sourceTree = "<group>"; };
+		A409DFCA1E6300CB00C136C4 /* MXETSampleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETSampleModel.h; path = MXETSampleModel.h; sourceTree = "<group>"; };
+		A409DFCB1E6300CB00C136C4 /* MXETSampleModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETSampleModel.m; path = MXETSampleModel.m; sourceTree = "<group>"; };
+		A409DFCC1E6300CB00C136C4 /* MXETTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETTypeModel.h; path = MXETTypeModel.h; sourceTree = "<group>"; };
+		A409DFCD1E6300CB00C136C4 /* MXETTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETTypeModel.m; path = MXETTypeModel.m; sourceTree = "<group>"; };
+		A409DFCE1E6300CB00C136C4 /* MXETUsersResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXETUsersResponse.h; path = MXETUsersResponse.h; sourceTree = "<group>"; };
+		A409DFCF1E6300CB00C136C4 /* MXETUsersResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXETUsersResponse.m; path = MXETUsersResponse.m; sourceTree = "<group>"; };
+		A409DFD41E6300D700C136C4 /* MXEErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEErrorCode.h; path = MXEErrorCode.h; sourceTree = "<group>"; };
+		A409DFD51E6300D700C136C4 /* MXEXmlAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlAdapter.h; path = MXEXmlAdapter.h; sourceTree = "<group>"; };
+		A409DFD61E6300D700C136C4 /* MXEXmlAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlAdapter.m; path = MXEXmlAdapter.m; sourceTree = "<group>"; };
+		A409DFD71E6300D700C136C4 /* MXEXmlAdapter+Transformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MXEXmlAdapter+Transformers.m"; path = "MXEXmlAdapter+Transformers.m"; sourceTree = "<group>"; };
+		A409DFD81E6300D700C136C4 /* MXEXmlArrayPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlArrayPath.h; path = MXEXmlArrayPath.h; sourceTree = "<group>"; };
+		A409DFD91E6300D700C136C4 /* MXEXmlArrayPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlArrayPath.m; path = MXEXmlArrayPath.m; sourceTree = "<group>"; };
+		A409DFDA1E6300D700C136C4 /* MXEXmlAttributePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlAttributePath.h; path = MXEXmlAttributePath.h; sourceTree = "<group>"; };
+		A409DFDB1E6300D700C136C4 /* MXEXmlAttributePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlAttributePath.m; path = MXEXmlAttributePath.m; sourceTree = "<group>"; };
+		A409DFDC1E6300D700C136C4 /* MXEXmlChildNodePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlChildNodePath.h; path = MXEXmlChildNodePath.h; sourceTree = "<group>"; };
+		A409DFDD1E6300D700C136C4 /* MXEXmlChildNodePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlChildNodePath.m; path = MXEXmlChildNodePath.m; sourceTree = "<group>"; };
+		A409DFDE1E6300D700C136C4 /* MXEXmlNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlNode.h; path = MXEXmlNode.h; sourceTree = "<group>"; };
+		A409DFDF1E6300D700C136C4 /* MXEXmlNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlNode.m; path = MXEXmlNode.m; sourceTree = "<group>"; };
+		A409DFE01E6300D700C136C4 /* MXEXmlNodePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlNodePath.h; path = MXEXmlNodePath.h; sourceTree = "<group>"; };
+		A409DFE11E6300D700C136C4 /* MXEXmlNodePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlNodePath.m; path = MXEXmlNodePath.m; sourceTree = "<group>"; };
+		A409DFE21E6300D700C136C4 /* MXEXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlParser.h; path = MXEXmlParser.h; sourceTree = "<group>"; };
+		A409DFE31E6300D700C136C4 /* MXEXmlParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlParser.m; path = MXEXmlParser.m; sourceTree = "<group>"; };
+		A409DFE41E6300D700C136C4 /* MXEXmlValuePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXEXmlValuePath.h; path = MXEXmlValuePath.h; sourceTree = "<group>"; };
+		A409DFE51E6300D700C136C4 /* MXEXmlValuePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXEXmlValuePath.m; path = MXEXmlValuePath.m; sourceTree = "<group>"; };
+		A409DFF91E6300EC00C136C4 /* NSError+MantleXMLExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+MantleXMLExtension.h"; path = "NSError+MantleXMLExtension.h"; sourceTree = "<group>"; };
+		A409DFFA1E6300EC00C136C4 /* NSError+MantleXMLExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+MantleXMLExtension.m"; path = "NSError+MantleXMLExtension.m"; sourceTree = "<group>"; };
 		A409DFFF1E63092300C136C4 /* Mantle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mantle.framework; path = Carthage/Build/iOS/Mantle.framework; sourceTree = "<group>"; };
 		A409E0011E6322AC00C136C4 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		A409E0031E6322B700C136C4 /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCMock.framework; path = Carthage/Build/iOS/OCMock.framework; sourceTree = "<group>"; };
@@ -150,13 +150,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A409DF9E1E63007500C136C4 /* MantleXMLExtension */ = {
+		A40611C91E758EDA0074F00D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A409DFF81E6300D900C136C4 /* Private */,
 				A409DFD41E6300D700C136C4 /* MXEErrorCode.h */,
+				A409DFD71E6300D700C136C4 /* MXEXmlAdapter+Transformers.m */,
 				A409DFD51E6300D700C136C4 /* MXEXmlAdapter.h */,
 				A409DFD61E6300D700C136C4 /* MXEXmlAdapter.m */,
-				A409DFD71E6300D700C136C4 /* MXEXmlAdapter+Transformers.m */,
 				A409DFD81E6300D700C136C4 /* MXEXmlArrayPath.h */,
 				A409DFD91E6300D700C136C4 /* MXEXmlArrayPath.m */,
 				A409DFDA1E6300D700C136C4 /* MXEXmlAttributePath.h */,
@@ -171,9 +172,17 @@
 				A409DFE31E6300D700C136C4 /* MXEXmlParser.m */,
 				A409DFE41E6300D700C136C4 /* MXEXmlValuePath.h */,
 				A409DFE51E6300D700C136C4 /* MXEXmlValuePath.m */,
-				A409DF9F1E63007500C136C4 /* MantleXMLExtension.h */,
+			);
+			name = Classes;
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		A409DF9E1E63007500C136C4 /* MantleXMLExtension */ = {
+			isa = PBXGroup;
+			children = (
+				A40611C91E758EDA0074F00D /* Classes */,
 				A409DFA01E63007500C136C4 /* Info.plist */,
-				A409DFF81E6300D900C136C4 /* Private */,
+				A409DF9F1E63007500C136C4 /* MantleXMLExtension.h */,
 			);
 			path = MantleXMLExtension;
 			sourceTree = "<group>";
@@ -182,7 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				A409DFC71E6300C200C136C4 /* Models */,
-				A409DFC61E6300BE00C136C4 /* MantleXMLExtensionTests-Prefix.pch */,
+				A409DFAC1E63007500C136C4 /* Info.plist */,
 				A409DFB41E6300B800C136C4 /* MXEXmlAdapter+TransformeresTests.m */,
 				A409DFB51E6300B800C136C4 /* MXEXmlAdapterTests.m */,
 				A409DFB61E6300B800C136C4 /* MXEXmlArrayPathTests.m */,
@@ -192,7 +201,7 @@
 				A409DFBA1E6300B800C136C4 /* MXEXmlNodeTests.m */,
 				A409DFBB1E6300B800C136C4 /* MXEXmlParserTests.m */,
 				A409DFBC1E6300B800C136C4 /* MXEXmlValuePathTests.m */,
-				A409DFAC1E63007500C136C4 /* Info.plist */,
+				A409DFC61E6300BE00C136C4 /* MantleXMLExtensionTests-Prefix.pch */,
 			);
 			path = MantleXMLExtensionTests;
 			sourceTree = "<group>";
@@ -210,6 +219,7 @@
 				A409DFCF1E6300CB00C136C4 /* MXETUsersResponse.m */,
 			);
 			name = Models;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A409DFF81E6300D900C136C4 /* Private */ = {
@@ -219,16 +229,17 @@
 				A409DFFA1E6300EC00C136C4 /* NSError+MantleXMLExtension.m */,
 			);
 			name = Private;
+			path = Private;
 			sourceTree = "<group>";
 		};
 		A4BCF32F1DDFDE2C00EF672C = {
 			isa = PBXGroup;
 			children = (
-				A409DF9D1E63007500C136C4 /* MantleXMLExtension.framework */,
-				A409DF9E1E63007500C136C4 /* MantleXMLExtension */,
-				A409DFA51E63007500C136C4 /* MantleXMLExtensionTests.xctest */,
-				A409DFA91E63007500C136C4 /* MantleXMLExtensionTests */,
 				2C719C86E1BC09F9F20C0F0E /* Frameworks */,
+				A409DF9E1E63007500C136C4 /* MantleXMLExtension */,
+				A409DFA91E63007500C136C4 /* MantleXMLExtensionTests */,
+				A409DF9D1E63007500C136C4 /* MantleXMLExtension.framework */,
+				A409DFA51E63007500C136C4 /* MantleXMLExtensionTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};

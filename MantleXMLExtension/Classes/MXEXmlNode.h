@@ -166,7 +166,7 @@
 /// @see MXEXmlNode # attributes
 @property (nonatomic, nonnull, strong, readwrite) NSMutableDictionary<NSString*, NSString*>* attributes;
 /// @see MXEXmlNode # children
-@property (nonatomic, nullable, readwrite) NSMutableArray<MXEMutableXmlNode*>* children;
+@property (nonatomic, nullable, strong, readwrite) NSMutableArray<MXEMutableXmlNode*>* children;
 /// @see MXEXmlNode # value
 @property (nonatomic, nullable, copy, readwrite) NSString* value;
 

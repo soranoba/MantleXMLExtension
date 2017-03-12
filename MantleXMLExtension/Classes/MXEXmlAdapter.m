@@ -441,17 +441,11 @@
         if (*(attributes->type) == *(@encode(id))) {
             Class propertyClass = attributes->objectClass;
 
-            if (propertyClass != nil) {
-                transformer = [self transformerForModelPropertiesOfClass:propertyClass];
-            }
-
-            if (!transformer) {
-                // For user-defined MTLModel, try parse it with xmlNodeTransformer.
-                if ([propertyClass conformsToProtocol:@protocol(MXEXmlSerializing)]) {
-                    transformer = [self xmlNodeTransformerWithModelClass:propertyClass];
-                } else if ([propertyClass isSubclassOfClass:NSNumber.class]) {
-                    transformer = [self numberTransformer];
-                }
+            // For user-defined MTLModel, try parse it with xmlNodeTransformer.
+            if ([propertyClass conformsToProtocol:@protocol(MXEXmlSerializing)]) {
+                transformer = [self xmlNodeTransformerWithModelClass:propertyClass];
+            } else if ([propertyClass isSubclassOfClass:NSNumber.class]) {
+                transformer = [self numberTransformer];
             }
 
             if (transformer == nil) {
