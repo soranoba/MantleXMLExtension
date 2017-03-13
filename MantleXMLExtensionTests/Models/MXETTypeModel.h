@@ -13,6 +13,7 @@
 @interface MXETTypeModel : MTLModel <MXEXmlSerializing>
 
 @property (nonatomic, assign) NSInteger intNum;
+@property (nonatomic, assign) NSUInteger uintNum;
 @property (nonatomic, assign) double doubleNum;
 @property (nonatomic, assign) float floatNum;
 @property (nonatomic, assign) BOOL boolNum;
