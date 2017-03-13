@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'MantleXMLExtension'
-  s.version          = '1.0.1'
+  s.version          = '1.0.2'
   s.summary          = 'MantleXMLExtension support mutual conversion between Model object and XML with Mantle.'
   s.homepage         = 'https://github.com/soranoba/MantleXMLExtension'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
