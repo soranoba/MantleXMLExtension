@@ -15,6 +15,7 @@
 
 @interface MXEXmlAdapter ()
 + (NSDictionary<NSString*, NSValueTransformer*>* _Nonnull)valueTransformersForModelClass:(Class _Nonnull)modelClass;
++ (NSValueTransformer* _Nullable)transformerForModelPropertiesOfObjCType:(const char* _Nonnull)objCType;
 @end
 
 @interface MXETUsersResponse ()
@@ -131,8 +132,53 @@ QuickSpecBegin(MXEXmlAdapterTests)
         });
     });
 
+    describe(@"transformerForModelPropertiesOfObjCType:", ^{
+        it(@"supported basic type", ^{
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(char)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(int8_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(short)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(int16_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(int)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(long)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(int32_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(long long)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(int64_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(unsigned char)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(uint8_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(unsigned int)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(unsigned short)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(uint16_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(unsigned long)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(uint32_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(unsigned long long)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(uint64_t)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(NSInteger)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(NSUInteger)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(bool)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(BOOL)]).notTo(beNil());
+            expect([MXEXmlAdapter transformerForModelPropertiesOfObjCType:@encode(boolean_t)]).notTo(beNil());
+        });
+    });
+
     describe(@"serialize / deserialize", ^{
-        it(@"supported basic type with default transformers", ^{
+        it(@"supported basic type with default transformer", ^{
+            NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                               @"<response int=\"-123456789\" uint=\"123456789\" double=\"1.25\" float=\"0.25\" />";
+            NSData* xmlData = [xmlStr dataUsingEncoding:NSUTF8StringEncoding];
+            NSError* error = nil;
+
+            MXETTypeModel* model = [MXEXmlAdapter modelOfClass:MXETTypeModel.class
+                                                   fromXmlData:xmlData
+                                                         error:&error];
+            expect(model).notTo(beNil());
+            expect(error).to(beNil());
+            expect(model.intNum).to(equal(-123456789));
+            expect(model.uintNum).to(equal(123456789));
+            expect(model.doubleNum).to(equal(1.25));
+            expect(model.floatNum).to(equal(0.25));
+        });
+
+        it(@"supported basic path type", ^{
             NSString* xmlStr = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                                @"<response status=\"ok\">"
                                @"<summary>"

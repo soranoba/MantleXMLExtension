@@ -1,3 +1,9 @@
+## 1.0.2
+
+### Bug fixes
+
+- Fix that default transformer did not correspond to unsigned int.
+
 ## 1.0.1
 
 ### Bug fixes

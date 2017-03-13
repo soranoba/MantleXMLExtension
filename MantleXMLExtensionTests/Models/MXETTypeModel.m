@@ -15,6 +15,7 @@
 + (NSDictionary<NSString*, id>* _Nonnull)xmlKeyPathsByPropertyKey
 {
     return @{ @"intNum" : MXEXmlAttribute(@"", @"int"),
+              @"uintNum" : MXEXmlAttribute(@"", @"uint"),
               @"doubleNum" : MXEXmlAttribute(@"", @"double"),
               @"floatNum" : MXEXmlAttribute(@"", @"float"),
               @"boolNum" : MXEXmlAttribute(@"", @"bool") };

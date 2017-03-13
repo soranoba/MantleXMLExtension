@@ -483,18 +483,20 @@
 {
     NSParameterAssert(objCType != NULL);
 
-    if (strcmp(objCType, @encode(int)) == 0
+    if (strcmp(objCType, @encode(char)) == 0
+        || strcmp(objCType, @encode(int)) == 0
         || strcmp(objCType, @encode(short)) == 0
         || strcmp(objCType, @encode(long)) == 0
         || strcmp(objCType, @encode(long long)) == 0
+        || strcmp(objCType, @encode(unsigned char)) == 0
+        || strcmp(objCType, @encode(unsigned int)) == 0
         || strcmp(objCType, @encode(unsigned short)) == 0
         || strcmp(objCType, @encode(unsigned long)) == 0
         || strcmp(objCType, @encode(unsigned long long)) == 0
         || strcmp(objCType, @encode(float)) == 0
         || strcmp(objCType, @encode(double)) == 0) {
         return [self.class numberTransformer];
-    }
-    if (strcmp(objCType, @encode(BOOL)) == 0) {
+    } else if (strcmp(objCType, @encode(BOOL)) == 0) {
         return [self.class boolTransformer];
     }
 
