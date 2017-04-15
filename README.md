@@ -15,11 +15,11 @@ Mantle support the Json, but doesn't support XML.
 This application is an extension for handling xml with Mantle.
 
 - Support these
- - Attributes
- - Child nodes, Nested child nodes, Array of child nodes
- - Customizable order of child nodes
- - Customizable XML declaration
- - Customizable transformer
+  - Attributes
+  - Child nodes, Nested child nodes, Array of child nodes
+  - Customizable order of child nodes
+  - Customizable XML declaration
+  - Customizable transformer
 
 ### What is Mantle ?
 Model framework for Cocoa and Cocoa Touch
