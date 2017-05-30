@@ -1,3 +1,9 @@
+## 1.0.3
+
+### Bug fixes
+
+- Fix to delete of "Ideographic-space" at edge.
+
 ## 1.0.2
 
 ### Bug fixes
