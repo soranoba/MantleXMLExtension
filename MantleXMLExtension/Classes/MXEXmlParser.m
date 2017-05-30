@@ -167,7 +167,10 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 {
     MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
     if (!node.hasChildren) {
-        node.value = [node.value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        // NOTE: Don't remove Ideographic-spaces
+        NSMutableCharacterSet* trimCharacterSet = [[NSCharacterSet newlineCharacterSet] mutableCopy];
+        [trimCharacterSet addCharactersInString:@" \t"];
+        node.value = [node.value stringByTrimmingCharactersInSet:trimCharacterSet];
     }
 
     if (self.xmlParseStack.count > 1) {

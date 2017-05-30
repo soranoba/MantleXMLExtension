@@ -135,6 +135,21 @@ QuickSpecBegin(MXEXmlParserTests)
             expect(error).to(beNil());
         });
 
+        it(@"Ideographic-spaces at edge are not deleted", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            @"<response status=\"OK\">　　Hello, \"World\"!!　　</response>";
+
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                   attributes:@{ @"status" : @"OK" }
+                                                                        value:@"　　Hello, \"World\"!!　　"];
+
+            __block MXEXmlNode* node;
+            __block NSError* error = nil;
+            expect(node = [MXEXmlParser xmlNodeWithData:[str dataUsingEncoding:NSUTF8StringEncoding] error:&error])
+            .to(equal(expectedObj));
+            expect(error).to(beNil());
+        });
+
         it(@"can parse CDATA. Even in that case, it remove leading and trailing spaces", ^{
             NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                             @"<response status=\"OK\">\n"
