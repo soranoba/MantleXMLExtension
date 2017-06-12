@@ -1,8 +1,23 @@
 ## 1.1.0
 
+### Additional functions
+
+- MXEXmlAdapter # trimingCharactersTransformerWithCharacterSet:
+- MXEXmlAdapter # trimingCharactersTransformerWithDefaultCharacters
+
 ### Minor changes
 
 - MXEXmlParser has changed to NOT remove any characters from text nodes.
+
+   If your API request or response contains spaces, CRs, LFs, and tabs at edge of the text node, it will be incompatible. 
+   In order to get the same behavior as 1.0.x, you need to set the transformer to property of NSString.
+   
+   ```objc
+   + (NSValueTransformer* _Nonnull)<key>XmlTransformer
+   {
+       return [MXEXmlAdapter trimingCharactersTransformerWithDefaultCharacterSet];
+   }
+   ```
 
 ## 1.0.3
 

@@ -308,4 +308,34 @@
             }];
 }
 
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
+    trimingCharactersTransformerWithCharacterSet:(NSCharacterSet* _Nonnull)characterSet
+{
+    return [MTLValueTransformer
+        transformerUsingForwardBlock:
+            ^NSString* _Nullable(NSString* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
+                if (!value) {
+                    return nil;
+                }
+                if (![value isKindOfClass:NSString.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a string, but got %@", value.class),
+                                MXEErrorInputDataKey : value });
+                    *success = NO;
+                    return nil;
+                }
+                return [value stringByTrimmingCharactersInSet:characterSet];
+            }];
+}
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)trimingCharactersTransformerWithDefaultCharacterSet
+{
+    NSMutableCharacterSet* trimCharacterSet = [[NSCharacterSet newlineCharacterSet] mutableCopy];
+    [trimCharacterSet addCharactersInString:@" \t"];
+
+    return [self trimingCharactersTransformerWithCharacterSet:trimCharacterSet];
+}
+
 @end

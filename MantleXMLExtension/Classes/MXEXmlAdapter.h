@@ -271,6 +271,24 @@
  */
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)boolTransformer;
 
+/**
+ * Deletes the specified characters from edge of the string.
+ *
+ * @param characterSet  Character set to be deleted
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
+    trimingCharactersTransformerWithCharacterSet:(NSCharacterSet* _Nonnull)characterSet;
+
+/**
+ * Deletes the characters from edges of the string.
+ *
+ * Target characters : newlineCharacterSet, SP (0x20) and TAB (0x09)
+ *
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)trimingCharactersTransformerWithDefaultCharacterSet;
+
 @end
 
 @interface MXEXmlAdapter (Deprecated)
