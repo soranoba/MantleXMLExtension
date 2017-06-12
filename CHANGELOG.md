@@ -1,3 +1,9 @@
+## 1.1.0
+
+### Minor changes
+
+- MXEXmlParser has changed to NOT remove any characters from text nodes.
+
 ## 1.0.3
 
 ### Bug fixes
