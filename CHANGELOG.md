@@ -2,15 +2,15 @@
 
 ### Additional functions
 
-- MXEXmlAdapter # trimingCharactersTransformerWithCharacterSet:
-- MXEXmlAdapter # trimingCharactersTransformerWithDefaultCharacters
+- `MXEXmlAdapter # trimingCharactersTransformerWithCharacterSet:`
+- `MXEXmlAdapter # trimingCharactersTransformerWithDefaultCharacters`
 
 ### Minor changes
 
-- MXEXmlParser has changed to NOT remove any characters from text nodes.
+- `MXEXmlParser` has changed to **NOT** remove any characters from text nodes.
 
-   If your API request or response contains spaces, CRs, LFs, and tabs at edge of the text node, it will be incompatible. 
-   In order to get the same behavior as 1.0.x, you need to set the transformer to property of NSString.
+   If your API request or response contains spaces, CRs, LFs, and tabs at edge of the text node, **it become to incompatible**.  
+   In order to get the same behavior as 1.0.x, you need to set the transformer to property of `NSString`.
    
    ```objc
    + (NSValueTransformer* _Nonnull)<key>XmlTransformer
@@ -35,7 +35,7 @@
 
 ### Bug fixes
 
-- Fix to become warning when import MXEXmlNode.h on MRC.
+- Fix to become warning when import `MXEXmlNode.h` on MRC.
 
 ## 1.0.0
 
@@ -55,9 +55,9 @@
 - It become possible to separate that conversion to `MXEXmlNode` and conversion to model.
   (See: [MXEXmlParser](MantleXMLExtension/Classes/MXEXmlParser.h) )
 - It support Carthage.
-- Support some primitive types and NSNumber with default transformer.
+- Support some primitive types and `NSNumber` with default transformer.
 
 ### Minor changes
 
-- It changed MXEXmlNode to immutable and added MXEMutableXmlNode.
-- MXEXmlPath that is base class has been deleted. Instead, MXEAccessible protocol was added.
+- It changed `MXEXmlNode` to immutable and added `MXEMutableXmlNode`.
+- `MXEXmlPath` that is base class has been deleted. Instead, `MXEAccessible` protocol was added.
