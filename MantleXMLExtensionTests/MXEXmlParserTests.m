@@ -108,7 +108,7 @@ QuickSpecBegin(MXEXmlParserTests)
 
             MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
                                                                    attributes:@{ @"status" : @"OK" }
-                                                                        value:@"Hello, \"World\"!!"];
+                                                                        value:@"  Hello, \"World\"!!  "];
 
             __block MXEXmlNode* node;
             __block NSError* error = nil;
@@ -117,16 +117,34 @@ QuickSpecBegin(MXEXmlParserTests)
             expect(error).to(beNil());
         });
 
-        it(@"remove leading and trailing spaces", ^{
+        it(@"LF and space at edge are not deleted", ^{
             NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                             @"<response status=\"OK\">\n"
-                            @"    aaa bbb ccc \r\n"
+                            @"    aaa bbb ccc \n"
                             @"    ddd eee fff \n"
                             @"</response>";
 
             MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
                                                                    attributes:@{ @"status" : @"OK" }
-                                                                        value:@"aaa bbb ccc \n    ddd eee fff"];
+                                                                        value:@"\n    aaa bbb ccc \n    ddd eee fff \n"];
+
+            __block MXEXmlNode* node;
+            __block NSError* error = nil;
+            expect(node = [MXEXmlParser xmlNodeWithData:[str dataUsingEncoding:NSUTF8StringEncoding] error:&error])
+                .to(equal(expectedObj));
+            expect(error).to(beNil());
+        });
+
+        it(@"CR and CRLF are converted to one LF", ^{
+            NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                            @"<response>\n"
+                            @"a\r"
+                            @"b\r\n"
+                            @"</response>";
+
+            MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
+                                                                   attributes:@{}
+                                                                        value:@"\na\nb\n"];
 
             __block MXEXmlNode* node;
             __block NSError* error = nil;
@@ -137,7 +155,7 @@ QuickSpecBegin(MXEXmlParserTests)
 
         it(@"Ideographic-spaces at edge are not deleted", ^{
             NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-            @"<response status=\"OK\">　　Hello, \"World\"!!　　</response>";
+                            @"<response status=\"OK\">　　Hello, \"World\"!!　　</response>";
 
             MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
                                                                    attributes:@{ @"status" : @"OK" }
@@ -146,11 +164,11 @@ QuickSpecBegin(MXEXmlParserTests)
             __block MXEXmlNode* node;
             __block NSError* error = nil;
             expect(node = [MXEXmlParser xmlNodeWithData:[str dataUsingEncoding:NSUTF8StringEncoding] error:&error])
-            .to(equal(expectedObj));
+                .to(equal(expectedObj));
             expect(error).to(beNil());
         });
 
-        it(@"can parse CDATA. Even in that case, it remove leading and trailing spaces", ^{
+        it(@"can parse CDATA. The value is combinatio of CDATA and text nodes", ^{
             NSString* str = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                             @"<response status=\"OK\">\n"
                             @"    <![CDATA[    <aaa bbb ccc \n"
@@ -160,7 +178,7 @@ QuickSpecBegin(MXEXmlParserTests)
 
             MXEXmlNode* expectedObj = [[MXEXmlNode alloc] initWithElementName:@"response"
                                                                    attributes:@{ @"status" : @"OK" }
-                                                                        value:@"<aaa bbb ccc \n    ddd eee fff>"];
+                                                                        value:@"\n        <aaa bbb ccc \n    ddd eee fff>  \n    \n"];
 
             __block MXEXmlNode* node;
             __block NSError* error = nil;

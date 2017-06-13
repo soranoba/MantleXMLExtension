@@ -154,7 +154,7 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
 {
     MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
 
-    // NOTE: Ignore character string when child node and character string are mixed.
+    // NOTE: Ignore characters when child node and character string are mixed.
     if (!node.hasChildren) {
         node.value = node.value ? [node.value stringByAppendingString:string] : string;
     }
@@ -166,12 +166,6 @@ static NSString* _Nonnull const MXEXmlDeclarationDefault = @"<?xml version=\"1.0
     qualifiedName:(NSString* _Nullable)qName
 {
     MXEMutableXmlNode* node = [self.xmlParseStack lastObject];
-    if (!node.hasChildren) {
-        // NOTE: Don't remove Ideographic-spaces
-        NSMutableCharacterSet* trimCharacterSet = [[NSCharacterSet newlineCharacterSet] mutableCopy];
-        [trimCharacterSet addCharactersInString:@" \t"];
-        node.value = [node.value stringByTrimmingCharactersInSet:trimCharacterSet];
-    }
 
     if (self.xmlParseStack.count > 1) {
         [self.xmlParseStack removeLastObject];

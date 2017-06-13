@@ -578,5 +578,78 @@ QuickSpecBegin(MXEXmlAdapter_TransformersTests)
             expect(error.userInfo[MXEErrorInputDataKey]).to(equal(@"1"));
         });
     });
+
+    describe(@"trimingCharactersTransformerWithCharacterSet:", ^{
+        NSValueTransformer<MTLTransformerErrorHandling>* transformer
+            = [MXEXmlAdapter trimingCharactersTransformerWithCharacterSet:[NSCharacterSet characterSetWithCharactersInString:@"abc"]];
+
+        it(@"delete the specified characters", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@"abcdefgabcdefgabc" success:&success error:&error]).to(equal(@"defgabcdefg"));
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"sets NO to success, when input value is invalid type", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@(123) success:&success error:&error]).to(beNil());
+            expect(success).to(equal(NO));
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidInputData));
+            expect(error.userInfo[MXEErrorInputDataKey]).to(equal(@(123)));
+        });
+
+        it(@"sets YES to success, if input value is nil", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:nil success:&success error:&error]).to(beNil());
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"does not allow reverse transformation", ^{
+            expect([transformer.class allowsReverseTransformation]).to(equal(NO));
+        });
+    });
+
+    describe(@"trimingCharactersTransformerWithDefaultCharacterSet", ^{
+        NSValueTransformer<MTLTransformerErrorHandling>* transformer
+            = [MXEXmlAdapter trimingCharactersTransformerWithDefaultCharacterSet];
+
+        it(@"delete the CR, LF, SP and TAB characters", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@"\r\n \tabc\r\n \tabc\r\n \t" success:&success error:&error])
+                .to(equal(@"abc\r\n \tabc"));
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"sets NO to success, when input value is invalid type", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@(123) success:&success error:&error]).to(beNil());
+            expect(success).to(equal(NO));
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidInputData));
+            expect(error.userInfo[MXEErrorInputDataKey]).to(equal(@(123)));
+        });
+
+        it(@"sets YES to success, if input value is nil", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:nil success:&success error:&error]).to(beNil());
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"does not allow reverse transformation", ^{
+            expect([transformer.class allowsReverseTransformation]).to(equal(NO));
+        });
+    });
 }
 QuickSpecEnd
