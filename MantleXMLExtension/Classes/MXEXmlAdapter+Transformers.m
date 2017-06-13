@@ -311,6 +311,8 @@
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)
     trimingCharactersTransformerWithCharacterSet:(NSCharacterSet* _Nonnull)characterSet
 {
+    NSParameterAssert(characterSet != nil);
+
     return [MTLValueTransformer
         transformerUsingForwardBlock:
             ^NSString* _Nullable(NSString* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {

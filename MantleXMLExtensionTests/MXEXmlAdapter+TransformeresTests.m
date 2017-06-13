@@ -615,7 +615,7 @@ QuickSpecBegin(MXEXmlAdapter_TransformersTests)
         });
     });
 
-    describe(@"trimingCharactersTransformerWithDefaultCharacters", ^{
+    describe(@"trimingCharactersTransformerWithDefaultCharacterSet", ^{
         NSValueTransformer<MTLTransformerErrorHandling>* transformer
             = [MXEXmlAdapter trimingCharactersTransformerWithDefaultCharacterSet];
 

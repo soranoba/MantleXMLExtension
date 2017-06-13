@@ -3,7 +3,7 @@
 ### Additional functions
 
 - `MXEXmlAdapter # trimingCharactersTransformerWithCharacterSet:`
-- `MXEXmlAdapter # trimingCharactersTransformerWithDefaultCharacters`
+- `MXEXmlAdapter # trimingCharactersTransformerWithDefaultCharacterSet`
 
 ### Minor changes
 
