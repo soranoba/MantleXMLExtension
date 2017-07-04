@@ -211,6 +211,112 @@
             }];
 }
 
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)doubleToNumberTransformer
+{
+    return [MTLValueTransformer
+        transformerUsingForwardBlock:
+            ^NSNumber* _Nullable(NSString* _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
+                if (!str) {
+                    return nil;
+                }
+                if (![str isKindOfClass:NSString.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSString.class, str.class),
+                                MXEErrorInputDataKey : str });
+                    *success = NO;
+                    return nil;
+                }
+
+                NSString* pattern = @"^[\\-\\+]?[0-9]*(\\.[0-9]*)?f?$";
+                NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                                       options:0
+                                                                                         error:nil];
+                NSTextCheckingResult* match = [regex firstMatchInString:str
+                                                                options:0
+                                                                  range:NSMakeRange(0, [str length])];
+                if (match) {
+                    return [NSNumber numberWithDouble:[str doubleValue]];
+                } else {
+                    setError(error, MXEErrorInvalidInputData,
+                             @{ NSLocalizedFailureReasonErrorKey : @"Could not convert String to float",
+                                MXEErrorInputDataKey : str });
+                    *success = NO;
+                    return nil;
+                }
+            }
+        reverseBlock:
+            ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
+                if (!value) {
+                    return nil;
+                }
+                if (![value isKindOfClass:NSNumber.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSNumber.class, value.class),
+                                MXEErrorInputDataKey : value });
+                    *success = NO;
+                    return nil;
+                }
+                return [value stringValue];
+            }];
+}
+
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)floatToNumberTransformer
+{
+    return [MTLValueTransformer
+        transformerUsingForwardBlock:
+            ^NSNumber* _Nullable(NSString* _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
+                if (!str) {
+                    return nil;
+                }
+                if (![str isKindOfClass:NSString.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSString.class, str.class),
+                                MXEErrorInputDataKey : str });
+                    *success = NO;
+                    return nil;
+                }
+
+                NSString* pattern = @"^[\\-\\+]?[0-9]*(\\.[0-9]*)?f?$";
+                NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                                       options:0
+                                                                                         error:nil];
+                NSTextCheckingResult* match = [regex firstMatchInString:str
+                                                                options:0
+                                                                  range:NSMakeRange(0, [str length])];
+                if (match) {
+                    return [NSNumber numberWithFloat:[str floatValue]];
+                } else {
+                    setError(error, MXEErrorInvalidInputData,
+                             @{ NSLocalizedFailureReasonErrorKey : @"Could not convert String to float",
+                                MXEErrorInputDataKey : str });
+                    *success = NO;
+                    return nil;
+                }
+            }
+        reverseBlock:
+            ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
+                *success = YES;
+                if (!value) {
+                    return nil;
+                }
+                if (![value isKindOfClass:NSNumber.class]) {
+                    setError(error, MXEErrorInvalidInputData,
+                             @{ NSLocalizedFailureReasonErrorKey :
+                                    format(@"Expected a %@, but got %@.", NSNumber.class, value.class),
+                                MXEErrorInputDataKey : value });
+                    *success = NO;
+                    return nil;
+                }
+                return [value stringValue];
+            }];
+}
+
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)numberTransformer
 {
     return [MTLValueTransformer
@@ -243,7 +349,12 @@
                     } else if ([match rangeAtIndex:1].location != NSNotFound) {
                         return [NSNumber numberWithDouble:[str doubleValue]];
                     } else if ([match rangeAtIndex:0].location != NSNotFound) {
-                        return [NSNumber numberWithInteger:[str integerValue]];
+                        if (str.length > 0 && [str characterAtIndex:0] == '+') {
+                            str = [str substringFromIndex:1];
+                        }
+
+                        NSNumberFormatter* numberFormatter = [NSNumberFormatter new];
+                        return [numberFormatter numberFromString:str];
                     }
                 }
 
