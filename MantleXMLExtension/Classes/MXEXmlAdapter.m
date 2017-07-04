@@ -492,11 +492,14 @@
         || strcmp(objCType, @encode(unsigned int)) == 0
         || strcmp(objCType, @encode(unsigned short)) == 0
         || strcmp(objCType, @encode(unsigned long)) == 0
-        || strcmp(objCType, @encode(unsigned long long)) == 0
-        || strcmp(objCType, @encode(float)) == 0
-        || strcmp(objCType, @encode(double)) == 0) {
+        || strcmp(objCType, @encode(unsigned long long)) == 0) {
         return [self.class numberTransformer];
-    } else if (strcmp(objCType, @encode(BOOL)) == 0) {
+    } else if (strcmp(objCType, @encode(float)) == 0) {
+        return [self.class floatToNumberTransformer];
+    } else if (strcmp(objCType, @encode(double)) == 0) {
+        return [self.class doubleToNumberTransformer];
+    } else if (strcmp(objCType, @encode(BOOL)) == 0
+               || strcmp(objCType, @encode(bool)) == 0) {
         return [self.class boolTransformer];
     }
 

@@ -114,7 +114,9 @@
 - (NSString* _Nonnull)toString
 {
     NSMutableString* attributesStr = [NSMutableString string];
-    for (NSString* key in self.attributes) {
+
+    NSArray<NSString*>* orderedKeys = [self.attributes.allKeys sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
+    for (NSString* key in orderedKeys) {
         NSString* appendStr = [NSString stringWithFormat:@" %@=\"%@\"", key,
                                                          [self.class escapeString:self.attributes[key]]];
         [attributesStr appendString:appendStr];

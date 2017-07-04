@@ -419,10 +419,159 @@ QuickSpecBegin(MXEXmlAdapter_TransformersTests)
         });
     });
 
+    describe(@"doubleToNumberTransformer", ^{
+        NSValueTransformer<MTLTransformerErrorHandling>* transformer = [MXEXmlAdapter doubleToNumberTransformer];
+
+        it(@"must be converted to double", ^{
+            expect([transformer transformedValue:@"0.8"]).to(equal(0.8));
+            expect([transformer transformedValue:@"0.8"]).notTo(equal(0.8f));
+        });
+
+        it(@"is possible to convert even if it have a sign or a suffix", ^{
+            expect([transformer transformedValue:@"+0.8"]).to(equal(0.8));
+            expect([transformer transformedValue:@"-0.8"]).to(equal(-0.8));
+            expect([transformer transformedValue:@"+0.8f"]).to(equal(0.8));
+            expect([transformer transformedValue:@"-0.8f"]).to(equal(-0.8));
+
+            expect([transformer reverseTransformedValue:@(0.8)]).to(equal(@"0.8"));
+            expect([transformer reverseTransformedValue:@(-0.8)]).to(equal(@"-0.8"));
+        });
+
+        it(@"can convert accurately at expression range", ^{
+            expect([transformer transformedValue:[@(DBL_DIG) stringValue]]).to(equal(DBL_DIG));
+            expect([transformer transformedValue:[@(-DBL_DIG) stringValue]]).to(equal(-DBL_DIG));
+
+            expect([transformer reverseTransformedValue:@(DBL_DIG)]).to(equal([@(DBL_DIG) stringValue]));
+            expect([transformer reverseTransformedValue:@(-DBL_DIG)]).to(equal([@(-DBL_DIG) stringValue]));
+        });
+
+        it(@"sets YES to success, when the conversion is successful", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@"0.25" success:&success error:&error]).to(equal(@0.25));
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+
+            success = NO;
+            expect([transformer reverseTransformedValue:@0.25 success:&success error:&error]).to(equal(@"0.25"));
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"sets YES to success, if input value is nil", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:nil success:&success error:&error]).to(beNil());
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+
+            success = NO;
+            expect([transformer reverseTransformedValue:nil success:&success error:&error]).to(beNil());
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"sets NO to success, when input value is invalid type", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@"aa" success:&success error:&error]).to(beNil());
+            expect(success).to(equal(NO));
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidInputData));
+            expect(error.userInfo[MXEErrorInputDataKey]).to(equal(@"aa"));
+
+            success = NO;
+            error = nil;
+            expect([transformer reverseTransformedValue:@"aa" success:&success error:&error]).to(beNil());
+            expect(success).to(equal(NO));
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidInputData));
+            expect(error.userInfo[MXEErrorInputDataKey]).to(equal(@"aa"));
+        });
+    });
+
+    describe(@"floatToNumberTransformer", ^{
+        NSValueTransformer<MTLTransformerErrorHandling>* transformer = [MXEXmlAdapter floatToNumberTransformer];
+
+        it(@"must be converted to float", ^{
+            expect([transformer transformedValue:@"0.8"]).to(equal(0.8f));
+            expect([transformer transformedValue:@"0.8"]).notTo(equal(0.8));
+        });
+
+        it(@"is possible to convert even if it have a sign or a suffix", ^{
+            expect([transformer transformedValue:@"+0.8f"]).to(equal(0.8f));
+            expect([transformer transformedValue:@"-0.8f"]).to(equal(-0.8f));
+            expect([transformer transformedValue:@"+0.8"]).to(equal(0.8f));
+            expect([transformer transformedValue:@"-0.8"]).to(equal(-0.8f));
+
+            expect([transformer reverseTransformedValue:@(0.8f)]).to(equal(@"0.8"));
+            expect([transformer reverseTransformedValue:@(-0.8f)]).to(equal(@"-0.8"));
+        });
+
+        it(@"can convert accurately at expression range", ^{
+            expect([transformer transformedValue:[@(FLT_DIG) stringValue]]).to(equal(FLT_DIG));
+            expect([transformer transformedValue:[@(-FLT_DIG) stringValue]]).to(equal(-FLT_DIG));
+
+            expect([transformer reverseTransformedValue:@(FLT_DIG)]).to(equal([@(FLT_DIG) stringValue]));
+            expect([transformer reverseTransformedValue:@(-FLT_DIG)]).to(equal([@(-FLT_DIG) stringValue]));
+        });
+
+        it(@"sets YES to success, when the conversion is successful", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@"0.25" success:&success error:&error]).to(equal(@0.25f));
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+
+            success = NO;
+            expect([transformer reverseTransformedValue:@0.25f success:&success error:&error]).to(equal(@"0.25"));
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"sets YES to success, if input value is nil", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:nil success:&success error:&error]).to(beNil());
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+
+            success = NO;
+            expect([transformer reverseTransformedValue:nil success:&success error:&error]).to(beNil());
+            expect(success).to(equal(YES));
+            expect(error).to(beNil());
+        });
+
+        it(@"sets NO to success, when input value is invalid type", ^{
+            __block BOOL success = NO;
+            __block NSError* error = nil;
+            expect([transformer transformedValue:@"aa" success:&success error:&error]).to(beNil());
+            expect(success).to(equal(NO));
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidInputData));
+            expect(error.userInfo[MXEErrorInputDataKey]).to(equal(@"aa"));
+
+            success = NO;
+            error = nil;
+            expect([transformer reverseTransformedValue:@"aa" success:&success error:&error]).to(beNil());
+            expect(success).to(equal(NO));
+            expect(error).notTo(beNil());
+            expect(error.domain).to(equal(MXEErrorDomain));
+            expect(error.code).to(equal(MXEErrorInvalidInputData));
+            expect(error.userInfo[MXEErrorInputDataKey]).to(equal(@"aa"));
+        });
+    });
+
     describe(@"numberTransformer", ^{
         NSValueTransformer<MTLTransformerErrorHandling>* transformer = [MXEXmlAdapter numberTransformer];
 
         it(@"can convert between integer and string", ^{
+            expect([transformer transformedValue:[@(ULONG_LONG_MAX) stringValue]]).to(equal(ULONG_LONG_MAX));
+            expect([transformer transformedValue:[@(LONG_LONG_MIN) stringValue]]).to(equal(LONG_LONG_MIN));
+
             expect([transformer transformedValue:@"1389477961"]).to(equal(@1389477961));
             expect([transformer transformedValue:@"+1389477961"]).to(equal(@1389477961));
             expect([transformer transformedValue:@"-1389477961"]).to(equal(@(-1389477961)));
@@ -432,15 +581,13 @@ QuickSpecBegin(MXEXmlAdapter_TransformersTests)
         });
 
         it(@"can convert between float and string", ^{
-            expect([transformer transformedValue:@"20.25f"]).to(equal(@20.25));
-            expect([transformer transformedValue:@"20.25"]).to(equal(@20.25));
-            expect([transformer transformedValue:@"+20.25"]).to(equal(@20.25));
-            expect([transformer transformedValue:@"+20.25f"]).to(equal(@20.25));
-            expect([transformer transformedValue:@"-20.25"]).to(equal(@(-20.25)));
-            expect([transformer transformedValue:@"-20.25f"]).to(equal(@(-20.25)));
+            expect([transformer transformedValue:@"20.25f"]).to(equal(20.25f));
+            expect([transformer transformedValue:@"+20.25f"]).to(equal(20.25f));
+            expect([transformer transformedValue:@"-20.25f"]).to(equal(-20.25f));
+            expect([transformer transformedValue:@"0.8f"]).to(equal(0.8f));
 
-            expect([transformer reverseTransformedValue:@20.25]).to(equal(@"20.25"));
-            expect([transformer reverseTransformedValue:@(-20.25)]).to(equal(@"-20.25"));
+            expect([transformer reverseTransformedValue:@20.25f]).to(equal(@"20.25"));
+            expect([transformer reverseTransformedValue:@(-20.25f)]).to(equal(@"-20.25"));
         });
 
         it(@"can convert to double from string", ^{

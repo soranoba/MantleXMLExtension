@@ -1,3 +1,21 @@
+## 1.2.0
+
+## Additional functions
+
+- `MXEXmlAdapter # floatToNumberTransformer`
+- `MXEXmlAdapter # doubleToNumberTransformer`
+
+## Minor changes
+
+- Conversion of decimal was changed.
+
+   Until now, it converted it to float if there is a trailing f, double if not.  
+   After changing, it will convert it to float if the type of property is float, double if the type of property is double.
+
+## Bug fixes
+
+- Fixed that `ULONG_LONG_MAX` and `LONG_LONG_MIN` could not be converted correctly, when it use `MXEXmlAdapter # numberTransformer`.
+
 ## 1.1.0
 
 ### Additional functions

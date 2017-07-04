@@ -250,6 +250,24 @@
 + (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)dictionaryTransformer;
 
 /**
+ * Return a transformer that convert between double and string of number.
+ *
+ * If you want to convert decimals more accurately, use it instead of MXEXmlAdapter # numberTransformer.
+ *
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)doubleToNumberTransformer;
+
+/**
+ * Return a transformer that convert between float and string of number.
+ *
+ * If you want to convert decimals more accurately, use it instead of MXEXmlAdapter # numberTransformer.
+ *
+ * @return transformer
+ */
++ (NSValueTransformer<MTLTransformerErrorHandling>* _Nonnull)floatToNumberTransformer;
+
+/**
  * Return a transformer that convert between number and string of number.
  *
  * NOTE:
