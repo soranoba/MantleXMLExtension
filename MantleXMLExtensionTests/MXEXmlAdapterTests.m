@@ -45,19 +45,19 @@ QuickSpecBegin(MXEXmlAdapterTests)
         });
         it(@"xmlKeyPathsByPropertyKey is valid", ^{
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @"hoge.fuga" });
-            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(beNil());
 
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : @"a" });
-            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(beNil());
 
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : MXEXmlAttribute(@"hoge", @"fuga") });
-            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(beNil());
 
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn(@{ @"a" : MXEXmlArray(@"hoge", @"fuga") });
-            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(beNil());
 
             OCMStub([mock xmlKeyPathsByPropertyKey]).andReturn((@{ @"a" : @[ MXEXmlArray(@"hoge", @"fugo"), @"hoge.fugo" ] }));
-            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(equal(nil));
+            expect([[MXEXmlAdapter alloc] initWithModelClass:MXETSampleModel.class]).notTo(beNil());
         });
     });
 
