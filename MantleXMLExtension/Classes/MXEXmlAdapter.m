@@ -483,8 +483,7 @@
 {
     NSParameterAssert(objCType != NULL);
 
-    if (strcmp(objCType, @encode(char)) == 0
-        || strcmp(objCType, @encode(int)) == 0
+    if (strcmp(objCType, @encode(int)) == 0
         || strcmp(objCType, @encode(short)) == 0
         || strcmp(objCType, @encode(long)) == 0
         || strcmp(objCType, @encode(long long)) == 0
@@ -501,6 +500,9 @@
     } else if (strcmp(objCType, @encode(BOOL)) == 0
                || strcmp(objCType, @encode(bool)) == 0) {
         return [self.class boolTransformer];
+    } else if (strcmp(objCType, @encode(char)) == 0) {
+        // NOTE: In the case of 32 bit OS, BOOL equals to char, so it only applies to other cases.
+        return [self.class numberTransformer];
     }
 
     return nil;
