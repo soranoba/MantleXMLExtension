@@ -30,3 +30,6 @@ Podfile.lock
 # carthage
 Carthage/
 *.framework.zip
+
+# Xcode9.3
+IDEWorkspaceChecks.plist

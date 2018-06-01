@@ -1,3 +1,7 @@
+## 1.2.2
+
+- Fix to prevent warnings of analyze
+
 ## 1.2.1
 
 ### Bug fixes
