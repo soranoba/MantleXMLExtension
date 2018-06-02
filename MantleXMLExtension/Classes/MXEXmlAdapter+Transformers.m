@@ -217,7 +217,7 @@
         transformerUsingForwardBlock:
             ^NSNumber* _Nullable(NSString* _Nullable str, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 *success = YES;
-                if (!str) {
+                if (str == nil) {
                     return nil;
                 }
                 if (![str isKindOfClass:NSString.class]) {
@@ -249,7 +249,7 @@
         reverseBlock:
             ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 *success = YES;
-                if (!value) {
+                if (value == nil) {
                     return nil;
                 }
                 if (![value isKindOfClass:NSNumber.class]) {
@@ -302,7 +302,7 @@
         reverseBlock:
             ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 *success = YES;
-                if (!value) {
+                if (value == nil) {
                     return nil;
                 }
                 if (![value isKindOfClass:NSNumber.class]) {
@@ -367,7 +367,7 @@
         reverseBlock:
             ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 *success = YES;
-                if (!value) {
+                if (value == nil) {
                     return nil;
                 }
                 if (![value isKindOfClass:NSNumber.class]) {
@@ -404,7 +404,7 @@
         reverseBlock:
             ^NSString* _Nullable(NSNumber* _Nullable value, BOOL* _Nonnull success, NSError* _Nullable* _Nullable error) {
                 *success = YES;
-                if (!value) {
+                if (value == nil) {
                     return nil;
                 }
                 if (![value isKindOfClass:NSNumber.class]) {

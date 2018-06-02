@@ -170,7 +170,7 @@ For example:
 ```
 <parent>
   <element_a>....</element_a>
-  <element_b title=\"....\" />
+  <element_b title="...." />
 </parent>
 ```
 

@@ -13,14 +13,13 @@ open:
 
 test:
 	xcodebuild -workspace ${NAME}.xcworkspace -scheme ${NAME}Scheme -sdk iphonesimulator -verbose \
-		-destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' \
-		-destination 'platform=iOS Simulator,name=iPhone 6,OS=9.0' \
-		-destination 'platform=iOS Simulator,name=iPhone 6,OS=10.0' \
-		-destination 'platform=iOS Simulator,name=iPhone 7,OS=10.1' \
+		-destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.0' \
+		-destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' \
+		-destination 'platform=iOS Simulator,name=iPhone X,OS=11.3' \
 		clean test
 
 podlint:
-	bundle exec pod lib lint --use-libraries
+	bundle exec pod lib lint --use-libraries --swift-version=4
 
 cartrelease:
 	carthage build --no-skip-current
