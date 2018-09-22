@@ -247,7 +247,7 @@ QuickSpecBegin(MXEXmlAdapterTests)
         it(@"returns error, if input data is nil", ^{
             __block NSError* error = nil;
 
-            void (^check)() = [^{
+            void (^check)(void) = [^{
                 expect(error).notTo(beNil());
                 expect(error.domain).to(equal(MXEErrorDomain));
                 expect(error.code).to(equal(MXEErrorNilInputData));
