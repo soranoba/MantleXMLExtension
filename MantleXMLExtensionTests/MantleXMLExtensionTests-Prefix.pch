@@ -9,9 +9,8 @@
 #ifndef MantleXMLExtensionTests_Prefix_pch
 #define MantleXMLExtensionTests_Prefix_pch
 
-#import <Quick/Quick.h>
-#import <Nimble/Nimble-Swift.h>
-#import <Nimble/Nimble.h>
+@import Quick;
+@import Nimble;
 #import <OCMock/OCMock.h>
 
 #endif /* MantleXMLExtensionTests_Prefix_pch */
