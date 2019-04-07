@@ -20,7 +20,7 @@ test:
 		clean test
 
 podlint:
-	bundle exec pod lib lint --use-libraries --allow-warnings --swift-version=4
+	bundle exec pod lib lint --use-libraries --allow-warnings
 
 cartrelease:
 	carthage build --no-skip-current

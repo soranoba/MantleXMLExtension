@@ -1,4 +1,4 @@
 github "Mantle/Mantle" "2.1.0"
 github "Quick/Nimble" "v8.0.1"
-github "Quick/Quick" "v2.0.0"
+github "Quick/Quick" "v2.1.0"
 github "erikdoe/OCMock" "v3.4.3"
