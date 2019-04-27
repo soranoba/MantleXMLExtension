@@ -14,14 +14,13 @@ open:
 test:
 	xcodebuild -workspace ${NAME}.xcworkspace -scheme ${NAME}Scheme -disable-concurrent-destination-testing \
 		-destination-timeout 300 \
-		-destination 'platform=iOS Simulator,name=iPhone 6,OS=9.0' \
 		-destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' \
 		-destination 'platform=iOS Simulator,name=iPhone X,OS=11.4' \
-		-destination 'platform=iOS Simulator,name=iPhone XS,OS=12.0' \
+		-destination 'platform=iOS Simulator,name=iPhone Xs,OS=12.2' \
 		clean test
 
 podlint:
-	bundle exec pod lib lint --use-libraries --allow-warnings --swift-version=4
+	bundle exec pod lib lint --use-libraries --allow-warnings
 
 cartrelease:
 	carthage build --no-skip-current
