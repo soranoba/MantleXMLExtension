@@ -51,6 +51,7 @@
 		A409E0041E6322B700C136C4 /* OCMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409E0031E6322B700C136C4 /* OCMock.framework */; };
 		A409E0061E6322C500C136C4 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409E0051E6322C500C136C4 /* Quick.framework */; };
 		A409E0081E63315C00C136C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A409E0071E63315C00C136C4 /* Foundation.framework */; };
+		A496DC9A23365DCA0038630F /* Mantle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A409DFFF1E63092300C136C4 /* Mantle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,19 @@
 			remoteInfo = MantleXMLExtension;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A496DC9923365DB50038630F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A496DC9A23365DCA0038630F /* Mantle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A409DF9D1E63007500C136C4 /* MantleXMLExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MantleXMLExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -272,7 +286,7 @@
 				A409DF991E63007500C136C4 /* Frameworks */,
 				A409DF9A1E63007500C136C4 /* Headers */,
 				A409DF9B1E63007500C136C4 /* Resources */,
-				A409DFFD1E63060000C136C4 /* ShellScript */,
+				A496DC9923365DB50038630F /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -364,20 +378,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A409DFFD1E63060000C136C4 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Mantle.framework",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
 		A409DFFE1E63060F00C136C4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
