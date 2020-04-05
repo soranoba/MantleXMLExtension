@@ -6,7 +6,7 @@ ci: init test podlint cartrelease
 
 init:
 	bundle install --path vendor/bundle
-	carthage update --platform iOS
+	carthage bootstrap --platform iOS
 
 open:
 	open ${NAME}.xcworkspace
