@@ -6,7 +6,7 @@ ci: init test podlint cartrelease
 
 init:
 	bundle install --path vendor/bundle
-	carthage bootstrap --platform iOS
+	carthage bootstrap --platform iOS --use-xcframeworks
 
 open:
 	open ${NAME}.xcworkspace
@@ -14,14 +14,14 @@ open:
 test:
 	xcodebuild -workspace ${NAME}.xcworkspace -scheme ${NAME}Scheme -disable-concurrent-destination-testing \
 		-destination-timeout 300 \
-		-destination 'platform=iOS Simulator,name=iPhone 11,OS=13.7' \
+		-destination 'platform=iOS Simulator,name=iPhone 11,OS=12.4' \
 		clean test
 
 podlint:
 	bundle exec pod lib lint --use-libraries --allow-warnings
 
 cartrelease:
-	carthage build --no-skip-current
+	carthage build --no-skip-current --use-xcframeworks
 	carthage archive ${NAME}
 
 synx:
