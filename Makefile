@@ -14,7 +14,7 @@ open:
 test:
 	xcodebuild -workspace ${NAME}.xcworkspace -scheme ${NAME}Scheme -disable-concurrent-destination-testing \
 		-destination-timeout 300 \
-		-destination 'platform=iOS Simulator,name=iPhone 11,OS=12.4' \
+		-destination 'platform=iOS Simulator,name=iPhone 11,OS=14.4' \
 		clean test
 
 podlint:
