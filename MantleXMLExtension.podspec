@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.source_files         = 'MantleXMLExtension/Classes/**/*.{m,h}'
   s.private_header_files = 'MantleXMLExtension/Classes/Private/*.h'
 
-  s.dependency 'Mantle', '~> 2.0'
+  s.dependency 'Mantle', '~> 2.0', '< 2.1.6'
 end
