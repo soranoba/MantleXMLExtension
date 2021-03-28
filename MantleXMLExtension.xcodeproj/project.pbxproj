@@ -307,7 +307,7 @@
 		A4BCF3301DDFDE2C00EF672C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = "Hinagiku Soranoba";
 				TargetAttributes = {
 					A409DF9C1E63007500C136C4 = {
