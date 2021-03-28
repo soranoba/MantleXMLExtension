@@ -1,0 +1,30 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+          bundler-cache: true
+      - name: Select Xcode version
+        run: sudo xcode-select -s '/Applications/Xcode_11.7.app/Contents/Developer'
+      - uses: actions/cache@v2
+        with:
+          path: Carthage
+          key: Carthage-${{ runner.os }}-${{ hashFiles('**/Cartfile.resolved') }}
+          restore-keys: |
+            Carthage-${{ runner.os }}-
+      - name: init
+        run: make init
+      - name: test
+        run: make test
+      - name: cartrelease
+        run: make cartrelease
+      - name: podlint
+        run: make podlint
