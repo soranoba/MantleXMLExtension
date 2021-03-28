@@ -17,7 +17,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: Carthage
-          key: Carthage-${{ runner.os }}-${ hashFiles('Cartfile.resolved') }
+          key: Carthage-${{ runner.os }}-${{ hashFiles('**/Cartfile.resolved') }}
+          restore-keys: |
+            Carthage-${{ runner.os }}-
       - name: init
         run: make init
       - name: test
