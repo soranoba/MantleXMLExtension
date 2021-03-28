@@ -102,10 +102,7 @@
 		A409DFE51E6300D700C136C4 /* MXEXmlValuePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXEXmlValuePath.m; sourceTree = "<group>"; };
 		A409DFF91E6300EC00C136C4 /* NSError+MantleXMLExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MantleXMLExtension.h"; sourceTree = "<group>"; };
 		A409DFFA1E6300EC00C136C4 /* NSError+MantleXMLExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+MantleXMLExtension.m"; sourceTree = "<group>"; };
-		A409DFFF1E63092300C136C4 /* Mantle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mantle.framework; path = Carthage/Build/iOS/Mantle.framework; sourceTree = "<group>"; };
-		A409E0011E6322AC00C136C4 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		A409E0031E6322B700C136C4 /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCMock.framework; path = Carthage/Build/iOS/OCMock.framework; sourceTree = "<group>"; };
-		A409E0051E6322C500C136C4 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		A409E0071E63315C00C136C4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A4331BE6260F180200D5E1BC /* Mantle.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Mantle.xcframework; path = Carthage/Build/Mantle.xcframework; sourceTree = "<group>"; };
 		A4331BF2260F199E00D5E1BC /* Quick.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Quick.xcframework; path = Carthage/Build/Quick.xcframework; sourceTree = "<group>"; };
@@ -142,10 +139,7 @@
 				A4331BF2260F199E00D5E1BC /* Quick.xcframework */,
 				A4331BE6260F180200D5E1BC /* Mantle.xcframework */,
 				A409E0071E63315C00C136C4 /* Foundation.framework */,
-				A409E0051E6322C500C136C4 /* Quick.framework */,
 				A409E0031E6322B700C136C4 /* OCMock.framework */,
-				A409E0011E6322AC00C136C4 /* Nimble.framework */,
-				A409DFFF1E63092300C136C4 /* Mantle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
