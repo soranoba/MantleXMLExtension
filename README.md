@@ -1,6 +1,6 @@
 MantleXMLExtension
 =======
-[![Build Status](https://travis-ci.org/soranoba/MantleXMLExtension.svg?branch=master)](https://travis-ci.org/soranoba/MantleXMLExtension)
+[![CircleCI](https://circleci.com/gh/soranoba/MantleXMLExtension/tree/master.svg?style=svg)](https://circleci.com/gh/soranoba/MantleXMLExtension/tree/master)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)
 [![License](https://img.shields.io/cocoapods/l/MantleXMLExtension.svg?style=flat)](http://cocoapods.org/pods/MantleXMLExtension)

@@ -1,0 +1,61 @@
+version: 2.1
+
+default: &default
+  macos:
+    xcode: 11.7
+
+jobs:
+  build:
+    <<: *default
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "Gemfile.lock" }}-{{ checksum "Cartfile.resolved" }}
+      - run: make init
+      - save_cache:
+          key: cache-{{ checksum "Gemfile.lock" }}-{{ checksum "Cartfile.resolved" }}
+          paths:
+            - "./vendor"
+            - "./Carthage"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./*
+  test:
+    <<: *default
+    steps:
+      - attach_workspace:
+          at: .
+      - run: make test
+  podlint:
+    <<: *default
+    steps:
+      - attach_workspace:
+          at: .
+      - run: make podlint
+  cartrelease:
+    <<: *default
+    steps:
+      - attach_workspace:
+          at: .
+      - run: make cartrelease
+
+workflows:
+  version: 2
+  general:
+    jobs:
+      - build:
+          context: org-global
+      - test:
+          requires:
+            - build
+          context: org-global
+      - podlint:
+          requires:
+            - build
+          context: org-global
+      - cartrelease:
+          requires:
+            - build
+          context: org-global
