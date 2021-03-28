@@ -22,7 +22,6 @@ podlint:
 
 cartrelease:
 	carthage build --no-skip-current --use-xcframeworks
-	carthage archive ${NAME}
 
 synx:
 	bundle exec synx ${NAME}.xcodeproj

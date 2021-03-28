@@ -13,6 +13,7 @@ If you can update Mantle 2.1.6 or later, please use the next version.
 ### Others
 
 - (Carthage) Xcode12 compatible
+- (Carthage) No longer create pre-build frameworks. (ref: https://github.com/Carthage/Carthage/issues/3130)
 
 ## 1.2.2
 
