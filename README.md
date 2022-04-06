@@ -204,4 +204,3 @@ Pull request is welcome =D
 ## License
 
 [MIT License](LICENSE)
-
