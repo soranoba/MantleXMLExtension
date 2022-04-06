@@ -1,3 +1,8 @@
+**This repository has been archived.**  
+We recommend migrating to Swift and JSON (or others).  
+If you want to be a maintainer, please contact me an email.
+
+
 MantleXMLExtension
 =======
 [![Build Status](https://github.com/soranoba/MantleXMLExtension/actions/workflows/ci.yml/badge.svg)](https://github.com/soranoba/MantleXMLExtension/actions?query=branch%3Amaster+workflow%3A"ci")
